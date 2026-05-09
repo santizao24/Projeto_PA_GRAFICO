@@ -37,7 +37,7 @@ public class PainelCliente extends JPanel implements ActionListener {
     private ControladorNotificacao cNotificacao;
 
     private JPanel painelConteudo;
-    private CardLayout cardConteudo;
+    private JPanel painelAtualConteudo;
 
     private JButton btnInserirEquip, btnPedirRep, btnPerfil, btnListarRep;
     private JButton btnPesquisarRep, btnListarEquip, btnPesquisarEquip;
@@ -90,11 +90,12 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         add(painelMenu, BorderLayout.WEST);
 
-        // Painel de conteúdo dinâmico
-        cardConteudo = new CardLayout();
-        painelConteudo = new JPanel(cardConteudo);
+        // Painel de conteúdo dinâmico (navegação por remove/add/revalidate/repaint)
+        painelConteudo = new JPanel(new BorderLayout());
         painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        painelConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER), "vazio");
+        painelAtualConteudo = new JPanel();
+        painelAtualConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER));
+        painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);
         add(painelConteudo, BorderLayout.CENTER);
     }
 
@@ -532,11 +533,14 @@ public class PainelCliente extends JPanel implements ActionListener {
     }
 
     /**
-     * Troca o painel de conteúdo visível.
+     * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
      */
     private void trocarConteudo(JPanel novoPainel, String nome) {
-        painelConteudo.add(novoPainel, nome);
-        cardConteudo.show(painelConteudo, nome);
+        painelConteudo.remove(painelAtualConteudo);
+        painelAtualConteudo = novoPainel;
+        painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);
+        painelConteudo.revalidate();
+        painelConteudo.repaint();
     }
 }
 

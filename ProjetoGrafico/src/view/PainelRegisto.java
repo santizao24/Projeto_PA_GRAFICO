@@ -91,12 +91,11 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 "Selecione Funcionário ou Cliente"));
         painelFormulario.add(Box.createVerticalStrut(10));
 
-        // Campos específicos (dinâmicos)
-        painelCamposEspecificos = new JPanel(new CardLayout());
+        // Campos específicos (dinâmicos via remove/add/revalidate/repaint)
+        painelCamposEspecificos = new JPanel(new BorderLayout());
         construirPainelFuncionario();
         construirPainelCliente();
-        painelCamposEspecificos.add(painelFuncionario, "Funcionário");
-        painelCamposEspecificos.add(painelCliente, "Cliente");
+        painelCamposEspecificos.add(painelFuncionario, BorderLayout.CENTER);
         painelFormulario.add(painelCamposEspecificos);
 
         // R4 - Campo de observações
@@ -191,8 +190,15 @@ public class PainelRegisto extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == comboTipo) {
-            CardLayout cl = (CardLayout) painelCamposEspecificos.getLayout();
-            cl.show(painelCamposEspecificos, (String) comboTipo.getSelectedItem());
+            String tipoSel = (String) comboTipo.getSelectedItem();
+            painelCamposEspecificos.removeAll();
+            if (tipoSel.equals("Funcionário")) {
+                painelCamposEspecificos.add(painelFuncionario, BorderLayout.CENTER);
+            } else {
+                painelCamposEspecificos.add(painelCliente, BorderLayout.CENTER);
+            }
+            painelCamposEspecificos.revalidate();
+            painelCamposEspecificos.repaint();
         } else if (e.getSource() == btnRegistar) {
             efetuarRegisto();
         } else if (e.getSource() == btnVoltar) {

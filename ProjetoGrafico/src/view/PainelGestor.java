@@ -38,7 +38,7 @@ public class PainelGestor extends JPanel implements ActionListener {
     private ControladorEquipamento cEquipamento;
     private ControladorNotificacao cNotificacao;
     private JPanel painelConteudo;
-    private CardLayout cardConteudo;
+    private JPanel painelAtualConteudo;
     private JButton btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers;
     private JButton btnListagens, btnNotifs, btnLogs, btnToggleContas;
     private JButton btnPedidosRemocao, btnMinhaRemocao, btnLogout;
@@ -89,11 +89,12 @@ public class PainelGestor extends JPanel implements ActionListener {
         }
         add(painelMenu, BorderLayout.WEST);
 
-        // Painel de conteúdo dinâmico
-        cardConteudo = new CardLayout();
-        painelConteudo = new JPanel(cardConteudo);
+        // Painel de conteúdo dinâmico (navegação por remove/add/revalidate/repaint)
+        painelConteudo = new JPanel(new BorderLayout());
         painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        painelConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER), "vazio");
+        painelAtualConteudo = new JPanel();
+        painelAtualConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER));
+        painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);
         add(painelConteudo, BorderLayout.CENTER);
     }
 
@@ -149,11 +150,14 @@ public class PainelGestor extends JPanel implements ActionListener {
     }
 
     /**
-     * Troca o painel de conteúdo visível.
+     * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
      */
     private void trocarConteudo(JPanel novoPainel, String nome) {
-        painelConteudo.add(novoPainel, nome);
-        cardConteudo.show(painelConteudo, nome);
+        painelConteudo.remove(painelAtualConteudo);
+        painelAtualConteudo = novoPainel;
+        painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);
+        painelConteudo.revalidate();
+        painelConteudo.repaint();
     }
 
     private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
@@ -509,21 +513,24 @@ public class PainelGestor extends JPanel implements ActionListener {
         JScrollPane st = Utilitarios.criarTabela(new String[] { "Data", "Hora", "Utilizador", "Ação" },
                 new Object[][] {});
         p.add(st, BorderLayout.CENTER);
-        ActionListener carregarLogs = ev -> {
-            ArrayList<Log> lista;
-            if (ev.getSource() == bPesq && !campoUser.getText().trim().isEmpty())
-                lista = cUtilizador.pesquisarLogsPorUtilizador(campoUser.getText().trim());
-            else
-                lista = cUtilizador.listarTodosLogs();
-            Object[][] dd = new Object[lista.size()][4];
-            Iterator<Log> it2 = lista.iterator();
-            int j = 0;
-            while (it2.hasNext()) {
-                Log l = it2.next();
-                dd[j] = new Object[] { l.getData(), l.getHora(), l.getUtilizador(), l.getAcao() };
-                j++;
+        ActionListener carregarLogs = new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                ArrayList<Log> lista;
+                if (ev.getSource() == bPesq && !campoUser.getText().trim().isEmpty())
+                    lista = cUtilizador.pesquisarLogsPorUtilizador(campoUser.getText().trim());
+                else
+                    lista = cUtilizador.listarTodosLogs();
+                Object[][] dd = new Object[lista.size()][4];
+                Iterator<Log> it2 = lista.iterator();
+                int j = 0;
+                while (it2.hasNext()) {
+                    Log l = it2.next();
+                    dd[j] = new Object[] { l.getData(), l.getHora(), l.getUtilizador(), l.getAcao() };
+                    j++;
+                }
+                Utilitarios.atualizarTabela(st, new String[] { "Data", "Hora", "Utilizador", "Ação" }, dd);
             }
-            Utilitarios.atualizarTabela(st, new String[] { "Data", "Hora", "Utilizador", "Ação" }, dd);
         };
         bPesq.addActionListener(carregarLogs);
         bTodos.addActionListener(carregarLogs);
