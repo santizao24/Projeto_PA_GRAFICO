@@ -6,6 +6,13 @@
             "name": "AplicacaoGUI",
             "request": "launch",
             "mainClass": "view.AplicacaoGUI",
+            "projectName": "ProjetoGrafico_456597ba"
+        },
+        {
+            "type": "java",
+            "name": "AplicacaoGUI",
+            "request": "launch",
+            "mainClass": "view.AplicacaoGUI",
             "projectName": "PROJETOGRAFICO",
             "classPaths": [
                 "src",
