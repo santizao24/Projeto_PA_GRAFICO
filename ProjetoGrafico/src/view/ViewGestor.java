@@ -557,6 +557,10 @@ public class ViewGestor {
         System.out.print("Novo Nome: ");
         String novoNome = ler.nextLine();
 
+        System.out.println("Username atual: " + utilizadorAlvo.getLogin());
+        System.out.print("Novo Username: ");
+        String novoUsername = ler.nextLine();
+
         System.out.println("Email atual: " + utilizadorAlvo.getEmail());
         System.out.print("Novo Email: ");
         String novoEmail = ler.nextLine();
@@ -571,7 +575,7 @@ public class ViewGestor {
         } while (novaPass.isEmpty());
 
         boolean sucesso = cUtilizador.atualizarPerfilPeloGestor(idAlvo, novoNome, novoEmail, novaPass,
-                utilizadorLogado.getLogin());
+                novoUsername, utilizadorLogado.getLogin());
 
         if (sucesso) {
             System.out.println("Dados base do utilizador alterados com sucesso pelo Gestor!");

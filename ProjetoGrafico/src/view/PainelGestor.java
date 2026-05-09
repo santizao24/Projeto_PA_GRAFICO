@@ -359,6 +359,8 @@ public class PainelGestor extends JPanel implements ActionListener {
         JPanel form = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JTextField cNome = new JTextField(10);
         cNome.setToolTipText("Novo nome");
+        JTextField cUser = new JTextField(10);
+        cUser.setToolTipText("Novo username");
         JTextField cEmail = new JTextField(10);
         cEmail.setToolTipText("Novo email");
         JPasswordField cPass = new JPasswordField(10);
@@ -373,8 +375,9 @@ public class PainelGestor extends JPanel implements ActionListener {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
                     return;
                 }
-                boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText().trim(), cEmail.getText().trim(),
-                        new String(cPass.getPassword()), utilizadorLogado.getLogin());
+                boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText().trim(),
+                        cEmail.getText().trim(), new String(cPass.getPassword()),
+                        cUser.getText().trim(), utilizadorLogado.getLogin());
                 if (ok) {
                     Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados!");
                     mostrarEditarUsers();
@@ -384,6 +387,8 @@ public class PainelGestor extends JPanel implements ActionListener {
         });
         form.add(new JLabel("Nome:"));
         form.add(cNome);
+        form.add(new JLabel("Username:"));
+        form.add(cUser);
         form.add(new JLabel("Email:"));
         form.add(cEmail);
         form.add(new JLabel("Pass:"));

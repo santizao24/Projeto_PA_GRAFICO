@@ -313,19 +313,20 @@ public class ControladorUtilizador {
 
     /**
      * Atualiza os dados base de qualquer utilizador por parte do gestor
-     * (nome, email e password).
+     * (nome, email, password e username).
      *
      * @param idAlvo         identificador do utilizador a alterar
      * @param nome           novo nome
      * @param email          novo email
      * @param pass           nova password
+     * @param username       novo username
      * @param usernameLogado username do gestor que realizou a alteração (para log)
      * @return {@code true} se a atualização for efetuada com sucesso, {@code false}
      *         caso contrário
      */
-    public boolean atualizarPerfilPeloGestor(int idAlvo, String nome, String email, String pass,
+    public boolean atualizarPerfilPeloGestor(int idAlvo, String nome, String email, String pass, String username,
             String usernameLogado) {
-        boolean sucesso = uDao.atualizarDadosGenericos(idAlvo, nome, email, pass);
+        boolean sucesso = uDao.atualizarDadosGenericos(idAlvo, nome, email, pass, username);
 
         if (sucesso) {
             cLog.registarAcao(usernameLogado, "O Gestor alterou os dados base do utilizador ID: " + idAlvo);

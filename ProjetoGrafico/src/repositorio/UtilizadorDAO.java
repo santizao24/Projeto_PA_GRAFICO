@@ -709,13 +709,14 @@ public class UtilizadorDAO {
      * @param novoNome     novo nome
      * @param novoEmail    novo email
      * @param novaPassword nova password
+     * @param novoUsername novo username
      * @return {@code true} se a atualização for bem sucedida, {@code false} caso
      *         contrário
      */
-    public boolean atualizarDadosGenericos(int idUtilizador, String novoNome, String novoEmail, String novaPassword) {
+    public boolean atualizarDadosGenericos(int idUtilizador, String novoNome, String novoEmail, String novaPassword, String novoUsername) {
         Connection conn = null;
         PreparedStatement ps = null;
-        String sql = "UPDATE UTILIZADOR SET U_NOME = ?, U_EMAIL = ?, U_PASSWORD = ? WHERE U_ID_UTILIZADOR = ?";
+        String sql = "UPDATE UTILIZADOR SET U_NOME = ?, U_EMAIL = ?, U_PASSWORD = ?, U_USERNAME = ? WHERE U_ID_UTILIZADOR = ?";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -725,7 +726,8 @@ public class UtilizadorDAO {
             ps.setString(1, novoNome);
             ps.setString(2, novoEmail);
             ps.setString(3, novaPassword);
-            ps.setInt(4, idUtilizador);
+            ps.setString(4, novoUsername);
+            ps.setInt(5, idUtilizador);
 
             ps.executeUpdate();
             return true;
