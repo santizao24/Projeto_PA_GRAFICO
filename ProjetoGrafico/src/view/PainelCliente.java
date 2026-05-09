@@ -303,15 +303,8 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.setBorder(BorderFactory.createTitledBorder("Listar Pedidos de Reparação"));
 
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JComboBox<String> comboCrit = new JComboBox<>(new String[] { "Data de Criação", "Número da Reparação" });
-        comboCrit.setToolTipText("Critério de ordenação da listagem");
-        JComboBox<String> comboOrdem = new JComboBox<>(new String[] { "Crescente", "Decrescente" });
-        comboOrdem.setToolTipText("Direção da ordenação");
         JButton btnListar = new JButton("Listar");
-        btnListar.setToolTipText("Aplicar ordenação e listar reparações");
-        filtros.add(new JLabel("Ordenar por:"));
-        filtros.add(comboCrit);
-        filtros.add(comboOrdem);
+        btnListar.setToolTipText("Listar reparações");
         filtros.add(btnListar);
         p.add(filtros, BorderLayout.NORTH);
 
@@ -321,10 +314,8 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         btnListar.addActionListener(new ActionListener() { @Override
             public void actionPerformed(ActionEvent ev) {
-            int escolha = comboCrit.getSelectedIndex() + 1;
-            boolean asc = comboOrdem.getSelectedIndex() == 0;
             ArrayList<Reparacao> lista = cReparacao.listarReparacoesClienteOrdenadas(
-                    utilizadorLogado.getIdUtilizador(), escolha, asc);
+                    utilizadorLogado.getIdUtilizador(), 1, true);
             Object[][] dados = new Object[lista.size()][4];
             Iterator<Reparacao> it = lista.iterator();
             int i = 0;
@@ -388,15 +379,8 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.setBorder(BorderFactory.createTitledBorder("Listar Equipamentos"));
 
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JComboBox<String> comboCrit = new JComboBox<>(new String[] { "Marca", "Código de Modelo" });
-        comboCrit.setToolTipText("Critério de ordenação");
-        JComboBox<String> comboOrdem = new JComboBox<>(new String[] { "Crescente", "Decrescente" });
-        comboOrdem.setToolTipText("Direção da ordenação");
         JButton btnListar = new JButton("Listar");
-        btnListar.setToolTipText("Aplicar ordenação e listar equipamentos");
-        filtros.add(new JLabel("Ordenar por:"));
-        filtros.add(comboCrit);
-        filtros.add(comboOrdem);
+        btnListar.setToolTipText("Listar equipamentos");
         filtros.add(btnListar);
         p.add(filtros, BorderLayout.NORTH);
 
@@ -407,8 +391,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         btnListar.addActionListener(new ActionListener() { @Override
             public void actionPerformed(ActionEvent ev) {
             ArrayList<Equipamento> lista = cEquipamento.listarEquipamentosClienteOrdenados(
-                    utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
-                    comboOrdem.getSelectedIndex() == 0);
+                    utilizadorLogado.getIdUtilizador(), 1, true);
             Object[][] dados = new Object[lista.size()][4];
             Iterator<Equipamento> it = lista.iterator();
             int i = 0;

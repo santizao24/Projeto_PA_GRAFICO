@@ -294,15 +294,8 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         p.setBorder(BorderFactory.createTitledBorder("Listar Reparações"));
 
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JComboBox<String> comboCrit = new JComboBox<>(new String[] { "Data de Criação", "Número" });
-        comboCrit.setToolTipText("Critério de ordenação");
-        JComboBox<String> comboOrdem = new JComboBox<>(new String[] { "Crescente", "Decrescente" });
-        comboOrdem.setToolTipText("Direção da ordenação");
         JButton btnListar = new JButton("Listar");
-        btnListar.setToolTipText("Aplicar filtro e listar");
-        filtros.add(new JLabel("Ordenar por:"));
-        filtros.add(comboCrit);
-        filtros.add(comboOrdem);
+        btnListar.setToolTipText("Listar reparações");
         filtros.add(btnListar);
         p.add(filtros, BorderLayout.NORTH);
 
@@ -313,8 +306,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         btnListar.addActionListener(new ActionListener() { @Override
             public void actionPerformed(ActionEvent ev) {
             ArrayList<Reparacao> lista = cReparacao.listarReparacoesFuncionarioOrdenadas(
-                    utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
-                    comboOrdem.getSelectedIndex() == 0);
+                    utilizadorLogado.getIdUtilizador(), 1, true);
             Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
                     converterReparacoes(lista));
             }

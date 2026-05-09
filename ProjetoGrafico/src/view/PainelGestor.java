@@ -362,22 +362,19 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.setBorder(BorderFactory.createTitledBorder("Listagens e Pesquisas"));
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JComboBox<String> comboTipo = new JComboBox<>(new String[] {
-                "Utilizadores Ordenados", "Reparações Ordenadas", "Reparações Não Finalizadas",
+                "Utilizadores", "Reparações", "Reparações Não Finalizadas",
                 "Pesquisar Reparações", "Pesquisar Utilizadores", "Pesquisar Equipamentos",
                 "Reparações por Data", "Todas as Reparações" });
         comboTipo.setToolTipText("Selecione o tipo de listagem ou pesquisa");
         JTextField campoTermo = new JTextField(12);
-        campoTermo.setToolTipText("Termo de pesquisa ou data");
+        campoTermo.setToolTipText("Termo de pesquisa ou data (YYYY-MM-DD)");
         JTextField campoTermo2 = new JTextField(10);
         campoTermo2.setToolTipText("Data final (YYYY-MM-DD)");
-        JComboBox<String> comboOrdem = new JComboBox<>(new String[] { "Crescente", "Decrescente" });
-        comboOrdem.setToolTipText("Ordem da listagem");
         JButton bExec = new JButton("Executar");
         bExec.setToolTipText("Executar a listagem ou pesquisa");
         top.add(comboTipo);
         top.add(campoTermo);
         top.add(campoTermo2);
-        top.add(comboOrdem);
         top.add(bExec);
         p.add(top, BorderLayout.NORTH);
         JScrollPane st = Utilitarios.criarTabela(new String[] { "Resultado" }, new Object[][] {});
@@ -385,10 +382,9 @@ public class PainelGestor extends JPanel implements ActionListener {
         bExec.addActionListener(new ActionListener() { @Override
             public void actionPerformed(ActionEvent ev) {
             int sel = comboTipo.getSelectedIndex();
-            boolean asc = comboOrdem.getSelectedIndex() == 0;
             String termo = campoTermo.getText().trim();
             if (sel == 0) {
-                ArrayList<Utilizador> l = cUtilizador.listarUtilizadoresOrdenados(asc);
+                ArrayList<Utilizador> l = cUtilizador.listarUtilizadoresOrdenados(true);
                 Object[][] dd = new Object[l.size()][5];
                 Iterator<Utilizador> it2 = l.iterator();
                 int j = 0;
@@ -399,7 +395,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                 }
                 Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
             } else if (sel == 1) {
-                ArrayList<Reparacao> l = cReparacao.listarReparacoesOrdenadas(1, asc);
+                ArrayList<Reparacao> l = cReparacao.listarReparacoesOrdenadas(1, true);
                 Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(l));
             } else if (sel == 2) {
