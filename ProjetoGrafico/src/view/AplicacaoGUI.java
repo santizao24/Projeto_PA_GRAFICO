@@ -185,30 +185,33 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         // Aplicar FlatLaf para aspeto visual moderno (recomendado pelo professor)
         FlatDarculaLaf.setup();
 
-        SwingUtilities.invokeLater(() -> {
-            AplicacaoGUI app = new AplicacaoGUI();
-            app.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                AplicacaoGUI app = new AplicacaoGUI();
+                app.setVisible(true);
 
-            // Verificar configbd.txt
-            File configFile = new File("configbd.txt");
-            if (!configFile.exists()) {
-                JOptionPane.showMessageDialog(app,
-                        "Ficheiro 'configbd.txt' não encontrado!\nConfigure a base de dados.",
-                        "Configuração Necessária", JOptionPane.WARNING_MESSAGE);
-                DialogoConfigBD d = new DialogoConfigBD(app);
-                d.setVisible(true);
-            }
-
-            // Verificar se existe gestor
-            try {
-                if (!app.getControladorUtilizador().existeGestor()) {
+                // Verificar configbd.txt
+                File configFile = new File("configbd.txt");
+                if (!configFile.exists()) {
                     JOptionPane.showMessageDialog(app,
-                            "Não existe nenhum Gestor. Crie o primeiro Gestor.",
-                            "Primeiro Acesso", JOptionPane.INFORMATION_MESSAGE);
-                    criarPrimeiroGestor(app);
+                            "Ficheiro 'configbd.txt' não encontrado!\nConfigure a base de dados.",
+                            "Configuração Necessária", JOptionPane.WARNING_MESSAGE);
+                    DialogoConfigBD d = new DialogoConfigBD(app);
+                    d.setVisible(true);
                 }
-            } catch (Exception ex) {
-                // BD pode não estar configurada ainda
+
+                // Verificar se existe gestor
+                try {
+                    if (!app.getControladorUtilizador().existeGestor()) {
+                        JOptionPane.showMessageDialog(app,
+                                "Não existe nenhum Gestor. Crie o primeiro Gestor.",
+                                "Primeiro Acesso", JOptionPane.INFORMATION_MESSAGE);
+                        criarPrimeiroGestor(app);
+                    }
+                } catch (Exception ex) {
+                    // BD pode não estar configurada ainda
+                }
             }
         });
     }
