@@ -83,9 +83,11 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton[] botoes = { btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers,
                 btnListagens, btnNotifs, btnLogs, btnToggleContas, btnPedidosRemocao,
                 btnMinhaRemocao, btnLogout };
-        for (JButton b : botoes) {
-            painelMenu.add(b);
+        int idx = 0;
+        while (idx < botoes.length) {
+            painelMenu.add(botoes[idx]);
             painelMenu.add(Box.createVerticalStrut(3));
+            idx++;
         }
         add(painelMenu, BorderLayout.WEST);
 
@@ -461,10 +463,13 @@ public class PainelGestor extends JPanel implements ActionListener {
         top.add(bVer);
         top.add(bMarcar);
         // Mostrar contadores
-        for (CategoriaNotificacao c : CategoriaNotificacao.values()) {
-            int n = cNotificacao.contarNaoLidasPorCategoria(id, c);
+        CategoriaNotificacao[] categorias = CategoriaNotificacao.values();
+        int idxCat = 0;
+        while (idxCat < categorias.length) {
+            int n = cNotificacao.contarNaoLidasPorCategoria(id, categorias[idxCat]);
             if (n > 0)
-                top.add(new JLabel(" " + c.name() + ":" + n));
+                top.add(new JLabel(" " + categorias[idxCat].name() + ":" + n));
+            idxCat++;
         }
         p.add(top, BorderLayout.NORTH);
         JScrollPane st = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, new Object[][] {});

@@ -83,9 +83,11 @@ public class PainelCliente extends JPanel implements ActionListener {
         JButton[] botoes = { btnInserirEquip, btnPedirRep, btnPerfil, btnListarRep,
                 btnPesquisarRep, btnListarEquip, btnPesquisarEquip, btnNotificacoes,
                 btnRemocao, btnConsultarRep, btnLogout };
-        for (JButton b : botoes) {
-            painelMenu.add(b);
+        int idx = 0;
+        while (idx < botoes.length) {
+            painelMenu.add(botoes[idx]);
             painelMenu.add(Box.createVerticalStrut(3));
+            idx++;
         }
 
         add(painelMenu, BorderLayout.WEST);
