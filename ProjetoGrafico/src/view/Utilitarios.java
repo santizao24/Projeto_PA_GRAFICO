@@ -30,6 +30,14 @@ public class Utilitarios {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                // Verificar a primeira linha para determinar o tipo da coluna
+                if (getRowCount() > 0 && getValueAt(0, columnIndex) != null) {
+                    return getValueAt(0, columnIndex).getClass();
+                }
+                return Object.class;
+            }
         };
         JTable tabela = new JTable(modelo);
         tabela.setAutoCreateRowSorter(true);
@@ -111,8 +119,16 @@ public class Utilitarios {
                 public boolean isCellEditable(int row, int column) {
                     return false;
                 }
+                @Override
+                public Class<?> getColumnClass(int columnIndex) {
+                    if (getRowCount() > 0 && getValueAt(0, columnIndex) != null) {
+                        return getValueAt(0, columnIndex).getClass();
+                    }
+                    return Object.class;
+                }
             };
             tabela.setModel(modelo);
+            tabela.setAutoCreateRowSorter(true);
         }
     }
 
