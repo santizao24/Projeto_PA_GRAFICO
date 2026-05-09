@@ -105,7 +105,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
         campoObservacoes.setWrapStyleWord(true);
         JScrollPane scrollObs = new JScrollPane(campoObservacoes);
         painelFormulario.add(Utilitarios.criarCampoFormulario("Observações:", scrollObs,
-                "Observações ou comentários adicionais sobre o registo (R4)"));
+                "Observações ou comentários adicionais sobre o registo"));
 
         JScrollPane scrollFormulario = new JScrollPane(painelFormulario);
         scrollFormulario.setBorder(null);
