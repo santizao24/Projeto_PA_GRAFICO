@@ -99,6 +99,11 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         painelPrincipal.add(painelAtual, BorderLayout.CENTER);
     }
 
+    /**
+     * Processa os eventos da barra de menus superior.
+     *
+     * @param e evento de ação gerado pelos itens do menu
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == menuConfigBD) {
@@ -136,7 +141,12 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         painelPrincipal.repaint();
     }
 
-    /** Autentica o utilizador e redireciona para o painel correto. */
+    /**
+     * Autentica o utilizador e redireciona para o painel correto
+     * (Cliente, Funcionário ou Gestor).
+     *
+     * @param u o utilizador autenticado
+     */
     public void autenticar(Utilizador u) {
         // Verificar reparações atrasadas
         cReparacao.verificarReparacoesAtrasadas();
@@ -155,12 +165,19 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         }
     }
 
-    /** Termina a sessão e volta ao login. */
+    /**
+     * Termina a sessão do utilizador atual e volta ao painel de login.
+     */
     public void terminarSessao() {
         barraEstado.setText(" Sessão terminada.");
         mostrarPainel("login");
     }
 
+    /**
+     * Devolve a instância do Controlador de Utilizadores.
+     *
+     * @return controlador de utilizadores
+     */
     public ControladorUtilizador getControladorUtilizador() {
         return cUtilizador;
     }

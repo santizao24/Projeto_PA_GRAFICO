@@ -125,7 +125,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
     }
 
     /**
-     * Constrói o sub-painel com campos específicos para Funcionário.
+     * Constrói e configura os campos específicos para o registo de um Funcionário.
      */
     private void construirPainelFuncionario() {
         painelFuncionario = new JPanel();
@@ -154,7 +154,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
     }
 
     /**
-     * Constrói o sub-painel com campos específicos para Cliente.
+     * Constrói e configura os campos específicos para o registo de um Cliente.
      */
     private void construirPainelCliente() {
         painelCliente = new JPanel();
@@ -208,7 +208,8 @@ public class PainelRegisto extends JPanel implements ActionListener {
     }
 
     /**
-     * Efetua o registo do utilizador após validação de todos os campos.
+     * Valida os campos preenchidos, cria as instâncias adequadas (Cliente ou Funcionário)
+     * e submete os dados ao controlador para registo no sistema.
      */
     private void efetuarRegisto() {
         String nome = campoNome.getText().trim();
@@ -289,7 +290,8 @@ public class PainelRegisto extends JPanel implements ActionListener {
     }
 
     /**
-     * Limpa todos os campos do formulário de registo.
+     * Limpa todos os campos do formulário após um registo bem sucedido
+     * ou cancelamento.
      */
     private void limparCampos() {
         campoNome.setText("");
