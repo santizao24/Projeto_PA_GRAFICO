@@ -493,19 +493,21 @@ public class PainelGestor extends JPanel implements ActionListener {
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 } else if (sel == 3) {
+                    ArrayList<Reparacao> l;
                     if (termo.isEmpty()) {
-                        Utilitarios.mostrarErro(PainelGestor.this, "Introduza um termo de pesquisa!");
-                        return;
+                        l = cReparacao.listarReparacoesOrdenadas(1, true);
+                    } else {
+                        l = cReparacao.pesquisarReparacoes(1, termo);
                     }
-                    ArrayList<Reparacao> l = cReparacao.pesquisarReparacoes(1, termo);
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 } else if (sel == 4) {
+                    ArrayList<Utilizador> l;
                     if (termo.isEmpty()) {
-                        Utilitarios.mostrarErro(PainelGestor.this, "Introduza um termo de pesquisa!");
-                        return;
+                        l = cUtilizador.listarUtilizadoresOrdenados(true);
+                    } else {
+                        l = cUtilizador.pesquisarUtilizadores(1, termo);
                     }
-                    ArrayList<Utilizador> l = cUtilizador.pesquisarUtilizadores(1, termo);
                     Object[][] dd = new Object[l.size()][5];
                     Iterator<Utilizador> it2 = l.iterator();
                     int j = 0;
@@ -517,11 +519,12 @@ public class PainelGestor extends JPanel implements ActionListener {
                     }
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
                 } else if (sel == 5) {
+                    ArrayList<Equipamento> l;
                     if (termo.isEmpty()) {
-                        Utilitarios.mostrarErro(PainelGestor.this, "Introduza um termo de pesquisa!");
-                        return;
+                        l = cEquipamento.pesquisarEquipamentos(1, "");
+                    } else {
+                        l = cEquipamento.pesquisarEquipamentos(1, termo);
                     }
-                    ArrayList<Equipamento> l = cEquipamento.pesquisarEquipamentos(1, termo);
                     Object[][] dd = new Object[l.size()][4];
                     Iterator<Equipamento> it2 = l.iterator();
                     int j = 0;
@@ -534,11 +537,12 @@ public class PainelGestor extends JPanel implements ActionListener {
                 } else if (sel == 6) {
                     String dataInicio = campoDataInicio.getText().trim();
                     String dataFim = campoDataFim.getText().trim();
+                    ArrayList<Reparacao> l;
                     if (dataInicio.isEmpty() || dataFim.isEmpty()) {
-                        Utilitarios.mostrarErro(PainelGestor.this, "Preencha ambas as datas!");
-                        return;
+                        l = cReparacao.obterTodasReparacoes();
+                    } else {
+                        l = cReparacao.pesquisarReparacoesPorData(dataInicio, dataFim);
                     }
-                    ArrayList<Reparacao> l = cReparacao.pesquisarReparacoesPorData(dataInicio, dataFim);
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 } else if (sel == 7) {
