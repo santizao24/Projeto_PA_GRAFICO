@@ -6,7 +6,7 @@
             "name": "AplicacaoGUI",
             "request": "launch",
             "mainClass": "view.AplicacaoGUI",
-            "projectName": "Projeto1",
+            "projectName": "PROJETOGRAFICO",
             "classPaths": [
                 "src",
                 "lib/flatlaf-3.4.jar"
@@ -17,7 +17,7 @@
             "name": "Aplicacao (Consola)",
             "request": "launch",
             "mainClass": "view.Aplicacao",
-            "projectName": "Projeto1",
+            "projectName": "PROJETOGRAFICO",
             "classPaths": [
                 "src"
             ]
