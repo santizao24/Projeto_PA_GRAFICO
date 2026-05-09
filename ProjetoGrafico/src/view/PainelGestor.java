@@ -1,0 +1,647 @@
+package view;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import controlador.ControladorEquipamento;
+import controlador.ControladorNotificacao;
+import controlador.ControladorReparacao;
+import controlador.ControladorUtilizador;
+import model.Equipamento;
+import model.Log;
+import model.Notificacao;
+import model.Reparacao;
+import model.Utilizador;
+import Enums.CategoriaNotificacao;
+import Enums.EstadoReparacao;
+import Enums.EstadoUtilizador;
+import Enums.TipoUtilizador;
+
+/**
+ * Painel com as funcionalidades disponíveis para o utilizador do tipo Gestor.
+ * Inclui gestão de contas, reparações, arquivamento, listagens, notificações,
+ * logs de auditoria e pedidos de remoção de conta.
+ *
+ * @author Santiago e Hugo
+ * @version 1.0
+ */
+public class PainelGestor extends JPanel implements ActionListener {
+
+    private AplicacaoGUI aplicacao;
+    private Utilizador utilizadorLogado;
+    private ControladorUtilizador cUtilizador;
+    private ControladorReparacao cReparacao;
+    private ControladorEquipamento cEquipamento;
+    private ControladorNotificacao cNotificacao;
+    private JPanel painelConteudo;
+    private CardLayout cardConteudo;
+    private JButton btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers;
+    private JButton btnListagens, btnNotifs, btnLogs, btnToggleContas;
+    private JButton btnPedidosRemocao, btnMinhaRemocao, btnLogout;
+
+    /**
+     * Constrói o painel do gestor.
+     *
+     * @param aplicacao referência para a aplicação principal
+     */
+    public PainelGestor(AplicacaoGUI aplicacao) {
+        this.aplicacao = aplicacao;
+        this.cUtilizador = aplicacao.getControladorUtilizador();
+        this.cReparacao = aplicacao.getControladorReparacao();
+        this.cEquipamento = aplicacao.getControladorEquipamento();
+        this.cNotificacao = aplicacao.getControladorNotificacao();
+        setLayout(new BorderLayout());
+
+        // Menu lateral
+        JPanel painelMenu = new JPanel();
+        painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
+        painelMenu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelMenu.setPreferredSize(new Dimension(220, 0));
+
+        JLabel titulo = new JLabel("Menu Gestor");
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 16));
+        titulo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        painelMenu.add(titulo);
+        painelMenu.add(Box.createVerticalStrut(10));
+
+        btnAtivarContas = criarBotaoMenu("Ativar Contas", "Aprovar ou rejeitar contas pendentes");
+        btnGerirRep = criarBotaoMenu("Gerir Reparações", "Atribuir reparações a funcionários");
+        btnArquivar = criarBotaoMenu("Arquivar Processos", "Arquivar reparações finalizadas");
+        btnEditarUsers = criarBotaoMenu("Editar Utilizadores", "Editar dados de utilizadores");
+        btnListagens = criarBotaoMenu("Listagens/Pesquisas", "Listar e pesquisar dados");
+        btnNotifs = criarBotaoMenu("Notificações", "Dashboard de notificações");
+        btnLogs = criarBotaoMenu("Logs", "Consultar registos de auditoria");
+        btnToggleContas = criarBotaoMenu("Ativar/Inativar", "Alterar estado de contas");
+        btnPedidosRemocao = criarBotaoMenu("Pedidos Remoção", "Gerir pedidos de remoção");
+        btnMinhaRemocao = criarBotaoMenu("Minha Remoção", "Solicitar remoção da minha conta");
+        btnLogout = criarBotaoMenu("Logout", "Terminar sessão");
+
+        JButton[] botoes = { btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers,
+                btnListagens, btnNotifs, btnLogs, btnToggleContas, btnPedidosRemocao,
+                btnMinhaRemocao, btnLogout };
+        for (JButton b : botoes) {
+            painelMenu.add(b);
+            painelMenu.add(Box.createVerticalStrut(3));
+        }
+        add(painelMenu, BorderLayout.WEST);
+
+        // Painel de conteúdo dinâmico
+        cardConteudo = new CardLayout();
+        painelConteudo = new JPanel(cardConteudo);
+        painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER), "vazio");
+        add(painelConteudo, BorderLayout.CENTER);
+    }
+
+    /**
+     * Define o utilizador autenticado.
+     * 
+     * @param u utilizador logado
+     */
+    public void setUtilizadorLogado(Utilizador u) {
+        this.utilizadorLogado = u;
+    }
+
+    private JButton criarBotaoMenu(String texto, String tooltip) {
+        JButton btn = new JButton(texto);
+        btn.setToolTipText(tooltip);
+        btn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btn.setMaximumSize(new Dimension(200, 30));
+        btn.addActionListener(this);
+        return btn;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (utilizadorLogado == null)
+            return;
+        Object src = e.getSource();
+
+        if (src == btnLogout) {
+            cUtilizador.registarFimSessao(utilizadorLogado.getLogin());
+            aplicacao.terminarSessao();
+            return;
+        }
+        if (src == btnAtivarContas)
+            mostrarAtivarContas();
+        else if (src == btnGerirRep)
+            mostrarGerirReparacoes();
+        else if (src == btnArquivar)
+            mostrarArquivar();
+        else if (src == btnEditarUsers)
+            mostrarEditarUsers();
+        else if (src == btnListagens)
+            mostrarListagens();
+        else if (src == btnNotifs)
+            mostrarNotificacoes();
+        else if (src == btnLogs)
+            mostrarLogs();
+        else if (src == btnToggleContas)
+            mostrarToggleContas();
+        else if (src == btnPedidosRemocao)
+            mostrarPedidosRemocao();
+        else if (src == btnMinhaRemocao)
+            solicitarMinhaRemocao();
+    }
+
+    /**
+     * Troca o painel de conteúdo visível.
+     */
+    private void trocarConteudo(JPanel novoPainel, String nome) {
+        painelConteudo.add(novoPainel, nome);
+        cardConteudo.show(painelConteudo, nome);
+    }
+
+    private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
+        Object[][] dados = new Object[lista.size()][4];
+        Iterator<Reparacao> it = lista.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Reparacao r = it.next();
+            dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(), r.getEstado() };
+            i++;
+        }
+        return dados;
+    }
+
+    // --- Ativar Contas ---
+    private void mostrarAtivarContas() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Ativar/Rejeitar Contas Pendentes"));
+        ArrayList<Utilizador> pend = cUtilizador.obterContasPendentes();
+        Object[][] d = new Object[pend.size()][4];
+        Iterator<Utilizador> it = pend.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Utilizador u = it.next();
+            d[i] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo() };
+            i++;
+        }
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo" }, d);
+        p.add(st, BorderLayout.CENTER);
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton bAtiv = new JButton("Ativar");
+        bAtiv.setToolTipText("Aprovar a conta selecionada");
+        JButton bRej = new JButton("Rejeitar");
+        bRej.setToolTipText("Rejeitar a conta selecionada");
+        bAtiv.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione uma conta!");
+                return;
+            }
+            cUtilizador.alterarEstadoConta(id, true, utilizadorLogado.getLogin());
+            Utilitarios.mostrarSucesso(this, "Conta ativada!");
+            mostrarAtivarContas();
+        });
+        bRej.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione uma conta!");
+                return;
+            }
+            cUtilizador.alterarEstadoConta(id, false, utilizadorLogado.getLogin());
+            Utilitarios.mostrarSucesso(this, "Conta rejeitada!");
+            mostrarAtivarContas();
+        });
+        btns.add(bAtiv);
+        btns.add(bRej);
+        p.add(btns, BorderLayout.SOUTH);
+        trocarConteudo(p, "ativarContas");
+    }
+
+    private void mostrarGerirReparacoes() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Gerir Pedidos de Reparação"));
+        ArrayList<Reparacao> pend = cReparacao.listarPedidosPendentes();
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
+                converterReparacoes(pend));
+        p.add(st, BorderLayout.CENTER);
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        ArrayList<Utilizador> funcs = cUtilizador.obterFuncionariosAtivos();
+        JComboBox<String> comboFunc = new JComboBox<>();
+        comboFunc.setToolTipText("Funcionário a atribuir à reparação");
+        Iterator<Utilizador> itF = funcs.iterator();
+        while (itF.hasNext()) {
+            Utilizador f = itF.next();
+            comboFunc.addItem(f.getIdUtilizador() + " - " + f.getNome());
+        }
+        JButton bAceitar = new JButton("Aceitar e Atribuir");
+        bAceitar.setToolTipText("Aceitar e atribuir ao funcionário");
+        JButton bRejeitar = new JButton("Rejeitar");
+        bRejeitar.setToolTipText("Rejeitar o pedido");
+        bAceitar.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione um pedido!");
+                return;
+            }
+            if (comboFunc.getSelectedItem() == null) {
+                Utilitarios.mostrarErro(this, "Sem funcionários disponíveis!");
+                return;
+            }
+            String sel = (String) comboFunc.getSelectedItem();
+            int idFunc = Integer.parseInt(sel.split(" - ")[0].trim());
+            cReparacao.gerirEstadoReparacao(id, idFunc, EstadoReparacao.ACEITE.name(), utilizadorLogado.getLogin());
+            Utilitarios.mostrarSucesso(this, "Reparação atribuída!");
+            mostrarGerirReparacoes();
+        });
+        bRejeitar.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione um pedido!");
+                return;
+            }
+            cReparacao.gerirEstadoReparacao(id, 0, EstadoReparacao.REJEITADO.name(), utilizadorLogado.getLogin());
+            Utilitarios.mostrarSucesso(this, "Pedido rejeitado!");
+            mostrarGerirReparacoes();
+        });
+        btns.add(new JLabel("Funcionário:"));
+        btns.add(comboFunc);
+        btns.add(bAceitar);
+        btns.add(bRejeitar);
+        p.add(btns, BorderLayout.SOUTH);
+        trocarConteudo(p, "gerirRep");
+    }
+
+    private void mostrarArquivar() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Arquivar Processos Finalizados"));
+        ArrayList<Reparacao> fin = cReparacao.obterReparacoesProntasAArquivar();
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
+                converterReparacoes(fin));
+        p.add(st, BorderLayout.CENTER);
+        JButton bArq = new JButton("Arquivar Selecionado");
+        bArq.setToolTipText("Arquivar a reparação selecionada");
+        bArq.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione uma reparação!");
+                return;
+            }
+            cReparacao.arquivarReparacao(id);
+            Utilitarios.mostrarSucesso(this, "Processo arquivado!");
+            mostrarArquivar();
+        });
+        p.add(bArq, BorderLayout.SOUTH);
+        trocarConteudo(p, "arquivar");
+    }
+
+    private void mostrarEditarUsers() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Editar Utilizadores"));
+        ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
+        Object[][] d = new Object[todos.size()][5];
+        Iterator<Utilizador> it = todos.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Utilizador u = it.next();
+            d[i] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(), u.getEstado() };
+            i++;
+        }
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, d);
+        p.add(st, BorderLayout.CENTER);
+        JPanel form = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JTextField cNome = new JTextField(10);
+        cNome.setToolTipText("Novo nome");
+        JTextField cEmail = new JTextField(10);
+        cEmail.setToolTipText("Novo email");
+        JPasswordField cPass = new JPasswordField(10);
+        cPass.setToolTipText("Nova password");
+        JButton bSave = new JButton("Guardar");
+        bSave.setToolTipText("Guardar alterações");
+        bSave.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione!");
+                return;
+            }
+            boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText().trim(), cEmail.getText().trim(),
+                    new String(cPass.getPassword()), utilizadorLogado.getLogin());
+            if (ok) {
+                Utilitarios.mostrarSucesso(this, "Dados atualizados!");
+                mostrarEditarUsers();
+            } else
+                Utilitarios.mostrarErro(this, "Erro ao atualizar!");
+        });
+        form.add(new JLabel("Nome:"));
+        form.add(cNome);
+        form.add(new JLabel("Email:"));
+        form.add(cEmail);
+        form.add(new JLabel("Pass:"));
+        form.add(cPass);
+        form.add(bSave);
+        p.add(form, BorderLayout.SOUTH);
+        trocarConteudo(p, "editarUsers");
+    }
+
+    private void mostrarListagens() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Listagens e Pesquisas"));
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JComboBox<String> comboTipo = new JComboBox<>(new String[] {
+                "Utilizadores Ordenados", "Reparações Ordenadas", "Reparações Não Finalizadas",
+                "Pesquisar Reparações", "Pesquisar Utilizadores", "Pesquisar Equipamentos",
+                "Reparações por Data", "Todas as Reparações" });
+        comboTipo.setToolTipText("Selecione o tipo de listagem ou pesquisa");
+        JTextField campoTermo = new JTextField(12);
+        campoTermo.setToolTipText("Termo de pesquisa ou data");
+        JTextField campoTermo2 = new JTextField(10);
+        campoTermo2.setToolTipText("Data final (YYYY-MM-DD)");
+        JComboBox<String> comboOrdem = new JComboBox<>(new String[] { "Crescente", "Decrescente" });
+        comboOrdem.setToolTipText("Ordem da listagem");
+        JButton bExec = new JButton("Executar");
+        bExec.setToolTipText("Executar a listagem ou pesquisa");
+        top.add(comboTipo);
+        top.add(campoTermo);
+        top.add(campoTermo2);
+        top.add(comboOrdem);
+        top.add(bExec);
+        p.add(top, BorderLayout.NORTH);
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "Resultado" }, new Object[][] {});
+        p.add(st, BorderLayout.CENTER);
+        bExec.addActionListener(ev -> {
+            int sel = comboTipo.getSelectedIndex();
+            boolean asc = comboOrdem.getSelectedIndex() == 0;
+            String termo = campoTermo.getText().trim();
+            if (sel == 0) {
+                ArrayList<Utilizador> l = cUtilizador.listarUtilizadoresOrdenados(asc);
+                Object[][] dd = new Object[l.size()][5];
+                Iterator<Utilizador> it2 = l.iterator();
+                int j = 0;
+                while (it2.hasNext()) {
+                    Utilizador u = it2.next();
+                    dd[j] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(), u.getEstado() };
+                    j++;
+                }
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
+            } else if (sel == 1) {
+                ArrayList<Reparacao> l = cReparacao.listarReparacoesOrdenadas(1, asc);
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                        converterReparacoes(l));
+            } else if (sel == 2) {
+                ArrayList<Reparacao> l = cReparacao.listarReparacoesNaoFinalizadas();
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                        converterReparacoes(l));
+            } else if (sel == 3) {
+                ArrayList<Reparacao> l = cReparacao.pesquisarReparacoes(1, termo);
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                        converterReparacoes(l));
+            } else if (sel == 4) {
+                ArrayList<Utilizador> l = cUtilizador.pesquisarUtilizadores(1, termo);
+                Object[][] dd = new Object[l.size()][5];
+                Iterator<Utilizador> it2 = l.iterator();
+                int j = 0;
+                while (it2.hasNext()) {
+                    Utilizador u = it2.next();
+                    dd[j] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(), u.getEstado() };
+                    j++;
+                }
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
+            } else if (sel == 5) {
+                ArrayList<Equipamento> l = cEquipamento.pesquisarEquipamentos(1, termo);
+                Object[][] dd = new Object[l.size()][4];
+                Iterator<Equipamento> it2 = l.iterator();
+                int j = 0;
+                while (it2.hasNext()) {
+                    Equipamento eq = it2.next();
+                    dd[j] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
+                    j++;
+                }
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Marca", "Modelo", "SKU" }, dd);
+            } else if (sel == 6) {
+                ArrayList<Reparacao> l = cReparacao.pesquisarReparacoesPorData(termo, campoTermo2.getText().trim());
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                        converterReparacoes(l));
+            } else if (sel == 7) {
+                ArrayList<Reparacao> l = cReparacao.obterTodasReparacoes();
+                Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                        converterReparacoes(l));
+            }
+        });
+        trocarConteudo(p, "listagens");
+    }
+
+    private void mostrarNotificacoes() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Dashboard de Notificações"));
+        int id = utilizadorLogado.getIdUtilizador();
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JComboBox<String> comboCat = new JComboBox<>(
+                new String[] { "REGISTO", "REPARACAO", "STOCK", "PRAZO", "REJEICAO", "REMOCAO", "GERAL" });
+        comboCat.setToolTipText("Selecione a categoria de notificações");
+        JButton bVer = new JButton("Ver");
+        bVer.setToolTipText("Ver notificações da categoria");
+        JButton bMarcar = new JButton("Marcar como Lidas");
+        bMarcar.setToolTipText("Marcar como lidas");
+        top.add(new JLabel("Categoria:"));
+        top.add(comboCat);
+        top.add(bVer);
+        top.add(bMarcar);
+        // Mostrar contadores
+        for (CategoriaNotificacao c : CategoriaNotificacao.values()) {
+            int n = cNotificacao.contarNaoLidasPorCategoria(id, c);
+            if (n > 0)
+                top.add(new JLabel(" " + c.name() + ":" + n));
+        }
+        p.add(top, BorderLayout.NORTH);
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, new Object[][] {});
+        p.add(st, BorderLayout.CENTER);
+        bVer.addActionListener(ev -> {
+            CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
+            ArrayList<Notificacao> l = cNotificacao.obterNotificacoesPorCategoria(id, cat);
+            Object[][] dd = new Object[l.size()][3];
+            Iterator<Notificacao> it2 = l.iterator();
+            int j = 0;
+            while (it2.hasNext()) {
+                Notificacao n = it2.next();
+                dd[j] = new Object[] { n.getDataCriacao(), n.getEstado(), n.getMensagem() };
+                j++;
+            }
+            Utilitarios.atualizarTabela(st, new String[] { "Data", "Estado", "Mensagem" }, dd);
+        });
+        bMarcar.addActionListener(ev -> {
+            CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
+            cNotificacao.marcarComoLidasPorCategoria(id, cat);
+            Utilitarios.mostrarSucesso(this, "Marcadas como lidas!");
+            mostrarNotificacoes();
+        });
+        trocarConteudo(p, "notifs");
+    }
+
+    private void mostrarLogs() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Registos de Auditoria (Logs)"));
+        JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JTextField campoUser = new JTextField(12);
+        campoUser.setToolTipText("Username a pesquisar (deixe vazio para todos)");
+        JButton bPesq = new JButton("Pesquisar");
+        bPesq.setToolTipText("Pesquisar logs por username");
+        JButton bTodos = new JButton("Todos");
+        bTodos.setToolTipText("Listar todos os logs");
+        top.add(new JLabel("Username:"));
+        top.add(campoUser);
+        top.add(bPesq);
+        top.add(bTodos);
+        p.add(top, BorderLayout.NORTH);
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "Data", "Hora", "Utilizador", "Ação" },
+                new Object[][] {});
+        p.add(st, BorderLayout.CENTER);
+        ActionListener carregarLogs = ev -> {
+            ArrayList<Log> lista;
+            if (ev.getSource() == bPesq && !campoUser.getText().trim().isEmpty())
+                lista = cUtilizador.pesquisarLogsPorUtilizador(campoUser.getText().trim());
+            else
+                lista = cUtilizador.listarTodosLogs();
+            Object[][] dd = new Object[lista.size()][4];
+            Iterator<Log> it2 = lista.iterator();
+            int j = 0;
+            while (it2.hasNext()) {
+                Log l = it2.next();
+                dd[j] = new Object[] { l.getData(), l.getHora(), l.getUtilizador(), l.getAcao() };
+                j++;
+            }
+            Utilitarios.atualizarTabela(st, new String[] { "Data", "Hora", "Utilizador", "Ação" }, dd);
+        };
+        bPesq.addActionListener(carregarLogs);
+        bTodos.addActionListener(carregarLogs);
+        trocarConteudo(p, "logs");
+    }
+
+    private void mostrarToggleContas() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Ativar / Inativar Contas"));
+        ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
+        Object[][] d = new Object[todos.size()][4];
+        Iterator<Utilizador> it = todos.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Utilizador u = it.next();
+            d[i] = new Object[] { u.getIdUtilizador(), u.getLogin(), u.getTipo(), u.getEstado() };
+            i++;
+        }
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Username", "Tipo", "Estado" }, d);
+        p.add(st, BorderLayout.CENTER);
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton bAtiv = new JButton("Tornar ATIVO");
+        bAtiv.setToolTipText("Mudar conta para estado ATIVO");
+        JButton bInat = new JButton("Tornar INATIVO");
+        bInat.setToolTipText("Mudar conta para estado INATIVO");
+        bAtiv.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione!");
+                return;
+            }
+            if (id == utilizadorLogado.getIdUtilizador()) {
+                Utilitarios.mostrarErro(this, "Não podes alterar a tua própria sessão!");
+                return;
+            }
+            cUtilizador.mudarEstadoConta(id, EstadoUtilizador.ATIVO, utilizadorLogado.getLogin(),
+                    "Ativou conta ID:" + id);
+            Utilitarios.mostrarSucesso(this, "Conta ativada!");
+            mostrarToggleContas();
+        });
+        bInat.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione!");
+                return;
+            }
+            if (id == utilizadorLogado.getIdUtilizador()) {
+                Utilitarios.mostrarErro(this, "Não podes inativar a tua própria sessão!");
+                return;
+            }
+            cUtilizador.mudarEstadoConta(id, EstadoUtilizador.INATIVO, utilizadorLogado.getLogin(),
+                    "Inativou conta ID:" + id);
+            Utilitarios.mostrarSucesso(this, "Conta inativada!");
+            mostrarToggleContas();
+        });
+        btns.add(bAtiv);
+        btns.add(bInat);
+        p.add(btns, BorderLayout.SOUTH);
+        trocarConteudo(p, "toggleContas");
+    }
+
+    private void mostrarPedidosRemocao() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Pedidos de Remoção de Conta"));
+        ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
+        ArrayList<Utilizador> pedidos = new ArrayList<>();
+        Iterator<Utilizador> it = todos.iterator();
+        while (it.hasNext()) {
+            Utilizador u = it.next();
+            if (u.getEstado() == EstadoUtilizador.AGUARDA_REMOCAO)
+                pedidos.add(u);
+        }
+        Object[][] d = new Object[pedidos.size()][3];
+        Iterator<Utilizador> it2 = pedidos.iterator();
+        int i = 0;
+        while (it2.hasNext()) {
+            Utilizador u = it2.next();
+            d[i] = new Object[] { u.getIdUtilizador(), u.getLogin(), u.getTipo() };
+            i++;
+        }
+        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Username", "Tipo" }, d);
+        p.add(st, BorderLayout.CENTER);
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton bAceitar = new JButton("Aceitar Remoção");
+        bAceitar.setToolTipText("Aceitar e apagar dados");
+        JButton bRecusar = new JButton("Recusar");
+        bRecusar.setToolTipText("Recusar e devolver ao estado ATIVO");
+        bAceitar.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione!");
+                return;
+            }
+            cNotificacao.gerarNotificacao(id, "O teu pedido de remoção foi aceite.", CategoriaNotificacao.GERAL);
+            cUtilizador.apagarDadosPessoais(id, utilizadorLogado.getLogin());
+            Utilitarios.mostrarSucesso(this, "Conta removida!");
+            mostrarPedidosRemocao();
+        });
+        bRecusar.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(st);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione!");
+                return;
+            }
+            cUtilizador.mudarEstadoConta(id, EstadoUtilizador.ATIVO, utilizadorLogado.getLogin(),
+                    "Recusou remoção ID:" + id);
+            cNotificacao.gerarNotificacao(id, "O teu pedido de remoção foi recusado.", CategoriaNotificacao.GERAL);
+            Utilitarios.mostrarSucesso(this, "Pedido recusado!");
+            mostrarPedidosRemocao();
+        });
+        btns.add(bAceitar);
+        btns.add(bRecusar);
+        p.add(btns, BorderLayout.SOUTH);
+        trocarConteudo(p, "pedidosRemocao");
+    }
+
+    private void solicitarMinhaRemocao() {
+        ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
+        Iterator<Utilizador> it = todos.iterator();
+        int gestoresAtivos = 0;
+        while (it.hasNext()) {
+            Utilizador u = it.next();
+            if (u.getTipo() == TipoUtilizador.GESTOR && u.getEstado() == EstadoUtilizador.ATIVO)
+                gestoresAtivos++;
+        }
+        if (gestoresAtivos <= 1) {
+            Utilitarios.mostrarErro(this, "És o único Gestor ATIVO! Não podes solicitar remoção.");
+            return;
+        }
+        if (Utilitarios.confirmar(this, "Tens a certeza que queres solicitar a remoção da tua conta?")) {
+            cUtilizador.mudarEstadoConta(utilizadorLogado.getIdUtilizador(), EstadoUtilizador.AGUARDA_REMOCAO,
+                    utilizadorLogado.getLogin(), "Gestor solicitou remoção da conta.");
+            cNotificacao.gerarNotificacaoParaGestores(
+                    "O Gestor '" + utilizadorLogado.getLogin() + "' solicitou remoção.", CategoriaNotificacao.REMOCAO);
+            Utilitarios.mostrarInfo(this, "Pedido submetido! Sessão terminada.");
+            aplicacao.terminarSessao();
+        }
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "AplicacaoGUI",
+            "request": "launch",
+            "mainClass": "view.AplicacaoGUI",
+            "projectName": "Projeto1",
+            "classPaths": [
+                "src",
+                "lib/flatlaf-3.4.jar"
+            ]
+        },
+        {
+            "type": "java",
+            "name": "Aplicacao (Consola)",
+            "request": "launch",
+            "mainClass": "view.Aplicacao",
+            "projectName": "Projeto1",
+            "classPaths": [
+                "src"
+            ]
+        }
+    ]
+}

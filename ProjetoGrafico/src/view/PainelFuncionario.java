@@ -1,0 +1,397 @@
+package view;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import controlador.ControladorNotificacao;
+import controlador.ControladorReparacao;
+import controlador.ControladorUtilizador;
+import model.Notificacao;
+import model.Reparacao;
+import model.Utilizador;
+import util.Validacoes;
+import Enums.EstadoReparacao;
+import Enums.EstadoUtilizador;
+import Enums.CategoriaNotificacao;
+
+/**
+ * Painel com as funcionalidades disponíveis para o utilizador do tipo
+ * Funcionário.
+ * Inclui gestão de reparações atribuídas, perfil, notificações e consultas.
+ * A manipulação de peças e testes NÃO é incluída na GUI (R12).
+ *
+ * @author Santiago e Hugo
+ * @version 1.0
+ */
+public class PainelFuncionario extends JPanel implements ActionListener {
+
+    private AplicacaoGUI aplicacao;
+    private Utilizador utilizadorLogado;
+    private ControladorUtilizador cUtilizador;
+    private ControladorReparacao cReparacao;
+    private ControladorNotificacao cNotificacao;
+
+    private JPanel painelConteudo;
+    private CardLayout cardConteudo;
+
+    private JButton btnPedidosNovos, btnEmCurso, btnPerfil, btnListarRep;
+    private JButton btnPesquisarRep, btnNotificacoes, btnRemocao, btnLogout;
+
+    /**
+     * Constrói o painel do funcionário.
+     * 
+     * @param aplicacao referência para a aplicação principal
+     */
+    public PainelFuncionario(AplicacaoGUI aplicacao) {
+        this.aplicacao = aplicacao;
+        this.cUtilizador = aplicacao.getControladorUtilizador();
+        this.cReparacao = aplicacao.getControladorReparacao();
+        this.cNotificacao = aplicacao.getControladorNotificacao();
+        setLayout(new BorderLayout());
+
+        JPanel painelMenu = new JPanel();
+        painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
+        painelMenu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelMenu.setPreferredSize(new Dimension(220, 0));
+
+        JLabel titulo = new JLabel("Menu Funcionário");
+        titulo.setFont(new Font("SansSerif", Font.BOLD, 16));
+        titulo.setAlignmentX(Component.LEFT_ALIGNMENT);
+        painelMenu.add(titulo);
+        painelMenu.add(Box.createVerticalStrut(10));
+
+        btnPedidosNovos = criarBotaoMenu("Pedidos Atribuídos", "Ver pedidos de reparação atribuídos");
+        btnEmCurso = criarBotaoMenu("Reparações em Curso", "Trabalhar em reparações em andamento");
+        btnPerfil = criarBotaoMenu("O Meu Perfil", "Editar dados pessoais");
+        btnListarRep = criarBotaoMenu("Listar Reparações", "Listar reparações ordenadas");
+        btnPesquisarRep = criarBotaoMenu("Pesquisar Reparações", "Pesquisar reparações");
+        btnNotificacoes = criarBotaoMenu("Notificações", "Ver as minhas notificações");
+        btnRemocao = criarBotaoMenu("Solicitar Remoção", "Solicitar remoção da conta");
+        btnLogout = criarBotaoMenu("Logout", "Terminar sessão");
+
+        JButton[] botoes = { btnPedidosNovos, btnEmCurso, btnPerfil, btnListarRep,
+                btnPesquisarRep, btnNotificacoes, btnRemocao, btnLogout };
+        for (JButton b : botoes) {
+            painelMenu.add(b);
+            painelMenu.add(Box.createVerticalStrut(3));
+        }
+        add(painelMenu, BorderLayout.WEST);
+
+        cardConteudo = new CardLayout();
+        painelConteudo = new JPanel(cardConteudo);
+        painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        painelConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER), "vazio");
+        add(painelConteudo, BorderLayout.CENTER);
+    }
+
+    public void setUtilizadorLogado(Utilizador u) {
+        this.utilizadorLogado = u;
+    }
+
+    private JButton criarBotaoMenu(String texto, String tooltip) {
+        JButton btn = new JButton(texto);
+        btn.setToolTipText(tooltip);
+        btn.setAlignmentX(Component.LEFT_ALIGNMENT);
+        btn.setMaximumSize(new Dimension(200, 30));
+        btn.addActionListener(this);
+        return btn;
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if (utilizadorLogado == null)
+            return;
+        Object src = e.getSource();
+        if (src == btnLogout) {
+            cUtilizador.registarFimSessao(utilizadorLogado.getLogin());
+            aplicacao.terminarSessao();
+            return;
+        }
+        if (src == btnPedidosNovos)
+            mostrarPedidosAtribuidos();
+        else if (src == btnEmCurso)
+            mostrarEmCurso();
+        else if (src == btnPerfil)
+            mostrarPerfil();
+        else if (src == btnListarRep)
+            mostrarListarRep();
+        else if (src == btnPesquisarRep)
+            mostrarPesquisarRep();
+        else if (src == btnNotificacoes)
+            mostrarNotificacoes();
+        else if (src == btnRemocao)
+            solicitarRemocao();
+    }
+
+    private void mostrarPedidosAtribuidos() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Pedidos de Reparação Atribuídos"));
+
+        ArrayList<Reparacao> lista = cReparacao.listarReparacoesPorEstado(
+                utilizadorLogado.getIdUtilizador(), EstadoReparacao.ACEITE.name());
+        JScrollPane scrollTabela = Utilitarios.criarTabela(
+                new String[] { "ID", "Número", "Data Criação", "Estado" },
+                converterReparacoes(lista));
+        p.add(scrollTabela, BorderLayout.CENTER);
+
+        JPanel painelBtns = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JButton btnAceitar = new JButton("Aceitar e Iniciar");
+        btnAceitar.setToolTipText("Aceitar o pedido e iniciar a reparação");
+        btnAceitar.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(scrollTabela);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione um pedido!");
+                return;
+            }
+            cReparacao.gerirEstadoReparacao(id, utilizadorLogado.getIdUtilizador(),
+                    EstadoReparacao.DECORRER.name(), utilizadorLogado.getLogin());
+            Utilitarios.mostrarSucesso(this, "Reparação iniciada!");
+            mostrarPedidosAtribuidos();
+        });
+        JButton btnRejeitar = new JButton("Rejeitar");
+        btnRejeitar.setToolTipText("Rejeitar o pedido e devolver ao gestor");
+        btnRejeitar.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(scrollTabela);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione um pedido!");
+                return;
+            }
+            cReparacao.rejeitarReparacaoPorFuncionario(id, utilizadorLogado.getIdUtilizador(),
+                    utilizadorLogado.getLogin());
+            Utilitarios.mostrarSucesso(this, "Pedido rejeitado e devolvido ao gestor.");
+            mostrarPedidosAtribuidos();
+        });
+        painelBtns.add(btnAceitar);
+        painelBtns.add(btnRejeitar);
+        p.add(painelBtns, BorderLayout.SOUTH);
+        trocarConteudo(p, "pedidosNovos");
+    }
+
+    private void mostrarEmCurso() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Reparações em Curso (sem peças/testes na GUI — R12)"));
+
+        ArrayList<Reparacao> lista = cReparacao.listarReparacoesPorEstado(
+                utilizadorLogado.getIdUtilizador(), EstadoReparacao.DECORRER.name());
+        JScrollPane scrollTabela = Utilitarios.criarTabela(
+                new String[] { "ID", "Número", "Data Criação", "Estado" },
+                converterReparacoes(lista));
+        p.add(scrollTabela, BorderLayout.CENTER);
+
+        JPanel painelConclusao = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JTextField campoCusto = new JTextField(8);
+        campoCusto.setToolTipText("Custo final da reparação em euros");
+        JTextArea campoObs = new JTextArea(2, 20);
+        campoObs.setToolTipText("Observações sobre o trabalho realizado (R4)");
+        campoObs.setLineWrap(true);
+        JButton btnConcluir = new JButton("Concluir Reparação");
+        btnConcluir.setToolTipText("Finalizar a reparação selecionada");
+
+        painelConclusao.add(new JLabel("Custo (€):"));
+        painelConclusao.add(campoCusto);
+        painelConclusao.add(new JLabel("Obs.:"));
+        painelConclusao.add(new JScrollPane(campoObs));
+        painelConclusao.add(btnConcluir);
+
+        btnConcluir.addActionListener(ev -> {
+            int id = Utilitarios.obterIdSelecionado(scrollTabela);
+            if (id == -1) {
+                Utilitarios.mostrarErro(this, "Selecione uma reparação!");
+                return;
+            }
+            double custo;
+            try {
+                custo = Double.parseDouble(campoCusto.getText().trim());
+            } catch (NumberFormatException ex) {
+                Utilitarios.mostrarErro(this, "Custo inválido!");
+                return;
+            }
+
+            // Procurar a reparação na lista
+            Reparacao repSelecionada = null;
+            Iterator<Reparacao> it = lista.iterator();
+            while (it.hasNext()) {
+                Reparacao r = it.next();
+                if (r.getIdReparacao() == id) {
+                    repSelecionada = r;
+                    break;
+                }
+            }
+            if (repSelecionada != null) {
+                cReparacao.concluirReparacaoFinal(repSelecionada, custo,
+                        campoObs.getText().trim(), utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(this, "Reparação concluída com sucesso!");
+                mostrarEmCurso();
+            }
+        });
+        p.add(painelConclusao, BorderLayout.SOUTH);
+        trocarConteudo(p, "emCurso");
+    }
+
+    private void mostrarPerfil() {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
+
+        JTextField cEmail = new JTextField(utilizadorLogado.getEmail(), 20);
+        JPasswordField cPass = new JPasswordField(20);
+        JTextField cTel = new JTextField(20);
+        JTextField cMorada = new JTextField(20);
+
+        p.add(new JLabel("Nome: " + utilizadorLogado.getNome()));
+        p.add(Box.createVerticalStrut(5));
+        p.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
+        p.add(Box.createVerticalStrut(5));
+        p.add(Utilitarios.criarCampoFormulario("Nova Password:", cPass, "Nova palavra-passe"));
+        p.add(Box.createVerticalStrut(5));
+        p.add(Utilitarios.criarCampoFormulario("Novo Telefone:", cTel, "Novo telefone (9 dígitos)"));
+        p.add(Box.createVerticalStrut(5));
+        p.add(Utilitarios.criarCampoFormulario("Nova Morada:", cMorada, "Nova morada"));
+        p.add(Box.createVerticalStrut(10));
+
+        JButton btnGuardar = new JButton("Guardar Alterações");
+        btnGuardar.setToolTipText("Guardar as alterações ao perfil");
+        btnGuardar.addActionListener(ev -> {
+            String email = cEmail.getText().trim();
+            String pass = new String(cPass.getPassword());
+            if (!Validacoes.emailValido(email)) {
+                Utilitarios.mostrarErro(this, "Email inválido!");
+                return;
+            }
+            if (pass.isEmpty()) {
+                Utilitarios.mostrarErro(this, "Password não pode estar vazia!");
+                return;
+            }
+            boolean ok = cUtilizador.atualizarPerfilFuncionario(utilizadorLogado.getIdUtilizador(),
+                    email, pass, cTel.getText().trim(), cMorada.getText().trim(), utilizadorLogado.getLogin());
+            if (ok)
+                Utilitarios.mostrarSucesso(this, "Perfil atualizado!");
+            else
+                Utilitarios.mostrarErro(this, "Erro ao atualizar perfil.");
+        });
+        p.add(btnGuardar);
+        trocarConteudo(p, "perfil");
+    }
+
+    private void mostrarListarRep() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Listar Reparações"));
+
+        JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JComboBox<String> comboCrit = new JComboBox<>(new String[] { "Data de Criação", "Número" });
+        comboCrit.setToolTipText("Critério de ordenação");
+        JComboBox<String> comboOrdem = new JComboBox<>(new String[] { "Crescente", "Decrescente" });
+        comboOrdem.setToolTipText("Direção da ordenação");
+        JButton btnListar = new JButton("Listar");
+        btnListar.setToolTipText("Aplicar filtro e listar");
+        filtros.add(new JLabel("Ordenar por:"));
+        filtros.add(comboCrit);
+        filtros.add(comboOrdem);
+        filtros.add(btnListar);
+        p.add(filtros, BorderLayout.NORTH);
+
+        JScrollPane scrollTabela = Utilitarios.criarTabela(
+                new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
+        p.add(scrollTabela, BorderLayout.CENTER);
+
+        btnListar.addActionListener(ev -> {
+            ArrayList<Reparacao> lista = cReparacao.listarReparacoesFuncionarioOrdenadas(
+                    utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
+                    comboOrdem.getSelectedIndex() == 0);
+            Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                    converterReparacoes(lista));
+        });
+        trocarConteudo(p, "listarRep");
+    }
+
+    private void mostrarPesquisarRep() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Pesquisar Reparações"));
+
+        JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JComboBox<String> comboCrit = new JComboBox<>(new String[] { "Número", "Estado" });
+        comboCrit.setToolTipText("Critério de pesquisa");
+        JTextField campoTermo = new JTextField(15);
+        campoTermo.setToolTipText("Termo a pesquisar");
+        JButton btnPesq = new JButton("Pesquisar");
+        btnPesq.setToolTipText("Executar pesquisa");
+        filtros.add(new JLabel("Critério:"));
+        filtros.add(comboCrit);
+        filtros.add(campoTermo);
+        filtros.add(btnPesq);
+        p.add(filtros, BorderLayout.NORTH);
+
+        JScrollPane scrollTabela = Utilitarios.criarTabela(
+                new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
+        p.add(scrollTabela, BorderLayout.CENTER);
+
+        btnPesq.addActionListener(ev -> {
+            ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesFuncionario(
+                    utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
+                    campoTermo.getText().trim());
+            Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                    converterReparacoes(res));
+        });
+        trocarConteudo(p, "pesqRep");
+    }
+
+    private void mostrarNotificacoes() {
+        JPanel p = new JPanel(new BorderLayout(5, 5));
+        p.setBorder(BorderFactory.createTitledBorder("Notificações"));
+
+        ArrayList<Notificacao> lista = cNotificacao.obterNotificacoes(utilizadorLogado.getIdUtilizador());
+        Object[][] dados = new Object[lista.size()][3];
+        Iterator<Notificacao> it = lista.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Notificacao n = it.next();
+            dados[i] = new Object[] { n.getDataCriacao(), n.getEstado(), n.getMensagem() };
+            i++;
+        }
+        JScrollPane scrollTabela = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, dados);
+        p.add(scrollTabela, BorderLayout.CENTER);
+
+        JButton btnMarcar = new JButton("Marcar Todas como Lidas");
+        btnMarcar.setToolTipText("Marcar notificações como lidas");
+        btnMarcar.addActionListener(ev -> {
+            cNotificacao.marcarComoLidas(utilizadorLogado.getIdUtilizador());
+            Utilitarios.mostrarSucesso(this, "Notificações marcadas como lidas!");
+            mostrarNotificacoes();
+        });
+        p.add(btnMarcar, BorderLayout.SOUTH);
+        trocarConteudo(p, "notifs");
+    }
+
+    private void solicitarRemocao() {
+        if (Utilitarios.confirmar(this, "Tens a certeza que queres solicitar a remoção da conta?")) {
+            cUtilizador.mudarEstadoConta(utilizadorLogado.getIdUtilizador(), EstadoUtilizador.AGUARDA_REMOCAO,
+                    utilizadorLogado.getLogin(), "Funcionário solicitou remoção da conta.");
+            cNotificacao.gerarNotificacaoParaGestores(
+                    "O Funcionário '" + utilizadorLogado.getLogin() + "' solicitou a remoção.",
+                    CategoriaNotificacao.REMOCAO);
+            Utilitarios.mostrarInfo(this, "Pedido submetido! Sessão terminada.");
+            aplicacao.terminarSessao();
+        }
+    }
+
+    private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
+        Object[][] dados = new Object[lista.size()][4];
+        Iterator<Reparacao> it = lista.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Reparacao r = it.next();
+            dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(), r.getEstado() };
+            i++;
+        }
+        return dados;
+    }
+
+    private void trocarConteudo(JPanel novoPainel, String nome) {
+        painelConteudo.add(novoPainel, nome);
+        cardConteudo.show(painelConteudo, nome);
+    }
+}
