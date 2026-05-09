@@ -77,7 +77,8 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         menuBar.add(menuAjuda);
         setJMenuBar(menuBar);
 
-        // Painel principal com BorderLayout (navegação por remove/add/revalidate/repaint)
+        // Painel principal com BorderLayout (navegação por
+        // remove/add/revalidate/repaint)
         painelPrincipal = new JPanel(new BorderLayout());
 
         painelLogin = new PainelLogin(this);
@@ -127,12 +128,24 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
     public void mostrarPainel(String nome) {
         JPanel novoPainel;
         switch (nome) {
-            case "login":       novoPainel = painelLogin; break;
-            case "registo":     novoPainel = painelRegisto; break;
-            case "cliente":     novoPainel = painelCliente; break;
-            case "funcionario": novoPainel = painelFuncionario; break;
-            case "gestor":      novoPainel = painelGestor; break;
-            default:            novoPainel = painelLogin; break;
+            case "login":
+                novoPainel = painelLogin;
+                break;
+            case "registo":
+                novoPainel = painelRegisto;
+                break;
+            case "cliente":
+                novoPainel = painelCliente;
+                break;
+            case "funcionario":
+                novoPainel = painelFuncionario;
+                break;
+            case "gestor":
+                novoPainel = painelGestor;
+                break;
+            default:
+                novoPainel = painelLogin;
+                break;
         }
         painelPrincipal.remove(painelAtual);
         painelAtual = novoPainel;

@@ -208,7 +208,8 @@ public class PainelRegisto extends JPanel implements ActionListener {
     }
 
     /**
-     * Valida os campos preenchidos, cria as instâncias adequadas (Cliente ou Funcionário)
+     * Valida os campos preenchidos, cria as instâncias adequadas (Cliente ou
+     * Funcionário)
      * e submete os dados ao controlador para registo no sistema.
      */
     private void efetuarRegisto() {

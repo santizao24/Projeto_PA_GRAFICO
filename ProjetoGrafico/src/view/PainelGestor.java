@@ -215,28 +215,30 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAtiv.setToolTipText("Aprovar a conta selecionada");
         JButton bRej = new JButton("Rejeitar");
         bRej.setToolTipText("Rejeitar a conta selecionada");
-        bAtiv.addActionListener(new ActionListener() { @Override
+        bAtiv.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
-                return;
-            }
-            cUtilizador.alterarEstadoConta(id, true, utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Conta ativada!");
-            mostrarAtivarContas();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
+                    return;
+                }
+                cUtilizador.alterarEstadoConta(id, true, utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Conta ativada!");
+                mostrarAtivarContas();
             }
         });
-        bRej.addActionListener(new ActionListener() { @Override
+        bRej.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
-                return;
-            }
-            cUtilizador.alterarEstadoConta(id, false, utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Conta rejeitada!");
-            mostrarAtivarContas();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
+                    return;
+                }
+                cUtilizador.alterarEstadoConta(id, false, utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Conta rejeitada!");
+                mostrarAtivarContas();
             }
         });
         btns.add(bAtiv);
@@ -268,34 +270,36 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAceitar.setToolTipText("Aceitar e atribuir ao funcionário");
         JButton bRejeitar = new JButton("Rejeitar");
         bRejeitar.setToolTipText("Rejeitar o pedido");
-        bAceitar.addActionListener(new ActionListener() { @Override
+        bAceitar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione um pedido!");
-                return;
-            }
-            if (comboFunc.getSelectedItem() == null) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Sem funcionários disponíveis!");
-                return;
-            }
-            String sel = (String) comboFunc.getSelectedItem();
-            int idFunc = Integer.parseInt(sel.split(" - ")[0].trim());
-            cReparacao.gerirEstadoReparacao(id, idFunc, EstadoReparacao.ACEITE.name(), utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Reparação atribuída!");
-            mostrarGerirReparacoes();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione um pedido!");
+                    return;
+                }
+                if (comboFunc.getSelectedItem() == null) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Sem funcionários disponíveis!");
+                    return;
+                }
+                String sel = (String) comboFunc.getSelectedItem();
+                int idFunc = Integer.parseInt(sel.split(" - ")[0].trim());
+                cReparacao.gerirEstadoReparacao(id, idFunc, EstadoReparacao.ACEITE.name(), utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Reparação atribuída!");
+                mostrarGerirReparacoes();
             }
         });
-        bRejeitar.addActionListener(new ActionListener() { @Override
+        bRejeitar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione um pedido!");
-                return;
-            }
-            cReparacao.gerirEstadoReparacao(id, 0, EstadoReparacao.REJEITADO.name(), utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Pedido rejeitado!");
-            mostrarGerirReparacoes();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione um pedido!");
+                    return;
+                }
+                cReparacao.gerirEstadoReparacao(id, 0, EstadoReparacao.REJEITADO.name(), utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Pedido rejeitado!");
+                mostrarGerirReparacoes();
             }
         });
         btns.add(new JLabel("Funcionário:"));
@@ -318,16 +322,17 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.add(st, BorderLayout.CENTER);
         JButton bArq = new JButton("Arquivar Selecionado");
         bArq.setToolTipText("Arquivar a reparação selecionada");
-        bArq.addActionListener(new ActionListener() { @Override
+        bArq.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma reparação!");
-                return;
-            }
-            cReparacao.arquivarReparacao(id);
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Processo arquivado!");
-            mostrarArquivar();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma reparação!");
+                    return;
+                }
+                cReparacao.arquivarReparacao(id);
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Processo arquivado!");
+                mostrarArquivar();
             }
         });
         p.add(bArq, BorderLayout.SOUTH);
@@ -360,20 +365,21 @@ public class PainelGestor extends JPanel implements ActionListener {
         cPass.setToolTipText("Nova password");
         JButton bSave = new JButton("Guardar");
         bSave.setToolTipText("Guardar alterações");
-        bSave.addActionListener(new ActionListener() { @Override
+        bSave.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
-                return;
-            }
-            boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText().trim(), cEmail.getText().trim(),
-                    new String(cPass.getPassword()), utilizadorLogado.getLogin());
-            if (ok) {
-                Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados!");
-                mostrarEditarUsers();
-            } else
-                Utilitarios.mostrarErro(PainelGestor.this, "Erro ao atualizar!");
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    return;
+                }
+                boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText().trim(), cEmail.getText().trim(),
+                        new String(cPass.getPassword()), utilizadorLogado.getLogin());
+                if (ok) {
+                    Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados!");
+                    mostrarEditarUsers();
+                } else
+                    Utilitarios.mostrarErro(PainelGestor.this, "Erro ao atualizar!");
             }
         });
         form.add(new JLabel("Nome:"));
@@ -439,7 +445,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent ev) {
                 int sel = comboTipo.getSelectedIndex();
-                // Pesquisar Reparações (3), Pesquisar Utilizadores (4), Pesquisar Equipamentos (5)
+                // Pesquisar Reparações (3), Pesquisar Utilizadores (4), Pesquisar Equipamentos
+                // (5)
                 boolean mostrarTermo = (sel == 3 || sel == 4 || sel == 5);
                 // Reparações por Data (6)
                 boolean mostrarDatas = (sel == 6);
@@ -472,7 +479,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                     int j = 0;
                     while (it2.hasNext()) {
                         Utilizador u = it2.next();
-                        dd[j] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(), u.getEstado() };
+                        dd[j] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(),
+                                u.getEstado() };
                         j++;
                     }
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
@@ -503,7 +511,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                     int j = 0;
                     while (it2.hasNext()) {
                         Utilizador u = it2.next();
-                        dd[j] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(), u.getEstado() };
+                        dd[j] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(),
+                                u.getEstado() };
                         j++;
                     }
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
@@ -541,6 +550,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         });
         trocarConteudo(p, "listagens");
     }
+
     /**
      * Apresenta o dashboard de notificações.
      * Permite visualizar e marcar notificações como lidas, filtradas por categoria.
@@ -573,31 +583,34 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.add(top, BorderLayout.NORTH);
         JScrollPane st = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, new Object[][] {});
         p.add(st, BorderLayout.CENTER);
-        bVer.addActionListener(new ActionListener() { @Override
+        bVer.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
-            ArrayList<Notificacao> l = cNotificacao.obterNotificacoesPorCategoria(id, cat);
-            Object[][] dd = new Object[l.size()][3];
-            Iterator<Notificacao> it2 = l.iterator();
-            int j = 0;
-            while (it2.hasNext()) {
-                Notificacao n = it2.next();
-                dd[j] = new Object[] { n.getDataCriacao(), n.getEstado(), n.getMensagem() };
-                j++;
-            }
-            Utilitarios.atualizarTabela(st, new String[] { "Data", "Estado", "Mensagem" }, dd);
+                CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
+                ArrayList<Notificacao> l = cNotificacao.obterNotificacoesPorCategoria(id, cat);
+                Object[][] dd = new Object[l.size()][3];
+                Iterator<Notificacao> it2 = l.iterator();
+                int j = 0;
+                while (it2.hasNext()) {
+                    Notificacao n = it2.next();
+                    dd[j] = new Object[] { n.getDataCriacao(), n.getEstado(), n.getMensagem() };
+                    j++;
+                }
+                Utilitarios.atualizarTabela(st, new String[] { "Data", "Estado", "Mensagem" }, dd);
             }
         });
-        bMarcar.addActionListener(new ActionListener() { @Override
+        bMarcar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
-            cNotificacao.marcarComoLidasPorCategoria(id, cat);
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Marcadas como lidas!");
-            mostrarNotificacoes();
+                CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
+                cNotificacao.marcarComoLidasPorCategoria(id, cat);
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Marcadas como lidas!");
+                mostrarNotificacoes();
             }
         });
         trocarConteudo(p, "notifs");
     }
+
     /**
      * Apresenta os registos de auditoria (logs) do sistema.
      * Permite visualizar todos os logs ou pesquisar por username específico.
@@ -643,6 +656,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bTodos.addActionListener(carregarLogs);
         trocarConteudo(p, "logs");
     }
+
     /**
      * Apresenta o painel para alternar o estado de contas (Ativo/Inativo).
      * O Gestor pode suspender (inativar) contas por mau comportamento ou reativar.
@@ -666,38 +680,40 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAtiv.setToolTipText("Mudar conta para estado ATIVO");
         JButton bInat = new JButton("Tornar INATIVO");
         bInat.setToolTipText("Mudar conta para estado INATIVO");
-        bAtiv.addActionListener(new ActionListener() { @Override
+        bAtiv.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
-                return;
-            }
-            if (id == utilizadorLogado.getIdUtilizador()) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Não podes alterar a tua própria sessão!");
-                return;
-            }
-            cUtilizador.mudarEstadoConta(id, EstadoUtilizador.ATIVO, utilizadorLogado.getLogin(),
-                    "Ativou conta ID:" + id);
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Conta ativada!");
-            mostrarToggleContas();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    return;
+                }
+                if (id == utilizadorLogado.getIdUtilizador()) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Não podes alterar a tua própria sessão!");
+                    return;
+                }
+                cUtilizador.mudarEstadoConta(id, EstadoUtilizador.ATIVO, utilizadorLogado.getLogin(),
+                        "Ativou conta ID:" + id);
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Conta ativada!");
+                mostrarToggleContas();
             }
         });
-        bInat.addActionListener(new ActionListener() { @Override
+        bInat.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
-                return;
-            }
-            if (id == utilizadorLogado.getIdUtilizador()) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Não podes inativar a tua própria sessão!");
-                return;
-            }
-            cUtilizador.mudarEstadoConta(id, EstadoUtilizador.INATIVO, utilizadorLogado.getLogin(),
-                    "Inativou conta ID:" + id);
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Conta inativada!");
-            mostrarToggleContas();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    return;
+                }
+                if (id == utilizadorLogado.getIdUtilizador()) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Não podes inativar a tua própria sessão!");
+                    return;
+                }
+                cUtilizador.mudarEstadoConta(id, EstadoUtilizador.INATIVO, utilizadorLogado.getLogin(),
+                        "Inativou conta ID:" + id);
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Conta inativada!");
+                mostrarToggleContas();
             }
         });
         btns.add(bAtiv);
@@ -705,6 +721,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.add(btns, BorderLayout.SOUTH);
         trocarConteudo(p, "toggleContas");
     }
+
     /**
      * Apresenta os pedidos de remoção de conta solicitados pelos utilizadores.
      * Permite aceitar (e anonimizar/apagar) ou recusar o pedido.
@@ -735,31 +752,33 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAceitar.setToolTipText("Aceitar e apagar dados");
         JButton bRecusar = new JButton("Recusar");
         bRecusar.setToolTipText("Recusar e devolver ao estado ATIVO");
-        bAceitar.addActionListener(new ActionListener() { @Override
+        bAceitar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
-                return;
-            }
-            cNotificacao.gerarNotificacao(id, "O teu pedido de remoção foi aceite.", CategoriaNotificacao.GERAL);
-            cUtilizador.apagarDadosPessoais(id, utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Conta removida!");
-            mostrarPedidosRemocao();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    return;
+                }
+                cNotificacao.gerarNotificacao(id, "O teu pedido de remoção foi aceite.", CategoriaNotificacao.GERAL);
+                cUtilizador.apagarDadosPessoais(id, utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Conta removida!");
+                mostrarPedidosRemocao();
             }
         });
-        bRecusar.addActionListener(new ActionListener() { @Override
+        bRecusar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int id = Utilitarios.obterIdSelecionado(st);
-            if (id == -1) {
-                Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
-                return;
-            }
-            cUtilizador.mudarEstadoConta(id, EstadoUtilizador.ATIVO, utilizadorLogado.getLogin(),
-                    "Recusou remoção ID:" + id);
-            cNotificacao.gerarNotificacao(id, "O teu pedido de remoção foi recusado.", CategoriaNotificacao.GERAL);
-            Utilitarios.mostrarSucesso(PainelGestor.this, "Pedido recusado!");
-            mostrarPedidosRemocao();
+                int id = Utilitarios.obterIdSelecionado(st);
+                if (id == -1) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    return;
+                }
+                cUtilizador.mudarEstadoConta(id, EstadoUtilizador.ATIVO, utilizadorLogado.getLogin(),
+                        "Recusou remoção ID:" + id);
+                cNotificacao.gerarNotificacao(id, "O teu pedido de remoção foi recusado.", CategoriaNotificacao.GERAL);
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Pedido recusado!");
+                mostrarPedidosRemocao();
             }
         });
         btns.add(bAceitar);
@@ -767,9 +786,11 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.add(btns, BorderLayout.SOUTH);
         trocarConteudo(p, "pedidosRemocao");
     }
+
     /**
      * Solicita a remoção da própria conta (Gestor logado).
-     * Verifica se existe pelo menos outro Gestor ativo no sistema antes de permitir a solicitação.
+     * Verifica se existe pelo menos outro Gestor ativo no sistema antes de permitir
+     * a solicitação.
      */
     private void solicitarMinhaRemocao() {
         ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
@@ -794,6 +815,3 @@ public class PainelGestor extends JPanel implements ActionListener {
         }
     }
 }
-
-
-

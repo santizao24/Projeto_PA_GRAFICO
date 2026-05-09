@@ -30,6 +30,7 @@ public class Utilitarios {
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
             @Override
             public Class<?> getColumnClass(int columnIndex) {
                 // Verificar a primeira linha para determinar o tipo da coluna
@@ -119,6 +120,7 @@ public class Utilitarios {
                 public boolean isCellEditable(int row, int column) {
                     return false;
                 }
+
                 @Override
                 public Class<?> getColumnClass(int columnIndex) {
                     if (getRowCount() > 0 && getValueAt(0, columnIndex) != null) {

@@ -192,22 +192,25 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         JButton btnSubmeter = new JButton("Registar Equipamento");
         btnSubmeter.setToolTipText("Submeter o registo do equipamento");
-        btnSubmeter.addActionListener(new ActionListener() { @Override
+        btnSubmeter.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            String marca = cMarca.getText().trim();
-            String modelo = cModelo.getText().trim();
-            if (marca.isEmpty() || modelo.isEmpty()) {
-                Utilitarios.mostrarErro(PainelCliente.this, "Marca e Modelo são obrigatórios!");
-                return;
-            }
-            if (cEquipamento.modeloExiste(modelo)) {
-                Utilitarios.mostrarErro(PainelCliente.this, "Já existe um equipamento com o código de modelo '" + modelo + "'.");
-                return;
-            }
-            int codSKU = cEquipamento.gerarSkuUnico();
-            cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU,
-                    cDataFab.getText().trim(), cLote.getText().trim(), utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(PainelCliente.this, "Equipamento registado com sucesso! (SKU: " + codSKU + ")");
+                String marca = cMarca.getText().trim();
+                String modelo = cModelo.getText().trim();
+                if (marca.isEmpty() || modelo.isEmpty()) {
+                    Utilitarios.mostrarErro(PainelCliente.this, "Marca e Modelo são obrigatórios!");
+                    return;
+                }
+                if (cEquipamento.modeloExiste(modelo)) {
+                    Utilitarios.mostrarErro(PainelCliente.this,
+                            "Já existe um equipamento com o código de modelo '" + modelo + "'.");
+                    return;
+                }
+                int codSKU = cEquipamento.gerarSkuUnico();
+                cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU,
+                        cDataFab.getText().trim(), cLote.getText().trim(), utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(PainelCliente.this,
+                        "Equipamento registado com sucesso! (SKU: " + codSKU + ")");
             }
         });
         p.add(btnSubmeter);
@@ -217,7 +220,8 @@ public class PainelCliente extends JPanel implements ActionListener {
 
     // --- Pedir Reparação ---
     /**
-     * Apresenta o painel para pedir a reparação de um equipamento associado ao cliente.
+     * Apresenta o painel para pedir a reparação de um equipamento associado ao
+     * cliente.
      */
     private void mostrarPedirReparacao() {
         JPanel p = new JPanel(new BorderLayout(5, 5));
@@ -243,15 +247,16 @@ public class PainelCliente extends JPanel implements ActionListener {
         painelAcao.add(new JScrollPane(cObs));
         JButton btnPedir = new JButton("Pedir Reparação");
         btnPedir.setToolTipText("Submeter pedido para o equipamento selecionado");
-        btnPedir.addActionListener(new ActionListener() { @Override
+        btnPedir.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            int idEq = Utilitarios.obterIdSelecionado(scrollTabela);
-            if (idEq == -1) {
-                Utilitarios.mostrarErro(PainelCliente.this, "Selecione um equipamento da tabela!");
-                return;
-            }
-            cReparacao.registarNovoPedido(idEq, utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(PainelCliente.this, "Pedido de reparação submetido com sucesso!");
+                int idEq = Utilitarios.obterIdSelecionado(scrollTabela);
+                if (idEq == -1) {
+                    Utilitarios.mostrarErro(PainelCliente.this, "Selecione um equipamento da tabela!");
+                    return;
+                }
+                cReparacao.registarNovoPedido(idEq, utilizadorLogado.getLogin());
+                Utilitarios.mostrarSucesso(PainelCliente.this, "Pedido de reparação submetido com sucesso!");
             }
         });
         painelAcao.add(btnPedir);
@@ -287,29 +292,30 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
-        btnGuardar.addActionListener(new ActionListener() { @Override
+        btnGuardar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            String email = cEmail.getText().trim();
-            String pass = new String(cPass.getPassword());
-            String tel = cTel.getText().trim();
-            if (!Validacoes.emailValido(email)) {
-                Utilitarios.mostrarErro(PainelCliente.this, "Email inválido!");
-                return;
-            }
-            if (pass.isEmpty()) {
-                Utilitarios.mostrarErro(PainelCliente.this, "Password não pode estar vazia!");
-                return;
-            }
-            if (!Validacoes.telefoneValido(tel)) {
-                Utilitarios.mostrarErro(PainelCliente.this, "Telefone inválido!");
-                return;
-            }
-            boolean ok = cUtilizador.atualizarPerfilCliente(utilizadorLogado.getIdUtilizador(),
-                    email, pass, tel, cMorada.getText().trim(), utilizadorLogado.getLogin());
-            if (ok)
-                Utilitarios.mostrarSucesso(PainelCliente.this, "Perfil atualizado com sucesso!");
-            else
-                Utilitarios.mostrarErro(PainelCliente.this, "Erro ao atualizar. Email pode já estar em uso.");
+                String email = cEmail.getText().trim();
+                String pass = new String(cPass.getPassword());
+                String tel = cTel.getText().trim();
+                if (!Validacoes.emailValido(email)) {
+                    Utilitarios.mostrarErro(PainelCliente.this, "Email inválido!");
+                    return;
+                }
+                if (pass.isEmpty()) {
+                    Utilitarios.mostrarErro(PainelCliente.this, "Password não pode estar vazia!");
+                    return;
+                }
+                if (!Validacoes.telefoneValido(tel)) {
+                    Utilitarios.mostrarErro(PainelCliente.this, "Telefone inválido!");
+                    return;
+                }
+                boolean ok = cUtilizador.atualizarPerfilCliente(utilizadorLogado.getIdUtilizador(),
+                        email, pass, tel, cMorada.getText().trim(), utilizadorLogado.getLogin());
+                if (ok)
+                    Utilitarios.mostrarSucesso(PainelCliente.this, "Perfil atualizado com sucesso!");
+                else
+                    Utilitarios.mostrarErro(PainelCliente.this, "Erro ao atualizar. Email pode já estar em uso.");
             }
         });
         p.add(btnGuardar);
@@ -318,7 +324,8 @@ public class PainelCliente extends JPanel implements ActionListener {
     }
 
     /**
-     * Apresenta o painel com a listagem de todos os pedidos de reparação do cliente.
+     * Apresenta o painel com a listagem de todos os pedidos de reparação do
+     * cliente.
      */
     private void mostrarListarReparacoes() {
         JPanel p = new JPanel(new BorderLayout(5, 5));
@@ -334,19 +341,21 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnListar.addActionListener(new ActionListener() { @Override
+        btnListar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            ArrayList<Reparacao> lista = cReparacao.listarReparacoesClienteOrdenadas(
-                    utilizadorLogado.getIdUtilizador(), 1, true);
-            Object[][] dados = new Object[lista.size()][4];
-            Iterator<Reparacao> it = lista.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                Reparacao r = it.next();
-                dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(), r.getEstado() };
-                i++;
-            }
-            Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
+                ArrayList<Reparacao> lista = cReparacao.listarReparacoesClienteOrdenadas(
+                        utilizadorLogado.getIdUtilizador(), 1, true);
+                Object[][] dados = new Object[lista.size()][4];
+                Iterator<Reparacao> it = lista.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    Reparacao r = it.next();
+                    dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(),
+                            r.getEstado() };
+                    i++;
+                }
+                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
             }
         });
 
@@ -377,20 +386,22 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnPesq.addActionListener(new ActionListener() { @Override
+        btnPesq.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesCliente(
-                    utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
-                    campoTermo.getText().trim());
-            Object[][] dados = new Object[res.size()][4];
-            Iterator<Reparacao> it = res.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                Reparacao r = it.next();
-                dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(), r.getEstado() };
-                i++;
-            }
-            Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
+                ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesCliente(
+                        utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
+                        campoTermo.getText().trim());
+                Object[][] dados = new Object[res.size()][4];
+                Iterator<Reparacao> it = res.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    Reparacao r = it.next();
+                    dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(),
+                            r.getEstado() };
+                    i++;
+                }
+                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
             }
         });
 
@@ -414,19 +425,20 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Marca", "Modelo", "SKU" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnListar.addActionListener(new ActionListener() { @Override
+        btnListar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            ArrayList<Equipamento> lista = cEquipamento.listarEquipamentosClienteOrdenados(
-                    utilizadorLogado.getIdUtilizador(), 1, true);
-            Object[][] dados = new Object[lista.size()][4];
-            Iterator<Equipamento> it = lista.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                Equipamento eq = it.next();
-                dados[i] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
-                i++;
-            }
-            Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
+                ArrayList<Equipamento> lista = cEquipamento.listarEquipamentosClienteOrdenados(
+                        utilizadorLogado.getIdUtilizador(), 1, true);
+                Object[][] dados = new Object[lista.size()][4];
+                Iterator<Equipamento> it = lista.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    Equipamento eq = it.next();
+                    dados[i] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
+                    i++;
+                }
+                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
             }
         });
 
@@ -457,20 +469,21 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Marca", "Modelo", "SKU" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnPesq.addActionListener(new ActionListener() { @Override
+        btnPesq.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            ArrayList<Equipamento> res = cEquipamento.pesquisarEquipamentosCliente(
-                    utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
-                    campoTermo.getText().trim());
-            Object[][] dados = new Object[res.size()][4];
-            Iterator<Equipamento> it = res.iterator();
-            int i = 0;
-            while (it.hasNext()) {
-                Equipamento eq = it.next();
-                dados[i] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
-                i++;
-            }
-            Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
+                ArrayList<Equipamento> res = cEquipamento.pesquisarEquipamentosCliente(
+                        utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
+                        campoTermo.getText().trim());
+                Object[][] dados = new Object[res.size()][4];
+                Iterator<Equipamento> it = res.iterator();
+                int i = 0;
+                while (it.hasNext()) {
+                    Equipamento eq = it.next();
+                    dados[i] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
+                    i++;
+                }
+                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
             }
         });
 
@@ -499,11 +512,12 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         JButton btnMarcar = new JButton("Marcar Todas como Lidas");
         btnMarcar.setToolTipText("Marcar todas as notificações pendentes como lidas");
-        btnMarcar.addActionListener(new ActionListener() { @Override
+        btnMarcar.addActionListener(new ActionListener() {
+            @Override
             public void actionPerformed(ActionEvent ev) {
-            cNotificacao.marcarComoLidas(utilizadorLogado.getIdUtilizador());
-            Utilitarios.mostrarSucesso(PainelCliente.this, "Notificações marcadas como lidas!");
-            mostrarNotificacoes();
+                cNotificacao.marcarComoLidas(utilizadorLogado.getIdUtilizador());
+                Utilitarios.mostrarSucesso(PainelCliente.this, "Notificações marcadas como lidas!");
+                mostrarNotificacoes();
             }
         });
         p.add(btnMarcar, BorderLayout.SOUTH);
@@ -568,6 +582,3 @@ public class PainelCliente extends JPanel implements ActionListener {
         painelConteudo.repaint();
     }
 }
-
-
-
