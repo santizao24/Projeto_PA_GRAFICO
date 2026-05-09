@@ -497,7 +497,38 @@ public class PainelGestor extends JPanel implements ActionListener {
                     if (termo.isEmpty()) {
                         l = cReparacao.listarReparacoesOrdenadas(1, true);
                     } else {
-                        l = cReparacao.pesquisarReparacoes(1, termo);
+                        // Pesquisar por número (1), estado (2) e nome do cliente (3)
+                        ArrayList<Reparacao> r1 = cReparacao.pesquisarReparacoes(1, termo);
+                        ArrayList<Reparacao> r2 = cReparacao.pesquisarReparacoes(2, termo);
+                        ArrayList<Reparacao> r3 = cReparacao.pesquisarReparacoes(3, termo);
+                        l = new ArrayList<Reparacao>();
+                        l.addAll(r1);
+                        // Adicionar r2 sem duplicados
+                        Iterator<Reparacao> it2 = r2.iterator();
+                        while (it2.hasNext()) {
+                            Reparacao r = it2.next();
+                            boolean existe = false;
+                            Iterator<Reparacao> itCheck = l.iterator();
+                            while (itCheck.hasNext()) {
+                                if (itCheck.next().getIdReparacao() == r.getIdReparacao()) {
+                                    existe = true;
+                                }
+                            }
+                            if (!existe) l.add(r);
+                        }
+                        // Adicionar r3 sem duplicados
+                        Iterator<Reparacao> it3 = r3.iterator();
+                        while (it3.hasNext()) {
+                            Reparacao r = it3.next();
+                            boolean existe = false;
+                            Iterator<Reparacao> itCheck = l.iterator();
+                            while (itCheck.hasNext()) {
+                                if (itCheck.next().getIdReparacao() == r.getIdReparacao()) {
+                                    existe = true;
+                                }
+                            }
+                            if (!existe) l.add(r);
+                        }
                     }
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
