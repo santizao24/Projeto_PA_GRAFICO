@@ -1,8 +1,10 @@
 {
-    "java.project.sourcePaths": ["src"],
+    "java.project.sourcePaths": [
+        "src"
+    ],
     "java.project.outputPath": "bin",
     "java.project.referencedLibraries": [
         "lib/**/*.jar",
-        "c:\\Users\\HP\\OneDrive - ESTGOH\\Ambiente de Trabalho\\UNI\\3ºano-2ºsemestre\\PA\\Projeto_PA\\lib\\mysql-connector-j-9.6.0.jar"
+        "c:\\Users\\HP\\OneDrive - ESTGOH\\Ambiente de Trabalho\\Projeto_PA_GRAFICO\\ProjetoGrafico\\lib\\mysql-connector-j-9.6.0.jar"
     ]
 }

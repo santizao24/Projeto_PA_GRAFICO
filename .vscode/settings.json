@@ -1,0 +1,9 @@
+{
+    "java.project.sourcePaths": [
+        "ProjetoGrafico/src"
+    ],
+    "java.project.outputPath": "ProjetoGrafico/bin",
+    "java.project.referencedLibraries": [
+        "ProjetoGrafico/lib/**/*.jar"
+    ]
+}
