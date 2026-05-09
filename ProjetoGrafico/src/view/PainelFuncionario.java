@@ -141,29 +141,33 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         JPanel painelBtns = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton btnAceitar = new JButton("Aceitar e Iniciar");
         btnAceitar.setToolTipText("Aceitar o pedido e iniciar a reparação");
-        btnAceitar.addActionListener(ev -> {
+        btnAceitar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             int id = Utilitarios.obterIdSelecionado(scrollTabela);
             if (id == -1) {
-                Utilitarios.mostrarErro(this, "Selecione um pedido!");
+                Utilitarios.mostrarErro(PainelFuncionario.this, "Selecione um pedido!");
                 return;
             }
             cReparacao.gerirEstadoReparacao(id, utilizadorLogado.getIdUtilizador(),
                     EstadoReparacao.DECORRER.name(), utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(this, "Reparação iniciada!");
+            Utilitarios.mostrarSucesso(PainelFuncionario.this, "Reparação iniciada!");
             mostrarPedidosAtribuidos();
+            }
         });
         JButton btnRejeitar = new JButton("Rejeitar");
         btnRejeitar.setToolTipText("Rejeitar o pedido e devolver ao gestor");
-        btnRejeitar.addActionListener(ev -> {
+        btnRejeitar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             int id = Utilitarios.obterIdSelecionado(scrollTabela);
             if (id == -1) {
-                Utilitarios.mostrarErro(this, "Selecione um pedido!");
+                Utilitarios.mostrarErro(PainelFuncionario.this, "Selecione um pedido!");
                 return;
             }
             cReparacao.rejeitarReparacaoPorFuncionario(id, utilizadorLogado.getIdUtilizador(),
                     utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(this, "Pedido rejeitado e devolvido ao gestor.");
+            Utilitarios.mostrarSucesso(PainelFuncionario.this, "Pedido rejeitado e devolvido ao gestor.");
             mostrarPedidosAtribuidos();
+            }
         });
         painelBtns.add(btnAceitar);
         painelBtns.add(btnRejeitar);
@@ -197,17 +201,18 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         painelConclusao.add(new JScrollPane(campoObs));
         painelConclusao.add(btnConcluir);
 
-        btnConcluir.addActionListener(ev -> {
+        btnConcluir.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             int id = Utilitarios.obterIdSelecionado(scrollTabela);
             if (id == -1) {
-                Utilitarios.mostrarErro(this, "Selecione uma reparação!");
+                Utilitarios.mostrarErro(PainelFuncionario.this, "Selecione uma reparação!");
                 return;
             }
             double custo;
             try {
                 custo = Double.parseDouble(campoCusto.getText().trim());
             } catch (NumberFormatException ex) {
-                Utilitarios.mostrarErro(this, "Custo inválido!");
+                Utilitarios.mostrarErro(PainelFuncionario.this, "Custo inválido!");
                 return;
             }
 
@@ -224,8 +229,9 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             if (repSelecionada != null) {
                 cReparacao.concluirReparacaoFinal(repSelecionada, custo,
                         campoObs.getText().trim(), utilizadorLogado.getLogin());
-                Utilitarios.mostrarSucesso(this, "Reparação concluída com sucesso!");
+                Utilitarios.mostrarSucesso(PainelFuncionario.this, "Reparação concluída com sucesso!");
                 mostrarEmCurso();
+            }
             }
         });
         p.add(painelConclusao, BorderLayout.SOUTH);
@@ -255,23 +261,25 @@ public class PainelFuncionario extends JPanel implements ActionListener {
 
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
-        btnGuardar.addActionListener(ev -> {
+        btnGuardar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             String email = cEmail.getText().trim();
             String pass = new String(cPass.getPassword());
             if (!Validacoes.emailValido(email)) {
-                Utilitarios.mostrarErro(this, "Email inválido!");
+                Utilitarios.mostrarErro(PainelFuncionario.this, "Email inválido!");
                 return;
             }
             if (pass.isEmpty()) {
-                Utilitarios.mostrarErro(this, "Password não pode estar vazia!");
+                Utilitarios.mostrarErro(PainelFuncionario.this, "Password não pode estar vazia!");
                 return;
             }
             boolean ok = cUtilizador.atualizarPerfilFuncionario(utilizadorLogado.getIdUtilizador(),
                     email, pass, cTel.getText().trim(), cMorada.getText().trim(), utilizadorLogado.getLogin());
             if (ok)
-                Utilitarios.mostrarSucesso(this, "Perfil atualizado!");
+                Utilitarios.mostrarSucesso(PainelFuncionario.this, "Perfil atualizado!");
             else
-                Utilitarios.mostrarErro(this, "Erro ao atualizar perfil.");
+                Utilitarios.mostrarErro(PainelFuncionario.this, "Erro ao atualizar perfil.");
+            }
         });
         p.add(btnGuardar);
         trocarConteudo(p, "perfil");
@@ -298,12 +306,14 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnListar.addActionListener(ev -> {
+        btnListar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             ArrayList<Reparacao> lista = cReparacao.listarReparacoesFuncionarioOrdenadas(
                     utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                     comboOrdem.getSelectedIndex() == 0);
             Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
                     converterReparacoes(lista));
+            }
         });
         trocarConteudo(p, "listarRep");
     }
@@ -329,12 +339,14 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnPesq.addActionListener(ev -> {
+        btnPesq.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesFuncionario(
                     utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                     campoTermo.getText().trim());
             Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
                     converterReparacoes(res));
+            }
         });
         trocarConteudo(p, "pesqRep");
     }
@@ -357,10 +369,12 @@ public class PainelFuncionario extends JPanel implements ActionListener {
 
         JButton btnMarcar = new JButton("Marcar Todas como Lidas");
         btnMarcar.setToolTipText("Marcar notificações como lidas");
-        btnMarcar.addActionListener(ev -> {
+        btnMarcar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             cNotificacao.marcarComoLidas(utilizadorLogado.getIdUtilizador());
-            Utilitarios.mostrarSucesso(this, "Notificações marcadas como lidas!");
+            Utilitarios.mostrarSucesso(PainelFuncionario.this, "Notificações marcadas como lidas!");
             mostrarNotificacoes();
+            }
         });
         p.add(btnMarcar, BorderLayout.SOUTH);
         trocarConteudo(p, "notifs");
@@ -373,7 +387,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             cNotificacao.gerarNotificacaoParaGestores(
                     "O Funcionário '" + utilizadorLogado.getLogin() + "' solicitou a remoção.",
                     CategoriaNotificacao.REMOCAO);
-            Utilitarios.mostrarInfo(this, "Pedido submetido! Sessão terminada.");
+            Utilitarios.mostrarInfo(PainelFuncionario.this, "Pedido submetido! Sessão terminada.");
             aplicacao.terminarSessao();
         }
     }
@@ -395,3 +409,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         cardConteudo.show(painelConteudo, nome);
     }
 }
+
+
+

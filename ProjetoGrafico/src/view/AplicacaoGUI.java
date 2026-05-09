@@ -17,7 +17,8 @@ import Enums.TipoUtilizador;
 
 /**
  * Janela principal da aplicação gráfica do Sistema de Gestão de Oficina.
- * Gere a navegação entre painéis (login, registo, menus) usando CardLayout,
+ * Gere a navegação entre painéis (login, registo, menus) usando
+ * remove/add/revalidate/repaint no painel principal,
  * e mantém referências centralizadas aos controladores do sistema.
  *
  * @author Santiago e Hugo
@@ -30,8 +31,8 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
     private ControladorEquipamento cEquipamento;
     private ControladorNotificacao cNotificacao;
 
-    private CardLayout cardLayout;
     private JPanel painelPrincipal;
+    private JPanel painelAtual;
     private PainelLogin painelLogin;
     private PainelRegisto painelRegisto;
     private PainelCliente painelCliente;
@@ -76,21 +77,14 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         menuBar.add(menuAjuda);
         setJMenuBar(menuBar);
 
-        // Painel principal com CardLayout
-        cardLayout = new CardLayout();
-        painelPrincipal = new JPanel(cardLayout);
+        // Painel principal com BorderLayout (navegação por remove/add/revalidate/repaint)
+        painelPrincipal = new JPanel(new BorderLayout());
 
         painelLogin = new PainelLogin(this);
         painelRegisto = new PainelRegisto(this);
         painelCliente = new PainelCliente(this);
         painelFuncionario = new PainelFuncionario(this);
         painelGestor = new PainelGestor(this);
-
-        painelPrincipal.add(painelLogin, "login");
-        painelPrincipal.add(painelRegisto, "registo");
-        painelPrincipal.add(painelCliente, "cliente");
-        painelPrincipal.add(painelFuncionario, "funcionario");
-        painelPrincipal.add(painelGestor, "gestor");
 
         getContentPane().setLayout(new BorderLayout());
         getContentPane().add(painelPrincipal, BorderLayout.CENTER);
@@ -100,7 +94,9 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         barraEstado.setBorder(BorderFactory.createEtchedBorder());
         getContentPane().add(barraEstado, BorderLayout.SOUTH);
 
-        cardLayout.show(painelPrincipal, "login");
+        // Mostrar o painel de login inicialmente
+        painelAtual = painelLogin;
+        painelPrincipal.add(painelAtual, BorderLayout.CENTER);
     }
 
     @Override
@@ -117,9 +113,27 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         }
     }
 
-    /** Mostra um painel pelo nome. */
+    /**
+     * Mostra um painel pelo nome, removendo o anterior e adicionando o novo.
+     * Usa remove/add seguido de revalidate() e repaint().
+     *
+     * @param nome identificador do painel a mostrar
+     */
     public void mostrarPainel(String nome) {
-        cardLayout.show(painelPrincipal, nome);
+        JPanel novoPainel;
+        switch (nome) {
+            case "login":       novoPainel = painelLogin; break;
+            case "registo":     novoPainel = painelRegisto; break;
+            case "cliente":     novoPainel = painelCliente; break;
+            case "funcionario": novoPainel = painelFuncionario; break;
+            case "gestor":      novoPainel = painelGestor; break;
+            default:            novoPainel = painelLogin; break;
+        }
+        painelPrincipal.remove(painelAtual);
+        painelAtual = novoPainel;
+        painelPrincipal.add(painelAtual, BorderLayout.CENTER);
+        painelPrincipal.revalidate();
+        painelPrincipal.repaint();
     }
 
     /** Autentica o utilizador e redireciona para o painel correto. */

@@ -175,21 +175,23 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         JButton btnSubmeter = new JButton("Registar Equipamento");
         btnSubmeter.setToolTipText("Submeter o registo do equipamento");
-        btnSubmeter.addActionListener(ev -> {
+        btnSubmeter.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             String marca = cMarca.getText().trim();
             String modelo = cModelo.getText().trim();
             if (marca.isEmpty() || modelo.isEmpty()) {
-                Utilitarios.mostrarErro(this, "Marca e Modelo são obrigatórios!");
+                Utilitarios.mostrarErro(PainelCliente.this, "Marca e Modelo são obrigatórios!");
                 return;
             }
             if (cEquipamento.modeloExiste(modelo)) {
-                Utilitarios.mostrarErro(this, "Já existe um equipamento com o código de modelo '" + modelo + "'.");
+                Utilitarios.mostrarErro(PainelCliente.this, "Já existe um equipamento com o código de modelo '" + modelo + "'.");
                 return;
             }
             int codSKU = cEquipamento.gerarSkuUnico();
             cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU,
                     cDataFab.getText().trim(), cLote.getText().trim(), utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(this, "Equipamento registado com sucesso! (SKU: " + codSKU + ")");
+            Utilitarios.mostrarSucesso(PainelCliente.this, "Equipamento registado com sucesso! (SKU: " + codSKU + ")");
+            }
         });
         p.add(btnSubmeter);
 
@@ -221,14 +223,16 @@ public class PainelCliente extends JPanel implements ActionListener {
         painelAcao.add(new JScrollPane(cObs));
         JButton btnPedir = new JButton("Pedir Reparação");
         btnPedir.setToolTipText("Submeter pedido para o equipamento selecionado");
-        btnPedir.addActionListener(ev -> {
+        btnPedir.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             int idEq = Utilitarios.obterIdSelecionado(scrollTabela);
             if (idEq == -1) {
-                Utilitarios.mostrarErro(this, "Selecione um equipamento da tabela!");
+                Utilitarios.mostrarErro(PainelCliente.this, "Selecione um equipamento da tabela!");
                 return;
             }
             cReparacao.registarNovoPedido(idEq, utilizadorLogado.getLogin());
-            Utilitarios.mostrarSucesso(this, "Pedido de reparação submetido com sucesso!");
+            Utilitarios.mostrarSucesso(PainelCliente.this, "Pedido de reparação submetido com sucesso!");
+            }
         });
         painelAcao.add(btnPedir);
         p.add(painelAcao, BorderLayout.SOUTH);
@@ -260,28 +264,30 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
-        btnGuardar.addActionListener(ev -> {
+        btnGuardar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             String email = cEmail.getText().trim();
             String pass = new String(cPass.getPassword());
             String tel = cTel.getText().trim();
             if (!Validacoes.emailValido(email)) {
-                Utilitarios.mostrarErro(this, "Email inválido!");
+                Utilitarios.mostrarErro(PainelCliente.this, "Email inválido!");
                 return;
             }
             if (pass.isEmpty()) {
-                Utilitarios.mostrarErro(this, "Password não pode estar vazia!");
+                Utilitarios.mostrarErro(PainelCliente.this, "Password não pode estar vazia!");
                 return;
             }
             if (!Validacoes.telefoneValido(tel)) {
-                Utilitarios.mostrarErro(this, "Telefone inválido!");
+                Utilitarios.mostrarErro(PainelCliente.this, "Telefone inválido!");
                 return;
             }
             boolean ok = cUtilizador.atualizarPerfilCliente(utilizadorLogado.getIdUtilizador(),
                     email, pass, tel, cMorada.getText().trim(), utilizadorLogado.getLogin());
             if (ok)
-                Utilitarios.mostrarSucesso(this, "Perfil atualizado com sucesso!");
+                Utilitarios.mostrarSucesso(PainelCliente.this, "Perfil atualizado com sucesso!");
             else
-                Utilitarios.mostrarErro(this, "Erro ao atualizar. Email pode já estar em uso.");
+                Utilitarios.mostrarErro(PainelCliente.this, "Erro ao atualizar. Email pode já estar em uso.");
+            }
         });
         p.add(btnGuardar);
 
@@ -310,7 +316,8 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnListar.addActionListener(ev -> {
+        btnListar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             int escolha = comboCrit.getSelectedIndex() + 1;
             boolean asc = comboOrdem.getSelectedIndex() == 0;
             ArrayList<Reparacao> lista = cReparacao.listarReparacoesClienteOrdenadas(
@@ -324,6 +331,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                 i++;
             }
             Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
+            }
         });
 
         trocarConteudo(p, "listarRep");
@@ -351,7 +359,8 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnPesq.addActionListener(ev -> {
+        btnPesq.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesCliente(
                     utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                     campoTermo.getText().trim());
@@ -364,6 +373,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                 i++;
             }
             Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
+            }
         });
 
         trocarConteudo(p, "pesqRep");
@@ -391,7 +401,8 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Marca", "Modelo", "SKU" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnListar.addActionListener(ev -> {
+        btnListar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             ArrayList<Equipamento> lista = cEquipamento.listarEquipamentosClienteOrdenados(
                     utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                     comboOrdem.getSelectedIndex() == 0);
@@ -404,6 +415,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                 i++;
             }
             Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
+            }
         });
 
         trocarConteudo(p, "listarEquip");
@@ -431,7 +443,8 @@ public class PainelCliente extends JPanel implements ActionListener {
                 new String[] { "ID", "Marca", "Modelo", "SKU" }, new Object[][] {});
         p.add(scrollTabela, BorderLayout.CENTER);
 
-        btnPesq.addActionListener(ev -> {
+        btnPesq.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             ArrayList<Equipamento> res = cEquipamento.pesquisarEquipamentosCliente(
                     utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                     campoTermo.getText().trim());
@@ -444,6 +457,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                 i++;
             }
             Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
+            }
         });
 
         trocarConteudo(p, "pesqEquip");
@@ -468,10 +482,12 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         JButton btnMarcar = new JButton("Marcar Todas como Lidas");
         btnMarcar.setToolTipText("Marcar todas as notificações pendentes como lidas");
-        btnMarcar.addActionListener(ev -> {
+        btnMarcar.addActionListener(new ActionListener() { @Override
+            public void actionPerformed(ActionEvent ev) {
             cNotificacao.marcarComoLidas(utilizadorLogado.getIdUtilizador());
-            Utilitarios.mostrarSucesso(this, "Notificações marcadas como lidas!");
+            Utilitarios.mostrarSucesso(PainelCliente.this, "Notificações marcadas como lidas!");
             mostrarNotificacoes();
+            }
         });
         p.add(btnMarcar, BorderLayout.SOUTH);
 
@@ -490,7 +506,7 @@ public class PainelCliente extends JPanel implements ActionListener {
             cNotificacao.gerarNotificacaoParaGestores(
                     "O Cliente '" + utilizadorLogado.getLogin() + "' solicitou a remoção da sua conta.",
                     CategoriaNotificacao.REMOCAO);
-            Utilitarios.mostrarInfo(this, "Pedido submetido! A sessão vai ser terminada.");
+            Utilitarios.mostrarInfo(PainelCliente.this, "Pedido submetido! A sessão vai ser terminada.");
             aplicacao.terminarSessao();
         }
     }
@@ -523,3 +539,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         cardConteudo.show(painelConteudo, nome);
     }
 }
+
+
+
