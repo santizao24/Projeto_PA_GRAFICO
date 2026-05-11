@@ -87,13 +87,14 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         painelFuncionario = new PainelFuncionario(this);
         painelGestor = new PainelGestor(this);
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
+        Container cont = getContentPane();
+        cont.setLayout(new BorderLayout());
+        cont.add(painelPrincipal, BorderLayout.CENTER);
 
         // Barra de estado
         barraEstado = new JLabel(" Bem-vindo ao Sistema de Gestão de Oficina");
         barraEstado.setBorder(BorderFactory.createEtchedBorder());
-        getContentPane().add(barraEstado, BorderLayout.SOUTH);
+        cont.add(barraEstado, BorderLayout.SOUTH);
 
         // Mostrar o painel de login inicialmente
         painelAtual = painelLogin;
@@ -107,12 +108,12 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == menuConfigBD) {
+        if (e.getSource().equals(menuConfigBD)) {
             DialogoConfigBD d = new DialogoConfigBD(this);
             d.setVisible(true);
-        } else if (e.getSource() == menuSair) {
+        } else if (e.getSource().equals(menuSair)) {
             System.exit(0);
-        } else if (e.getSource() == menuSobre) {
+        } else if (e.getSource().equals(menuSobre)) {
             JOptionPane.showMessageDialog(this,
                     "Sistema de Gestão de Oficina\nVersão 2.0 (GUI)\nAutores: Santiago e Hugo",
                     "Sobre", JOptionPane.INFORMATION_MESSAGE);

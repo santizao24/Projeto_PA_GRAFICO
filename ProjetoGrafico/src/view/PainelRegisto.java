@@ -189,7 +189,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == comboTipo) {
+        if (e.getSource().equals(comboTipo)) {
             String tipoSel = (String) comboTipo.getSelectedItem();
             painelCamposEspecificos.removeAll();
             if (tipoSel.equals("Funcionário")) {
@@ -199,9 +199,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
             }
             painelCamposEspecificos.revalidate();
             painelCamposEspecificos.repaint();
-        } else if (e.getSource() == btnRegistar) {
+        } else if (e.getSource().equals(btnRegistar)) {
             efetuarRegisto();
-        } else if (e.getSource() == btnVoltar) {
+        } else if (e.getSource().equals(btnVoltar)) {
             limparCampos();
             aplicacao.mostrarPainel("login");
         }

@@ -137,30 +137,30 @@ public class PainelCliente extends JPanel implements ActionListener {
             return;
         Object src = e.getSource();
 
-        if (src == btnLogout) {
+        if (src.equals(btnLogout)) {
             cUtilizador.registarFimSessao(utilizadorLogado.getLogin());
             aplicacao.terminarSessao();
             return;
         }
-        if (src == btnInserirEquip)
+        if (src.equals(btnInserirEquip))
             mostrarInserirEquipamento();
-        else if (src == btnPedirRep)
+        else if (src.equals(btnPedirRep))
             mostrarPedirReparacao();
-        else if (src == btnPerfil)
+        else if (src.equals(btnPerfil))
             mostrarEditarPerfil();
-        else if (src == btnListarRep)
+        else if (src.equals(btnListarRep))
             mostrarListarReparacoes();
-        else if (src == btnPesquisarRep)
+        else if (src.equals(btnPesquisarRep))
             mostrarPesquisarReparacoes();
-        else if (src == btnListarEquip)
+        else if (src.equals(btnListarEquip))
             mostrarListarEquipamentos();
-        else if (src == btnPesquisarEquip)
+        else if (src.equals(btnPesquisarEquip))
             mostrarPesquisarEquipamentos();
-        else if (src == btnNotificacoes)
+        else if (src.equals(btnNotificacoes))
             mostrarNotificacoes();
-        else if (src == btnRemocao)
+        else if (src.equals(btnRemocao))
             solicitarRemocao();
-        else if (src == btnConsultarRep)
+        else if (src.equals(btnConsultarRep))
             mostrarConsultarEstado();
     }
 

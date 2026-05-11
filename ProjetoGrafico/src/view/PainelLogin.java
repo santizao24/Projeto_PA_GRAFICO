@@ -105,7 +105,7 @@ public class PainelLogin extends JPanel implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnEntrar) {
+        if (e.getSource().equals(btnEntrar)) {
             String user = campoUsername.getText().trim();
             String pass = new String(campoPassword.getPassword());
 
@@ -150,9 +150,9 @@ public class PainelLogin extends JPanel implements ActionListener {
             } else {
                 Utilitarios.mostrarErro(this, "Credenciais inválidas.");
             }
-        } else if (e.getSource() == btnRegistar) {
+        } else if (e.getSource().equals(btnRegistar)) {
             aplicacao.mostrarPainel("registo");
-        } else if (e.getSource() == btnConfigBD) {
+        } else if (e.getSource().equals(btnConfigBD)) {
             DialogoConfigBD dialogo = new DialogoConfigBD(aplicacao);
             dialogo.setVisible(true);
         }

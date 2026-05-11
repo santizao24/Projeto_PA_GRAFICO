@@ -71,9 +71,10 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
         painelBotoes.add(btnGuardar);
         painelBotoes.add(btnCancelar);
 
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(painelPrincipal, BorderLayout.CENTER);
-        getContentPane().add(painelBotoes, BorderLayout.SOUTH);
+        Container cont = getContentPane();
+        cont.setLayout(new BorderLayout());
+        cont.add(painelPrincipal, BorderLayout.CENTER);
+        cont.add(painelBotoes, BorderLayout.SOUTH);
     }
 
     /**
@@ -83,7 +84,7 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (e.getSource() == btnGuardar) {
+        if (e.getSource().equals(btnGuardar)) {
             String ip = campoIP.getText().trim();
             String porto = campoPorto.getText().trim();
             String bd = campoNomeBD.getText().trim();
@@ -109,7 +110,7 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
             } catch (Exception ex) {
                 Utilitarios.mostrarErro(this, "Erro ao gravar as configurações: " + ex.getMessage());
             }
-        } else if (e.getSource() == btnCancelar) {
+        } else if (e.getSource().equals(btnCancelar)) {
             dispose();
         }
     }

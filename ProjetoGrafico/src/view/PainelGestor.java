@@ -136,30 +136,30 @@ public class PainelGestor extends JPanel implements ActionListener {
             return;
         Object src = e.getSource();
 
-        if (src == btnLogout) {
+        if (src.equals(btnLogout)) {
             cUtilizador.registarFimSessao(utilizadorLogado.getLogin());
             aplicacao.terminarSessao();
             return;
         }
-        if (src == btnAtivarContas)
+        if (src.equals(btnAtivarContas))
             mostrarAtivarContas();
-        else if (src == btnGerirRep)
+        else if (src.equals(btnGerirRep))
             mostrarGerirReparacoes();
-        else if (src == btnArquivar)
+        else if (src.equals(btnArquivar))
             mostrarArquivar();
-        else if (src == btnEditarUsers)
+        else if (src.equals(btnEditarUsers))
             mostrarEditarUsers();
-        else if (src == btnListagens)
+        else if (src.equals(btnListagens))
             mostrarListagens();
-        else if (src == btnNotifs)
+        else if (src.equals(btnNotifs))
             mostrarNotificacoes();
-        else if (src == btnLogs)
+        else if (src.equals(btnLogs))
             mostrarLogs();
-        else if (src == btnToggleContas)
+        else if (src.equals(btnToggleContas))
             mostrarToggleContas();
-        else if (src == btnPedidosRemocao)
+        else if (src.equals(btnPedidosRemocao))
             mostrarPedidosRemocao();
-        else if (src == btnMinhaRemocao)
+        else if (src.equals(btnMinhaRemocao))
             solicitarMinhaRemocao();
     }
 
@@ -677,7 +677,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Log> lista;
-                if (ev.getSource() == bPesq && !campoUser.getText().trim().isEmpty())
+                if (ev.getSource().equals(bPesq) && !campoUser.getText().trim().isEmpty())
                     lista = cUtilizador.pesquisarLogsPorUtilizador(campoUser.getText().trim());
                 else
                     lista = cUtilizador.listarTodosLogs();
