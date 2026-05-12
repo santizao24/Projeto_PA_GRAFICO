@@ -195,8 +195,8 @@ public class PainelCliente extends JPanel implements ActionListener {
         btnSubmeter.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                String marca = cMarca.getText().trim();
-                String modelo = cModelo.getText().trim();
+                String marca = cMarca.getText();
+                String modelo = cModelo.getText();
                 if (marca.isEmpty() || modelo.isEmpty()) {
                     Utilitarios.mostrarErro(PainelCliente.this, "Marca e Modelo são obrigatórios!");
                     return;
@@ -208,7 +208,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                 }
                 int codSKU = cEquipamento.gerarSkuUnico();
                 cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU,
-                        cDataFab.getText().trim(), cLote.getText().trim(), utilizadorLogado.getLogin());
+                        cDataFab.getText(), cLote.getText(), utilizadorLogado.getLogin());
                 Utilitarios.mostrarSucesso(PainelCliente.this,
                         "Equipamento registado com sucesso! (SKU: " + codSKU + ")");
             }
@@ -295,9 +295,9 @@ public class PainelCliente extends JPanel implements ActionListener {
         btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                String email = cEmail.getText().trim();
+                String email = cEmail.getText();
                 String pass = new String(cPass.getPassword());
-                String tel = cTel.getText().trim();
+                String tel = cTel.getText();
                 if (!Validacoes.emailValido(email)) {
                     Utilitarios.mostrarErro(PainelCliente.this, "Email inválido!");
                     return;
@@ -311,7 +311,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                     return;
                 }
                 boolean ok = cUtilizador.atualizarPerfilCliente(utilizadorLogado.getIdUtilizador(),
-                        email, pass, tel, cMorada.getText().trim(), utilizadorLogado.getLogin());
+                        email, pass, tel, cMorada.getText(), utilizadorLogado.getLogin());
                 if (ok)
                     Utilitarios.mostrarSucesso(PainelCliente.this, "Perfil atualizado com sucesso!");
                 else
@@ -391,7 +391,7 @@ public class PainelCliente extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesCliente(
                         utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
-                        campoTermo.getText().trim());
+                        campoTermo.getText());
                 Object[][] dados = new Object[res.size()][4];
                 Iterator<Reparacao> it = res.iterator();
                 int i = 0;
@@ -474,7 +474,7 @@ public class PainelCliente extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Equipamento> res = cEquipamento.pesquisarEquipamentosCliente(
                         utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
-                        campoTermo.getText().trim());
+                        campoTermo.getText());
                 Object[][] dados = new Object[res.size()][4];
                 Iterator<Equipamento> it = res.iterator();
                 int i = 0;

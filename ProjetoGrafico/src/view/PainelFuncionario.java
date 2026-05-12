@@ -235,7 +235,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                 }
                 double custo;
                 try {
-                    custo = Double.parseDouble(campoCusto.getText().trim());
+                    custo = Double.parseDouble(campoCusto.getText());
                 } catch (NumberFormatException ex) {
                     Utilitarios.mostrarErro(PainelFuncionario.this, "Custo inválido!");
                     return;
@@ -253,7 +253,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                 }
                 if (repSelecionada != null) {
                     cReparacao.concluirReparacaoFinal(repSelecionada, custo,
-                            campoObs.getText().trim(), utilizadorLogado.getLogin());
+                            campoObs.getText(), utilizadorLogado.getLogin());
                     Utilitarios.mostrarSucesso(PainelFuncionario.this, "Reparação concluída com sucesso!");
                     mostrarEmCurso();
                 }
@@ -292,7 +292,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         btnGuardar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                String email = cEmail.getText().trim();
+                String email = cEmail.getText();
                 String pass = new String(cPass.getPassword());
                 if (!Validacoes.emailValido(email)) {
                     Utilitarios.mostrarErro(PainelFuncionario.this, "Email inválido!");
@@ -303,7 +303,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                     return;
                 }
                 boolean ok = cUtilizador.atualizarPerfilFuncionario(utilizadorLogado.getIdUtilizador(),
-                        email, pass, cTel.getText().trim(), cMorada.getText().trim(), utilizadorLogado.getLogin());
+                        email, pass, cTel.getText(), cMorada.getText(), utilizadorLogado.getLogin());
                 if (ok)
                     Utilitarios.mostrarSucesso(PainelFuncionario.this, "Perfil atualizado!");
                 else
@@ -373,7 +373,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesFuncionario(
                         utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
-                        campoTermo.getText().trim());
+                        campoTermo.getText());
                 Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(res));
             }

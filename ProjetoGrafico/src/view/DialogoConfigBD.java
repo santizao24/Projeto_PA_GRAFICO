@@ -85,10 +85,10 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnGuardar)) {
-            String ip = campoIP.getText().trim();
-            String porto = campoPorto.getText().trim();
-            String bd = campoNomeBD.getText().trim();
-            String user = campoUser.getText().trim();
+            String ip = campoIP.getText();
+            String porto = campoPorto.getText();
+            String bd = campoNomeBD.getText();
+            String user = campoUser.getText();
             String password = new String(campoPassword.getPassword());
 
             if (ip.isEmpty() || porto.isEmpty() || bd.isEmpty() || user.isEmpty()) {

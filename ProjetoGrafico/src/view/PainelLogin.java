@@ -106,7 +106,7 @@ public class PainelLogin extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnEntrar)) {
-            String user = campoUsername.getText().trim();
+            String user = campoUsername.getText();
             String pass = new String(campoPassword.getPassword());
 
             if (user.isEmpty() || pass.isEmpty()) {

@@ -213,9 +213,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
      * e submete os dados ao controlador para registo no sistema.
      */
     private void efetuarRegisto() {
-        String nome = campoNome.getText().trim();
-        String email = campoEmail.getText().trim();
-        String user = campoUsername.getText().trim();
+        String nome = campoNome.getText();
+        String email = campoEmail.getText();
+        String user = campoUsername.getText();
         String pass = new String(campoPassword.getPassword());
 
         if (nome.isEmpty()) {
@@ -240,10 +240,10 @@ public class PainelRegisto extends JPanel implements ActionListener {
         boolean sucesso;
 
         if (tipo.equals("Funcionário")) {
-            String nif = campoNifFunc.getText().trim();
-            String tel = campoTelFunc.getText().trim();
-            String morada = campoMoradaFunc.getText().trim();
-            String dataInicio = campoDataInicioFunc.getText().trim();
+            String nif = campoNifFunc.getText();
+            String tel = campoTelFunc.getText();
+            String morada = campoMoradaFunc.getText();
+            String dataInicio = campoDataInicioFunc.getText();
 
             if (!Validacoes.nifValido(nif)) {
                 Utilitarios.mostrarErro(this, "O NIF tem de ter exatamente 9 dígitos numéricos!");
@@ -260,10 +260,10 @@ public class PainelRegisto extends JPanel implements ActionListener {
             sucesso = aplicacao.getControladorUtilizador().registarFuncionario(
                     nome, email, user, pass, nif, tel, morada, esp, dataInicio);
         } else {
-            String nif = campoNifCliente.getText().trim();
-            String tel = campoTelCliente.getText().trim();
-            String morada = campoMoradaCliente.getText().trim();
-            String setor = campoSetor.getText().trim();
+            String nif = campoNifCliente.getText();
+            String tel = campoTelCliente.getText();
+            String morada = campoMoradaCliente.getText();
+            String setor = campoSetor.getText();
             String escalao = (String) comboEscalao.getSelectedItem();
 
             if (!Validacoes.nifValido(nif)) {

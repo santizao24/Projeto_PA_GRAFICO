@@ -283,7 +283,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                     return;
                 }
                 String sel = (String) comboFunc.getSelectedItem();
-                int idFunc = Integer.parseInt(sel.split(" - ")[0].trim());
+                int idFunc = Integer.parseInt(sel.split(" - ")[0]);
                 cReparacao.gerirEstadoReparacao(id, idFunc, EstadoReparacao.ACEITE.name(), utilizadorLogado.getLogin());
                 Utilitarios.mostrarSucesso(PainelGestor.this, "Reparação atribuída!");
                 mostrarGerirReparacoes();
@@ -375,9 +375,9 @@ public class PainelGestor extends JPanel implements ActionListener {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
                     return;
                 }
-                boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText().trim(),
-                        cEmail.getText().trim(), new String(cPass.getPassword()),
-                        cUser.getText().trim(), utilizadorLogado.getLogin());
+                boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText(),
+                        cEmail.getText(), new String(cPass.getPassword()),
+                        cUser.getText(), utilizadorLogado.getLogin());
                 if (ok) {
                     Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados!");
                     mostrarEditarUsers();
@@ -476,7 +476,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent ev) {
                 int sel = comboTipo.getSelectedIndex();
-                String termo = campoTermo.getText().trim();
+                String termo = campoTermo.getText();
                 if (sel == 0) {
                     ArrayList<Utilizador> l = cUtilizador.listarUtilizadoresOrdenados(true);
                     Object[][] dd = new Object[l.size()][5];
@@ -519,7 +519,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                                     existe = true;
                                 }
                             }
-                            if (!existe) l.add(r);
+                            if (!existe)
+                                l.add(r);
                         }
                         // Adicionar r3 sem duplicados
                         Iterator<Reparacao> it3 = r3.iterator();
@@ -532,7 +533,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                                     existe = true;
                                 }
                             }
-                            if (!existe) l.add(r);
+                            if (!existe)
+                                l.add(r);
                         }
                     }
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
@@ -571,8 +573,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                     }
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Marca", "Modelo", "SKU" }, dd);
                 } else if (sel == 6) {
-                    String dataInicio = campoDataInicio.getText().trim();
-                    String dataFim = campoDataFim.getText().trim();
+                    String dataInicio = campoDataInicio.getText();
+                    String dataFim = campoDataFim.getText();
                     ArrayList<Reparacao> l;
                     if (dataInicio.isEmpty() || dataFim.isEmpty()) {
                         l = cReparacao.obterTodasReparacoes();
@@ -677,8 +679,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             @Override
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Log> lista;
-                if (ev.getSource().equals(bPesq) && !campoUser.getText().trim().isEmpty())
-                    lista = cUtilizador.pesquisarLogsPorUtilizador(campoUser.getText().trim());
+                if (ev.getSource().equals(bPesq) && !campoUser.getText().isEmpty())
+                    lista = cUtilizador.pesquisarLogsPorUtilizador(campoUser.getText());
                 else
                     lista = cUtilizador.listarTodosLogs();
                 Object[][] dd = new Object[lista.size()][4];

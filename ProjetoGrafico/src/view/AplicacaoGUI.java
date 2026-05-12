@@ -256,8 +256,8 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         int r = JOptionPane.showConfirmDialog(app, campos, "Criar Primeiro Gestor", JOptionPane.OK_CANCEL_OPTION);
         if (r == JOptionPane.OK_OPTION) {
             boolean ok = app.getControladorUtilizador().registarGestor(
-                    cNome.getText().trim(), cEmail.getText().trim(),
-                    cUser.getText().trim(), new String(cPass.getPassword()));
+                    cNome.getText(), cEmail.getText(),
+                    cUser.getText(), new String(cPass.getPassword()));
             if (ok)
                 Utilitarios.mostrarSucesso(app, "Gestor criado com sucesso!");
             else

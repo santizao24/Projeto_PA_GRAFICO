@@ -9,6 +9,7 @@ import model.Utilizador;
 import model.Log;
 import Enums.CategoriaNotificacao;
 import repositorio.UtilizadorDAO;
+import util.ServicoEmail;
 
 /**
  * Controlador responsável pela lógica de negócio relacionada com utilizadores.
@@ -93,6 +94,7 @@ public class ControladorUtilizador {
         if (sucesso) {
             cNotificacao.gerarNotificacaoParaGestores("Novo Funcionário registado (" + nome + "). Aguarda aprovação.",
                     CategoriaNotificacao.REGISTO);
+            ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Funcionário");
         }
         return sucesso;
     }
@@ -121,6 +123,7 @@ public class ControladorUtilizador {
         if (sucesso) {
             cNotificacao.gerarNotificacaoParaGestores("Novo Cliente registado (" + nome + "). Aguarda aprovação.",
                     CategoriaNotificacao.REGISTO);
+            ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Cliente");
         }
         return sucesso;
     }
