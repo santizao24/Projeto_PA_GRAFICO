@@ -1,5 +1,0 @@
-#Configuracoes da Base de Dados
-#Tue May 12 18:46:09 WEST 2026
-password=140820
-user=root
-url=jdbc\:mysql\://localhot\:3306/oficina
