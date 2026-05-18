@@ -5,6 +5,5 @@
     "java.project.outputPath": "ProjetoGrafico/bin",
     "java.project.referencedLibraries": [
         "ProjetoGrafico/lib/**/*.jar",
-        "c:\\Users\\HP\\OneDrive - ESTGOH\\Ambiente de Trabalho\\UNI\\3ºano-2ºsemestre\\PA\\Projeto_PA - Cópia\\lib\\mysql-connector-j-9.6.0.jar"
     ]
 }
