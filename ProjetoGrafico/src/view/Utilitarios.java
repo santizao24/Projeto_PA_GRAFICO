@@ -150,6 +150,7 @@ public class Utilitarios {
         campo.setToolTipText(tooltip);
         painel.add(label, BorderLayout.WEST);
         painel.add(campo, BorderLayout.CENTER);
+        painel.setMaximumSize(new Dimension(400, 30));
         return painel;
     }
 
