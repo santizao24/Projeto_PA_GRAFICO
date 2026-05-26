@@ -56,7 +56,6 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         setSize(950, 650);
         setLocationRelativeTo(null);
 
-        // Menu Bar
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFicheiro = new JMenu("Ficheiro");
         menuConfigBD = new JMenuItem("Configurar BD");
@@ -77,8 +76,6 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         menuBar.add(menuAjuda);
         setJMenuBar(menuBar);
 
-        // Painel principal com BorderLayout (navegação por
-        // remove/add/revalidate/repaint)
         painelPrincipal = new JPanel(new BorderLayout());
 
         painelLogin = new PainelLogin(this);
@@ -91,12 +88,10 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         cont.setLayout(new BorderLayout());
         cont.add(painelPrincipal, BorderLayout.CENTER);
 
-        // Barra de estado
         barraEstado = new JLabel(" Bem-vindo ao Sistema de Gestão de Oficina");
         barraEstado.setBorder(BorderFactory.createEtchedBorder());
         cont.add(barraEstado, BorderLayout.SOUTH);
 
-        // Mostrar o painel de login inicialmente
         painelAtual = painelLogin;
         painelPrincipal.add(painelAtual, BorderLayout.CENTER);
     }
@@ -162,7 +157,6 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
      * @param u o utilizador autenticado
      */
     public void autenticar(Utilizador u) {
-        // Verificar reparações atrasadas
         cReparacao.verificarReparacoesAtrasadas();
 
         barraEstado.setText(" Sessão: " + u.getLogin() + " | Tipo: " + u.getTipo());
@@ -213,7 +207,6 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
      * Verifica se o ficheiro configbd.txt existe e se há gestores no sistema.
      */
     public static void main(String[] args) {
-        // Aplicar FlatLaf para aspeto visual moderno (recomendado pelo professor)
         FlatDarculaLaf.setup();
 
         SwingUtilities.invokeLater(new Runnable() {
@@ -222,7 +215,6 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
                 AplicacaoGUI app = new AplicacaoGUI();
                 app.setVisible(true);
 
-                // Verificar configbd.txt
                 File configFile = new File("configbd.txt");
                 if (!configFile.exists()) {
                     JOptionPane.showMessageDialog(app,
@@ -232,7 +224,6 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
                     d.setVisible(true);
                 }
 
-                // Verificar se existe gestor
                 try {
                     if (!app.getControladorUtilizador().existeGestor()) {
                         JOptionPane.showMessageDialog(app,
@@ -241,7 +232,6 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
                         criarPrimeiroGestor(app);
                     }
                 } catch (Exception ex) {
-                    // BD pode não estar configurada ainda
                 }
             }
         });

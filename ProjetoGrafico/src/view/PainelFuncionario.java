@@ -83,7 +83,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         }
         add(painelMenu, BorderLayout.WEST);
 
-        // Painel de conteúdo dinâmico (navegação por remove/add/revalidate/repaint)
         painelConteudo = new JPanel(new BorderLayout());
         painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelAtualConteudo = new JPanel();
@@ -241,7 +240,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                     return;
                 }
 
-                // Procurar a reparação na lista
                 Reparacao repSelecionada = null;
                 Iterator<Reparacao> it = lista.iterator();
                 while (it.hasNext()) {
@@ -271,7 +269,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
-        // Foto de perfil (R2)
         final JPanel[] painelFotoRef = new JPanel[1];
         painelFotoRef[0] = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
             @Override

@@ -120,7 +120,6 @@ public class PainelLogin extends JPanel implements ActionListener {
                 if (utilizador.getEstado() == EstadoUtilizador.ATIVO) {
                     aplicacao.getControladorUtilizador().registarInicioSessao(user);
 
-                    // R5 - Verificar notificações após autenticação
                     int naoLidas = aplicacao.getControladorNotificacao()
                             .contarNaoLidas(utilizador.getIdUtilizador());
                     if (naoLidas > 0) {

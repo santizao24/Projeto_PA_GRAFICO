@@ -56,7 +56,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         this.cNotificacao = aplicacao.getControladorNotificacao();
         setLayout(new BorderLayout());
 
-        // Menu lateral
         JPanel painelMenu = new JPanel();
         painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
         painelMenu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -92,7 +91,6 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         add(painelMenu, BorderLayout.WEST);
 
-        // Painel de conteúdo dinâmico (navegação por remove/add/revalidate/repaint)
         painelConteudo = new JPanel(new BorderLayout());
         painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelAtualConteudo = new JPanel();
@@ -218,7 +216,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p, "inserirEquip");
     }
 
-    // --- Pedir Reparação ---
     /**
      * Apresenta o painel para pedir a reparação de um equipamento associado ao
      * cliente.
@@ -265,7 +262,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p, "pedirRep");
     }
 
-    // --- Editar Perfil ---
     /**
      * Apresenta o painel de edição do perfil (alterar password).
      */
@@ -274,7 +270,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
-        // Foto de perfil (R2)
         final JPanel[] painelFotoRef = new JPanel[1];
         painelFotoRef[0] = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
             @Override

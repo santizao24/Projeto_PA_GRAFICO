@@ -56,7 +56,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         this.cNotificacao = aplicacao.getControladorNotificacao();
         setLayout(new BorderLayout());
 
-        // Menu lateral
         JPanel painelMenu = new JPanel();
         painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
         painelMenu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -91,7 +90,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         }
         add(painelMenu, BorderLayout.WEST);
 
-        // Painel de conteúdo dinâmico (navegação por remove/add/revalidate/repaint)
         painelConteudo = new JPanel(new BorderLayout());
         painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelAtualConteudo = new JPanel();
@@ -412,7 +410,6 @@ public class PainelGestor extends JPanel implements ActionListener {
                 "Reparações por Data", "Todas as Reparações" });
         comboTipo.setToolTipText("Selecione o tipo de listagem ou pesquisa");
 
-        // Labels e campos de pesquisa (visíveis conforme a opção)
         JLabel lblTermo = new JLabel("Termo:");
         JTextField campoTermo = new JTextField(12);
         campoTermo.setToolTipText("Termo de pesquisa");
@@ -437,7 +434,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         top.add(campoDataFim);
         top.add(bExec);
 
-        // Estado inicial: "Utilizadores" não precisa de campos
         lblTermo.setVisible(false);
         campoTermo.setVisible(false);
         lblDataInicio.setVisible(false);
@@ -445,15 +441,11 @@ public class PainelGestor extends JPanel implements ActionListener {
         lblDataFim.setVisible(false);
         campoDataFim.setVisible(false);
 
-        // Listener para mostrar/esconder campos conforme a opção
         comboTipo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
                 int sel = comboTipo.getSelectedIndex();
-                // Pesquisar Reparações (3), Pesquisar Utilizadores (4), Pesquisar Equipamentos
-                // (5)
                 boolean mostrarTermo = (sel == 3 || sel == 4 || sel == 5);
-                // Reparações por Data (6)
                 boolean mostrarDatas = (sel == 6);
 
                 lblTermo.setVisible(mostrarTermo);
@@ -502,13 +494,11 @@ public class PainelGestor extends JPanel implements ActionListener {
                     if (termo.isEmpty()) {
                         l = cReparacao.listarReparacoesOrdenadas(1, true);
                     } else {
-                        // Pesquisar por número (1), estado (2) e nome do cliente (3)
                         ArrayList<Reparacao> r1 = cReparacao.pesquisarReparacoes(1, termo);
                         ArrayList<Reparacao> r2 = cReparacao.pesquisarReparacoes(2, termo);
                         ArrayList<Reparacao> r3 = cReparacao.pesquisarReparacoes(3, termo);
                         l = new ArrayList<Reparacao>();
                         l.addAll(r1);
-                        // Adicionar r2 sem duplicados
                         Iterator<Reparacao> it2 = r2.iterator();
                         while (it2.hasNext()) {
                             Reparacao r = it2.next();
@@ -522,7 +512,6 @@ public class PainelGestor extends JPanel implements ActionListener {
                             if (!existe)
                                 l.add(r);
                         }
-                        // Adicionar r3 sem duplicados
                         Iterator<Reparacao> it3 = r3.iterator();
                         while (it3.hasNext()) {
                             Reparacao r = it3.next();
@@ -613,7 +602,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         top.add(comboCat);
         top.add(bVer);
         top.add(bMarcar);
-        // Mostrar contadores
         CategoriaNotificacao[] categorias = CategoriaNotificacao.values();
         int idxCat = 0;
         while (idxCat < categorias.length) {

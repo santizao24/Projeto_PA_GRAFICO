@@ -39,7 +39,6 @@ public class Utilitarios {
 
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                // Verificar a primeira linha para determinar o tipo da coluna
                 if (getRowCount() > 0 && getValueAt(0, columnIndex) != null) {
                     return getValueAt(0, columnIndex).getClass();
                 }
@@ -262,7 +261,6 @@ public class Utilitarios {
         lblFoto.setBorder(BorderFactory.createLineBorder(Color.GRAY));
         lblFoto.setName("lblFoto");
 
-        // Carregar imagem ou mostrar genérica
         String pathAtual = fotoPath;
         if (pathAtual == null || pathAtual.isEmpty() || !new File(pathAtual).exists()) {
             pathAtual = "fotos/geral.png";
@@ -297,9 +295,10 @@ public class Utilitarios {
      * Abre um JFileChooser para o utilizador selecionar uma imagem.
      * Copia o ficheiro para a pasta "fotos/" do projeto e retorna o caminho.
      *
-     * @param pai           componente pai para o diálogo
-     * @param idUtilizador  identificador do utilizador (para nomear o ficheiro)
-     * @return caminho relativo da foto copiada (ex: fotos/user_42.png), ou null se cancelar
+     * @param pai          componente pai para o diálogo
+     * @param idUtilizador identificador do utilizador (para nomear o ficheiro)
+     * @return caminho relativo da foto copiada (ex: fotos/user_42.png), ou null se
+     *         cancelar
      */
     public static String escolherFicheiroImagem(Component pai, int idUtilizador) {
         JFileChooser fc = new JFileChooser();
@@ -311,17 +310,14 @@ public class Utilitarios {
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File ficheiroOrigem = fc.getSelectedFile();
             try {
-                // Criar pasta fotos/ se não existir
                 File pastaFotos = new File("fotos");
                 if (!pastaFotos.exists()) {
                     pastaFotos.mkdirs();
                 }
 
-                // Obter extensão do ficheiro original
                 String nomeOriginal = ficheiroOrigem.getName();
                 String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf('.'));
 
-                // Copiar para fotos/user_ID.extensao
                 String nomeDestino = "user_" + idUtilizador + extensao;
                 File ficheiroDestino = new File(pastaFotos, nomeDestino);
                 Files.copy(ficheiroOrigem.toPath(), ficheiroDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);

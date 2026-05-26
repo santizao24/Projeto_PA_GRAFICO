@@ -34,14 +34,12 @@ public class PainelRegisto extends JPanel implements ActionListener {
     private File fotoSelecionada = null;
     private JPanel painelFoto;
 
-    // Campos Funcionário
     private JTextField campoNifFunc;
     private JTextField campoTelFunc;
     private JTextField campoMoradaFunc;
     private JComboBox<String> comboEspecializacao;
     private JTextField campoDataInicioFunc;
 
-    // Campos Cliente
     private JTextField campoNifCliente;
     private JTextField campoTelCliente;
     private JTextField campoMoradaCliente;
@@ -65,16 +63,13 @@ public class PainelRegisto extends JPanel implements ActionListener {
         setLayout(new BorderLayout(10, 10));
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
-        // Título
         JLabel titulo = new JLabel("Registo de Novo Utilizador", SwingConstants.CENTER);
         titulo.setFont(new Font("SansSerif", Font.BOLD, 18));
         add(titulo, BorderLayout.NORTH);
 
-        // Painel central com scroll
         JPanel painelFormulario = new JPanel();
         painelFormulario.setLayout(new BoxLayout(painelFormulario, BoxLayout.Y_AXIS));
 
-        // Foto de perfil
         painelFoto = Utilitarios.criarPainelFoto(null, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
@@ -92,7 +87,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
         painelFormulario.add(painelFoto);
         painelFormulario.add(Box.createVerticalStrut(10));
 
-        // Campos comuns
         campoNome = new JTextField(20);
         campoEmail = new JTextField(20);
         campoUsername = new JTextField(20);
@@ -117,14 +111,12 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 "Selecione Funcionário ou Cliente"));
         painelFormulario.add(Box.createVerticalStrut(10));
 
-        // Campos específicos (dinâmicos via remove/add/revalidate/repaint)
         painelCamposEspecificos = new JPanel(new BorderLayout());
         construirPainelFuncionario();
         construirPainelCliente();
         painelCamposEspecificos.add(painelFuncionario, BorderLayout.CENTER);
         painelFormulario.add(painelCamposEspecificos);
 
-        // R4 - Campo de observações
         painelFormulario.add(Box.createVerticalStrut(10));
         campoObservacoes = new JTextArea(3, 20);
         campoObservacoes.setLineWrap(true);
@@ -137,7 +129,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
         scrollFormulario.setBorder(null);
         add(scrollFormulario, BorderLayout.CENTER);
 
-        // Botões
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         btnRegistar = new JButton("Registar");
         btnRegistar.setToolTipText("Submeter o registo do novo utilizador");
@@ -308,7 +299,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
 
         if (sucesso) {
             if (fotoSelecionada != null) {
-                // Obter o utilizador acabado de criar para ter o seu ID
                 Utilizador uNovo = aplicacao.getControladorUtilizador().efetuarLogin(user, pass);
                 if (uNovo != null) {
                     String nomeOriginal = fotoSelecionada.getName();
@@ -317,18 +307,19 @@ public class PainelRegisto extends JPanel implements ActionListener {
                     File destino = new File("fotos", nomeDestino);
                     try {
                         File pastaFotos = new File("fotos");
-                        if (!pastaFotos.exists()) pastaFotos.mkdirs();
+                        if (!pastaFotos.exists())
+                            pastaFotos.mkdirs();
                         Files.copy(fotoSelecionada.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
                         aplicacao.getControladorUtilizador().atualizarFoto(uNovo.getIdUtilizador(),
                                 "fotos" + File.separator + nomeDestino, "Sistema");
                     } catch (IOException ex) {
-                        // Opcional: mostrarErro(this, "Erro ao guardar foto.");
                     }
                 }
             } else {
                 Utilizador uNovo = aplicacao.getControladorUtilizador().efetuarLogin(user, pass);
                 if (uNovo != null) {
-                    aplicacao.getControladorUtilizador().atualizarFoto(uNovo.getIdUtilizador(), "fotos/geral.png", "Sistema");
+                    aplicacao.getControladorUtilizador().atualizarFoto(uNovo.getIdUtilizador(), "fotos/geral.png",
+                            "Sistema");
                 }
             }
             Utilitarios.mostrarSucesso(this, "Registo efetuado com sucesso! Já pode iniciar sessão.");
