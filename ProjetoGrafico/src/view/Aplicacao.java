@@ -215,10 +215,10 @@ public class Aplicacao {
                     }
                 } while (esp < 1 || esp > 5);
                 System.out.print("Data Início (YYYY-MM-DD): ");
-                String dataF = ler.nextLine();
+                String dataInicio = ler.nextLine();
 
                 boolean sucessoF = cUtilizador.registarFuncionario(nome, email, user, pass, nifF, telF, morF, esp,
-                        dataF);
+                        dataInicio, "");
                 if (sucessoF) {
                     System.out.println("Registo efetuado! Aguarde aprovação do Gestor.");
                 } else {
@@ -256,7 +256,7 @@ public class Aplicacao {
                 } while (!escalao.equals("A") && !escalao.equals("B") && !escalao.equals("C") && !escalao.equals("D"));
 
                 boolean sucessoC = cUtilizador.registarCliente(nome, email, user, pass, nifC, telC, morC, setor,
-                        escalao);
+                        escalao, "");
                 if (sucessoC) {
                     System.out.println("Registo efetuado! Aguarde aprovação do Gestor.");
                 } else {

@@ -91,6 +91,11 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         add(painelConteudo, BorderLayout.CENTER);
     }
 
+    /**
+     * Define o utilizador autenticado e atualiza o estado interno.
+     *
+     * @param u utilizador logado
+     */
     public void setUtilizadorLogado(Utilizador u) {
         this.utilizadorLogado = u;
     }
@@ -293,7 +298,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         JTextField cTel = new JTextField(20);
         JTextField cMorada = new JTextField(20);
 
-        p.add(new JLabel("Nome: " + utilizadorLogado.getNome()));
+        p.add(new JLabel("Nome: " + utilizadorLogado.getNome() + "  (não editável)"));
         p.add(Box.createVerticalStrut(5));
         p.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
         p.add(Box.createVerticalStrut(5));
@@ -317,6 +322,11 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                 }
                 if (pass.isEmpty()) {
                     Utilitarios.mostrarErro(PainelFuncionario.this, "Password não pode estar vazia!");
+                    return;
+                }
+                String tel = cTel.getText();
+                if (!Validacoes.telefoneValido(tel)) {
+                    Utilitarios.mostrarErro(PainelFuncionario.this, "Telefone inválido!");
                     return;
                 }
                 boolean ok = cUtilizador.atualizarPerfilFuncionario(utilizadorLogado.getIdUtilizador(),
@@ -403,7 +413,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
      */
     private void mostrarNotificacoes() {
         JPanel p = new JPanel(new BorderLayout(5, 5));
-        p.setBorder(BorderFactory.createTitledBorder("Notificações"));
+        p.setBorder(BorderFactory.createTitledBorder("As Minhas Notificações"));
 
         ArrayList<Notificacao> lista = cNotificacao.obterNotificacoes(utilizadorLogado.getIdUtilizador());
         Object[][] dados = new Object[lista.size()][3];
@@ -435,7 +445,10 @@ public class PainelFuncionario extends JPanel implements ActionListener {
      * Solicita a remoção da conta do funcionário, notificando os gestores.
      */
     private void solicitarRemocao() {
-        if (Utilitarios.confirmar(this, "Tens a certeza que queres solicitar a remoção da conta?")) {
+        if (Utilitarios.confirmar(this,
+                "Ao solicitar a remoção, a tua conta será removida do sistema.\n"
+                        + "Os teus dados pessoais serão apagados de forma irreversível.\n"
+                        + "Tens a certeza que queres apagar a conta?")) {
             cUtilizador.mudarEstadoConta(utilizadorLogado.getIdUtilizador(), EstadoUtilizador.AGUARDA_REMOCAO,
                     utilizadorLogado.getLogin(), "Funcionário solicitou remoção da conta.");
             cNotificacao.gerarNotificacaoParaGestores(
@@ -446,6 +459,13 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         }
     }
 
+    /**
+     * Converte uma lista de reparações para uma matriz de objetos
+     * para apresentação numa JTable.
+     *
+     * @param lista lista de reparações a converter
+     * @return matriz de dados com ID, número, data e estado
+     */
     private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
         Object[][] dados = new Object[lista.size()][4];
         Iterator<Reparacao> it = lista.iterator();

@@ -163,6 +163,9 @@ public class PainelGestor extends JPanel implements ActionListener {
 
     /**
      * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
+     * 
+     * @param novoPainel painel a apresentar
+     * @param nome       nome identificador do painel
      */
     private void trocarConteudo(JPanel novoPainel, String nome) {
         painelConteudo.remove(painelAtualConteudo);
@@ -354,7 +357,8 @@ public class PainelGestor extends JPanel implements ActionListener {
         }
         JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, d);
         p.add(st, BorderLayout.CENTER);
-        JPanel form = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        JPanel form = new JPanel();
+        form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         JTextField cNome = new JTextField(10);
         cNome.setToolTipText("Novo nome");
         JTextField cUser = new JTextField(10);
@@ -370,28 +374,30 @@ public class PainelGestor extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(st);
                 if (id == -1) {
-                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
                 }
                 boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText(),
                         cEmail.getText(), new String(cPass.getPassword()),
                         cUser.getText(), utilizadorLogado.getLogin());
                 if (ok) {
-                    Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados!");
+                    Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados com sucesso!");
                     mostrarEditarUsers();
                 } else
-                    Utilitarios.mostrarErro(PainelGestor.this, "Erro ao atualizar!");
+                    Utilitarios.mostrarErro(PainelGestor.this, "Erro ao atualizar. Email ou Username pode já estar em uso.");
             }
         });
-        form.add(new JLabel("Nome:"));
-        form.add(cNome);
-        form.add(new JLabel("Username:"));
-        form.add(cUser);
-        form.add(new JLabel("Email:"));
-        form.add(cEmail);
-        form.add(new JLabel("Pass:"));
-        form.add(cPass);
-        form.add(bSave);
+        form.add(Utilitarios.criarCampoFormulario("Nome:", cNome, "Novo nome"));
+        form.add(Box.createVerticalStrut(5));
+        form.add(Utilitarios.criarCampoFormulario("Username:", cUser, "Novo username"));
+        form.add(Box.createVerticalStrut(5));
+        form.add(Utilitarios.criarCampoFormulario("Email:", cEmail, "Novo email"));
+        form.add(Box.createVerticalStrut(5));
+        form.add(Utilitarios.criarCampoFormulario("Pass:", cPass, "Nova password"));
+        form.add(Box.createVerticalStrut(10));
+        JPanel pBtns = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        pBtns.add(bSave);
+        form.add(pBtns);
         p.add(form, BorderLayout.SOUTH);
         trocarConteudo(p, "editarUsers");
     }
@@ -634,7 +640,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
                 cNotificacao.marcarComoLidasPorCategoria(id, cat);
-                Utilitarios.mostrarSucesso(PainelGestor.this, "Marcadas como lidas!");
+                Utilitarios.mostrarSucesso(PainelGestor.this, "Notificações marcadas como lidas!");
                 mostrarNotificacoes();
             }
         });
@@ -715,7 +721,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(st);
                 if (id == -1) {
-                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
                 }
                 if (id == utilizadorLogado.getIdUtilizador()) {
@@ -733,7 +739,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(st);
                 if (id == -1) {
-                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
                 }
                 if (id == utilizadorLogado.getIdUtilizador()) {
@@ -787,7 +793,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(st);
                 if (id == -1) {
-                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
                 }
                 cNotificacao.gerarNotificacao(id, "O teu pedido de remoção foi aceite.", CategoriaNotificacao.GERAL);
@@ -801,7 +807,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(st);
                 if (id == -1) {
-                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione!");
+                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
                 }
                 cUtilizador.mudarEstadoConta(id, EstadoUtilizador.ATIVO, utilizadorLogado.getLogin(),
@@ -835,7 +841,10 @@ public class PainelGestor extends JPanel implements ActionListener {
             Utilitarios.mostrarErro(PainelGestor.this, "És o único Gestor ATIVO! Não podes solicitar remoção.");
             return;
         }
-        if (Utilitarios.confirmar(this, "Tens a certeza que queres solicitar a remoção da tua conta?")) {
+        if (Utilitarios.confirmar(this,
+                "Ao solicitar a remoção, a tua conta será removida do sistema.\n"
+                        + "Os teus dados pessoais serão apagados de forma irreversível.\n"
+                        + "Tens a certeza que queres apagar a conta?")) {
             cUtilizador.mudarEstadoConta(utilizadorLogado.getIdUtilizador(), EstadoUtilizador.AGUARDA_REMOCAO,
                     utilizadorLogado.getLogin(), "Gestor solicitou remoção da conta.");
             cNotificacao.gerarNotificacaoParaGestores(

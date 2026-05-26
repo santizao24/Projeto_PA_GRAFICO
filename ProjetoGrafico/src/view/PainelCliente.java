@@ -205,8 +205,8 @@ public class PainelCliente extends JPanel implements ActionListener {
                     return;
                 }
                 int codSKU = cEquipamento.gerarSkuUnico();
-                cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU,
-                        cDataFab.getText(), cLote.getText(), utilizadorLogado.getLogin());
+                cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU, cDataFab.getText(),
+                        cLote.getText(), utilizadorLogado.getLogin(), cObs.getText());
                 Utilitarios.mostrarSucesso(PainelCliente.this,
                         "Equipamento registado com sucesso! (SKU: " + codSKU + ")");
             }
@@ -361,16 +361,8 @@ public class PainelCliente extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Reparacao> lista = cReparacao.listarReparacoesClienteOrdenadas(
                         utilizadorLogado.getIdUtilizador(), 1, true);
-                Object[][] dados = new Object[lista.size()][4];
-                Iterator<Reparacao> it = lista.iterator();
-                int i = 0;
-                while (it.hasNext()) {
-                    Reparacao r = it.next();
-                    dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(),
-                            r.getEstado() };
-                    i++;
-                }
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
+                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                        converterReparacoes(lista));
             }
         });
 
@@ -407,16 +399,8 @@ public class PainelCliente extends JPanel implements ActionListener {
                 ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesCliente(
                         utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                         campoTermo.getText());
-                Object[][] dados = new Object[res.size()][4];
-                Iterator<Reparacao> it = res.iterator();
-                int i = 0;
-                while (it.hasNext()) {
-                    Reparacao r = it.next();
-                    dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(),
-                            r.getEstado() };
-                    i++;
-                }
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" }, dados);
+                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                        converterReparacoes(res));
             }
         });
 
@@ -569,18 +553,37 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.setBorder(BorderFactory.createTitledBorder("Estado das Minhas Reparações"));
 
         ArrayList<Reparacao> lista = cReparacao.obterMinhasReparacoes(utilizadorLogado.getIdUtilizador());
-        Object[][] dados = new Object[lista.size()][2];
+        String[] dados = new String[lista.size()];
         Iterator<Reparacao> it = lista.iterator();
         int i = 0;
         while (it.hasNext()) {
             Reparacao r = it.next();
-            dados[i] = new Object[] { r.getNumReparacao(), r.getEstado() };
+            dados[i] = "Processo Nº " + r.getNumReparacao() + "  ->  Estado: " + r.getEstado();
             i++;
         }
-        JScrollPane scrollTabela = Utilitarios.criarTabela(new String[] { "Nº Processo", "Estado" }, dados);
+        JScrollPane scrollTabela = Utilitarios.criarLista(dados);
         p.add(scrollTabela, BorderLayout.CENTER);
 
         trocarConteudo(p, "consultarEstado");
+    }
+
+    /**
+     * Converte uma lista de reparações para uma matriz de objetos
+     * para apresentação numa JTable.
+     *
+     * @param lista lista de reparações a converter
+     * @return matriz de dados com ID, número, data e estado
+     */
+    private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
+        Object[][] dados = new Object[lista.size()][4];
+        Iterator<Reparacao> it = lista.iterator();
+        int i = 0;
+        while (it.hasNext()) {
+            Reparacao r = it.next();
+            dados[i] = new Object[] { r.getIdReparacao(), r.getNumReparacao(), r.getDataCriacao(), r.getEstado() };
+            i++;
+        }
+        return dados;
     }
 
     /**

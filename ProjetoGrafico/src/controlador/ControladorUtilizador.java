@@ -87,7 +87,7 @@ public class ControladorUtilizador {
      *         caso contrário
      */
     public boolean registarFuncionario(String nome, String email, String user, String pass, String nif, String telefone,
-            String morada, int especializacao, String dataInicio) {
+            String morada, int especializacao, String dataInicio, String obs) {
         Funcionario novo = new Funcionario(0, user, pass, nome, email, TipoUtilizador.FUNCIONARIO,
                 EstadoUtilizador.ATIVO, nif, telefone, morada, especializacao, dataInicio);
         boolean sucesso = uDao.inserirUtilizador(novo);
@@ -95,6 +95,9 @@ public class ControladorUtilizador {
             cNotificacao.gerarNotificacaoParaGestores("Novo Funcionário registado e ativado: " + nome + ".",
                     CategoriaNotificacao.REGISTO);
             ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Funcionário");
+            if (obs != null && !obs.trim().isEmpty()) {
+                cLog.registarAcao(user, "Adicionou observações no registo: " + obs.trim());
+            }
         }
         return sucesso;
     }
@@ -116,7 +119,7 @@ public class ControladorUtilizador {
      *         caso contrário
      */
     public boolean registarCliente(String nome, String email, String user, String pass, String nif, String telefone,
-            String morada, String setorAtividade, String escalao) {
+            String morada, String setorAtividade, String escalao, String obs) {
         Cliente novo = new Cliente(0, user, pass, nome, email, TipoUtilizador.CLIENTE, EstadoUtilizador.ATIVO, nif,
                 telefone, morada, setorAtividade, escalao);
         boolean sucesso = uDao.inserirUtilizador(novo);
@@ -124,6 +127,9 @@ public class ControladorUtilizador {
             cNotificacao.gerarNotificacaoParaGestores("Novo Cliente registado e ativado: " + nome + ".",
                     CategoriaNotificacao.REGISTO);
             ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Cliente");
+            if (obs != null && !obs.trim().isEmpty()) {
+                cLog.registarAcao(user, "Adicionou observações no registo: " + obs.trim());
+            }
         }
         return sucesso;
     }

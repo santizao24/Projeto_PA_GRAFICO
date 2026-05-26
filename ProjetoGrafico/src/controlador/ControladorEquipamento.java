@@ -34,12 +34,12 @@ public class ControladorEquipamento {
      * @param usernameLogado username do utilizador autenticado (para registo de log)
      */
     public void registarEquipamento(Utilizador clienteLogado, String marca, String codModelo, int codSKU,
-            String dataFabrico, String lote, String usernameLogado) {
+            String dataFabrico, String lote, String usernameLogado, String obs) {
         Equipamento eq = new Equipamento(0, clienteLogado.getIdUtilizador(), marca, codModelo, codSKU, dataFabrico,
                 lote);
 
         eDao.inserirEquipamento(clienteLogado, eq);
-        cLog.registarAcao(usernameLogado, "Registou um novo equipamento (SKU: " + codSKU + ").");
+        cLog.registarAcao(usernameLogado, "Registou um novo equipamento (SKU: " + codSKU + ")." + (obs == null || obs.trim().isEmpty() ? "" : " Obs: " + obs.trim()));
     }
 
     /**

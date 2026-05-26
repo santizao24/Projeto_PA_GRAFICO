@@ -190,14 +190,29 @@ public class AplicacaoGUI extends JFrame implements ActionListener {
         return cUtilizador;
     }
 
+    /**
+     * Devolve a instância do Controlador de Reparações.
+     *
+     * @return controlador de reparações
+     */
     public ControladorReparacao getControladorReparacao() {
         return cReparacao;
     }
 
+    /**
+     * Devolve a instância do Controlador de Equipamentos.
+     *
+     * @return controlador de equipamentos
+     */
     public ControladorEquipamento getControladorEquipamento() {
         return cEquipamento;
     }
 
+    /**
+     * Devolve a instância do Controlador de Notificações.
+     *
+     * @return controlador de notificações
+     */
     public ControladorNotificacao getControladorNotificacao() {
         return cNotificacao;
     }

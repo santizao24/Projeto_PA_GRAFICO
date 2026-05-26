@@ -205,7 +205,7 @@ public class ViewCliente {
         String lote = ler.nextLine();
 
         cEquipamento.registarEquipamento(utilizadorLogado, marca, codModelo, codSKU, dataFab, lote,
-                utilizadorLogado.getLogin());
+                utilizadorLogado.getLogin(), "");
         System.out.println("Equipamento registado com sucesso! (SKU: " + codSKU + ")");
     }
 

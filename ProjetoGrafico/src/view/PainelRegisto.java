@@ -274,8 +274,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
 
             int esp = Integer.parseInt((String) comboEspecializacao.getSelectedItem());
 
+            String obs = campoObservacoes.getText();
             sucesso = aplicacao.getControladorUtilizador().registarFuncionario(
-                    nome, email, user, pass, nif, tel, morada, esp, dataInicio);
+                    nome, email, user, pass, nif, tel, morada, esp, dataInicio, obs);
         } else {
             String nif = campoNifCliente.getText();
             String tel = campoTelCliente.getText();
@@ -293,8 +294,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 return;
             }
 
+            String obs = campoObservacoes.getText();
             sucesso = aplicacao.getControladorUtilizador().registarCliente(
-                    nome, email, user, pass, nif, tel, morada, setor, escalao);
+                    nome, email, user, pass, nif, tel, morada, setor, escalao, obs);
         }
 
         if (sucesso) {
