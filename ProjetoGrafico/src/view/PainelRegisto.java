@@ -4,7 +4,13 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import model.Utilizador;
 import util.Validacoes;
 
 /**
@@ -25,6 +31,8 @@ public class PainelRegisto extends JPanel implements ActionListener {
     private JPasswordField campoPassword;
     private JComboBox<String> comboTipo;
     private JTextArea campoObservacoes;
+    private File fotoSelecionada = null;
+    private JPanel painelFoto;
 
     // Campos Funcionário
     private JTextField campoNifFunc;
@@ -65,6 +73,24 @@ public class PainelRegisto extends JPanel implements ActionListener {
         // Painel central com scroll
         JPanel painelFormulario = new JPanel();
         painelFormulario.setLayout(new BoxLayout(painelFormulario, BoxLayout.Y_AXIS));
+
+        // Foto de perfil
+        painelFoto = Utilitarios.criarPainelFoto(null, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                JFileChooser fc = new JFileChooser();
+                fc.setDialogTitle("Escolher Foto para o Novo Perfil");
+                fc.setFileFilter(new FileNameExtensionFilter("Imagens (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
+                fc.setAcceptAllFileFilterUsed(false);
+
+                if (fc.showOpenDialog(PainelRegisto.this) == JFileChooser.APPROVE_OPTION) {
+                    fotoSelecionada = fc.getSelectedFile();
+                    Utilitarios.atualizarImagemPainel(painelFoto, fotoSelecionada.getAbsolutePath());
+                }
+            }
+        });
+        painelFormulario.add(painelFoto);
+        painelFormulario.add(Box.createVerticalStrut(10));
 
         // Campos comuns
         campoNome = new JTextField(20);
@@ -281,8 +307,34 @@ public class PainelRegisto extends JPanel implements ActionListener {
         }
 
         if (sucesso) {
-            Utilitarios.mostrarSucesso(this, "Registo efetuado! Aguarde aprovação do Gestor.");
+            if (fotoSelecionada != null) {
+                // Obter o utilizador acabado de criar para ter o seu ID
+                Utilizador uNovo = aplicacao.getControladorUtilizador().efetuarLogin(user, pass);
+                if (uNovo != null) {
+                    String nomeOriginal = fotoSelecionada.getName();
+                    String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf('.'));
+                    String nomeDestino = "user_" + uNovo.getIdUtilizador() + extensao;
+                    File destino = new File("fotos", nomeDestino);
+                    try {
+                        File pastaFotos = new File("fotos");
+                        if (!pastaFotos.exists()) pastaFotos.mkdirs();
+                        Files.copy(fotoSelecionada.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                        aplicacao.getControladorUtilizador().atualizarFoto(uNovo.getIdUtilizador(),
+                                "fotos" + File.separator + nomeDestino, "Sistema");
+                    } catch (IOException ex) {
+                        // Opcional: mostrarErro(this, "Erro ao guardar foto.");
+                    }
+                }
+            } else {
+                Utilizador uNovo = aplicacao.getControladorUtilizador().efetuarLogin(user, pass);
+                if (uNovo != null) {
+                    aplicacao.getControladorUtilizador().atualizarFoto(uNovo.getIdUtilizador(), "fotos/geral.png", "Sistema");
+                }
+            }
+            Utilitarios.mostrarSucesso(this, "Registo efetuado com sucesso! Já pode iniciar sessão.");
             limparCampos();
+            fotoSelecionada = null;
+            Utilitarios.atualizarImagemPainel(painelFoto, null);
             aplicacao.mostrarPainel("login");
         } else {
             Utilitarios.mostrarErro(this,

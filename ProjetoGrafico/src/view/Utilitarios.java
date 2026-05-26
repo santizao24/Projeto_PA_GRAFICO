@@ -263,17 +263,17 @@ public class Utilitarios {
         lblFoto.setName("lblFoto");
 
         // Carregar imagem ou mostrar genérica
-        if (fotoPath != null && !fotoPath.isEmpty()) {
-            File ficheiro = new File(fotoPath);
-            if (ficheiro.exists()) {
-                ImageIcon icon = new ImageIcon(fotoPath);
-                Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-                lblFoto.setIcon(new ImageIcon(img));
-                lblFoto.setText("");
-            } else {
-                lblFoto.setIcon(null);
-                lblFoto.setText("Sem Foto");
-            }
+        String pathAtual = fotoPath;
+        if (pathAtual == null || pathAtual.isEmpty() || !new File(pathAtual).exists()) {
+            pathAtual = "fotos/geral.png";
+        }
+
+        File ficheiro = new File(pathAtual);
+        if (ficheiro.exists()) {
+            ImageIcon icon = new ImageIcon(pathAtual);
+            Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            lblFoto.setIcon(new ImageIcon(img));
+            lblFoto.setText("");
         } else {
             lblFoto.setIcon(null);
             lblFoto.setText("Sem Foto");
@@ -345,8 +345,12 @@ public class Utilitarios {
         for (Component c : painelFoto.getComponents()) {
             if (c instanceof JLabel && "lblFoto".equals(c.getName())) {
                 JLabel lbl = (JLabel) c;
-                if (fotoPath != null && !fotoPath.isEmpty() && new File(fotoPath).exists()) {
-                    ImageIcon icon = new ImageIcon(fotoPath);
+                String pathAtual = fotoPath;
+                if (pathAtual == null || pathAtual.isEmpty() || !new File(pathAtual).exists()) {
+                    pathAtual = "fotos/geral.png";
+                }
+                if (new File(pathAtual).exists()) {
+                    ImageIcon icon = new ImageIcon(pathAtual);
                     Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
                     lbl.setIcon(new ImageIcon(img));
                     lbl.setText("");

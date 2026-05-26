@@ -56,10 +56,9 @@ public class ServicoEmail {
                     mensagem.setFrom(new InternetAddress(EMAIL_REMETENTE, "Sistema de Gestão ESTGOH"));
                     mensagem.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDestino));
                     mensagem.setSubject("Confirmação de Registo - Projeto PA");
-
                     String corpo = "Olá " + nome + ",\n\n"
-                            + "Confirmamos que o teu registo como " + tipoUtilizador + " foi submetido.\n"
-                            + "A tua conta está PENDENTE de aprovação pelo Gestor.\n\n"
+                            + "Confirmamos que o teu registo como " + tipoUtilizador + " foi submetido com sucesso.\n"
+                            + "A tua conta já se encontra ATIVA e já podes iniciar sessão no sistema.\n\n"
                             + "Cumprimentos,\nEquipa de Programação Aplicada.";
 
                     mensagem.setText(corpo);

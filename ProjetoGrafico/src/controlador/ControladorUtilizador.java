@@ -89,10 +89,10 @@ public class ControladorUtilizador {
     public boolean registarFuncionario(String nome, String email, String user, String pass, String nif, String telefone,
             String morada, int especializacao, String dataInicio) {
         Funcionario novo = new Funcionario(0, user, pass, nome, email, TipoUtilizador.FUNCIONARIO,
-                EstadoUtilizador.PENDENTE, nif, telefone, morada, especializacao, dataInicio);
+                EstadoUtilizador.ATIVO, nif, telefone, morada, especializacao, dataInicio);
         boolean sucesso = uDao.inserirUtilizador(novo);
         if (sucesso) {
-            cNotificacao.gerarNotificacaoParaGestores("Novo Funcionário registado (" + nome + "). Aguarda aprovação.",
+            cNotificacao.gerarNotificacaoParaGestores("Novo Funcionário registado e ativado: " + nome + ".",
                     CategoriaNotificacao.REGISTO);
             ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Funcionário");
         }
@@ -117,11 +117,11 @@ public class ControladorUtilizador {
      */
     public boolean registarCliente(String nome, String email, String user, String pass, String nif, String telefone,
             String morada, String setorAtividade, String escalao) {
-        Cliente novo = new Cliente(0, user, pass, nome, email, TipoUtilizador.CLIENTE, EstadoUtilizador.PENDENTE, nif,
+        Cliente novo = new Cliente(0, user, pass, nome, email, TipoUtilizador.CLIENTE, EstadoUtilizador.ATIVO, nif,
                 telefone, morada, setorAtividade, escalao);
         boolean sucesso = uDao.inserirUtilizador(novo);
         if (sucesso) {
-            cNotificacao.gerarNotificacaoParaGestores("Novo Cliente registado (" + nome + "). Aguarda aprovação.",
+            cNotificacao.gerarNotificacaoParaGestores("Novo Cliente registado e ativado: " + nome + ".",
                     CategoriaNotificacao.REGISTO);
             ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Cliente");
         }
