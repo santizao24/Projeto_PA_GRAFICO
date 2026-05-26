@@ -103,8 +103,8 @@ public class Utilizador {
      *
      * @param aEstado novo estado
      */
-    public void setEstado(EstadoUtilizador aEstado) {
-        estado = aEstado;
+    public void setEstado(EstadoUtilizador estado) {
+        this.estado = estado;
     }
 
     /**
