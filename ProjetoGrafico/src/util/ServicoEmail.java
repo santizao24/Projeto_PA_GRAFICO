@@ -49,13 +49,13 @@ public class ServicoEmail {
             public void run() {
                 try {
                     Message mensagem = new MimeMessage(session);
-                    mensagem.setFrom(new InternetAddress(EMAIL_REMETENTE, "Sistema de Gestão ESTGOH"));
+                    mensagem.setFrom(new InternetAddress(EMAIL_REMETENTE, "Departamento de Apoio ao Cliente"));
                     mensagem.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emailDestino));
-                    mensagem.setSubject("Confirmação de Registo - Projeto PA");
+                    mensagem.setSubject("Confirmação de Registo - Aplicação de Gestão de Reparações");
                     String corpo = "Olá " + nome + ",\n\n"
                             + "Confirmamos que o teu registo como " + tipoUtilizador + " foi submetido com sucesso.\n"
                             + "A tua conta já se encontra ATIVA e já podes iniciar sessão no sistema.\n\n"
-                            + "Cumprimentos,\nEquipa de Programação Aplicada.";
+                            + "Com os melhores cumprimentos,\nDepartamento de Apoio ao Cliente.";
 
                     mensagem.setText(corpo);
                     Transport.send(mensagem);
