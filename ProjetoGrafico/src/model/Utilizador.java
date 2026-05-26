@@ -19,6 +19,7 @@ public class Utilizador {
     private String email;
     private TipoUtilizador tipo;
     private EstadoUtilizador estado;
+    private String fotoPath;
 
     /**
      * Constrói um novo Utilizador com todos os atributos.
@@ -40,6 +41,7 @@ public class Utilizador {
         email = aEmail;
         tipo = aTipo;
         estado = aEstado;
+        fotoPath = null;
     }
 
     /**
@@ -166,5 +168,23 @@ public class Utilizador {
      */
     public EstadoUtilizador getEstado() {
         return estado;
+    }
+
+    /**
+     * Define o caminho da foto de perfil do utilizador (R2).
+     *
+     * @param aFotoPath caminho relativo para a foto (ex: fotos/user_42.png)
+     */
+    public void setFotoPath(String aFotoPath) {
+        fotoPath = aFotoPath;
+    }
+
+    /**
+     * Obtém o caminho da foto de perfil do utilizador (R2).
+     *
+     * @return caminho relativo da foto, ou null se não tiver foto
+     */
+    public String getFotoPath() {
+        return fotoPath;
     }
 }

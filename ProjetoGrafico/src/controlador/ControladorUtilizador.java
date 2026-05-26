@@ -337,4 +337,21 @@ public class ControladorUtilizador {
 
         return sucesso;
     }
+
+    /**
+     * Atualiza o caminho da foto de perfil de um utilizador (R2).
+     *
+     * @param idUtilizador   identificador do utilizador
+     * @param fotoPath       caminho relativo da nova foto
+     * @param usernameLogado username do utilizador autenticado (para log)
+     * @return {@code true} se a atualização for efetuada com sucesso, {@code false}
+     *         caso contrário
+     */
+    public boolean atualizarFoto(int idUtilizador, String fotoPath, String usernameLogado) {
+        boolean sucesso = uDao.atualizarFoto(idUtilizador, fotoPath);
+        if (sucesso) {
+            cLog.registarAcao(usernameLogado, "Alterou a foto de perfil.");
+        }
+        return sucesso;
+    }
 }

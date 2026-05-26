@@ -33,7 +33,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sqlUtilizador = "INSERT INTO UTILIZADOR (U_NOME, U_USERNAME, U_EMAIL, U_PASSWORD, U_TIPO, U_ESTADO) VALUES (?, ?, ?, ?, ?, ?)";
+        String sqlUtilizador = "INSERT INTO UTILIZADOR (U_NOME, U_USERNAME, U_EMAIL, U_PASSWORD, U_TIPO, U_ESTADO, U_FOTO) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -48,6 +48,7 @@ public class UtilizadorDAO {
             ps.setString(4, aUtilizador.getPassword());
             ps.setString(5, aUtilizador.getTipo().name());
             ps.setString(6, aUtilizador.getEstado().name());
+            ps.setString(7, aUtilizador.getFotoPath());
 
             ps.executeUpdate();
 
@@ -187,6 +188,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         tipoEnum,
                         estadoUtilizador);
+                utilizadorEncontrado.setFotoPath(rs.getString("U_FOTO"));
             }
         } catch (SQLException e) {
         } finally {
@@ -224,7 +226,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_NOME, U_USERNAME, U_EMAIL, U_TIPO, U_ESTADO FROM UTILIZADOR WHERE (U_ESTADO = 'PENDENTE' OR U_ESTADO = 'REJEITADO') AND U_TIPO != 'GESTOR'";
+        String sql = "SELECT U_ID_UTILIZADOR, U_NOME, U_USERNAME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR WHERE (U_ESTADO = 'PENDENTE' OR U_ESTADO = 'REJEITADO') AND U_TIPO != 'GESTOR'";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -261,6 +263,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         tipoEnum,
                         estadoUtilizador);
+                u.setFotoPath(rs.getString("U_FOTO"));
                 lista.add(u);
             }
         } catch (Exception e) {
@@ -298,7 +301,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL FROM UTILIZADOR WHERE U_TIPO = 'FUNCIONARIO' AND U_ESTADO = 'ATIVO'";
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_FOTO FROM UTILIZADOR WHERE U_TIPO = 'FUNCIONARIO' AND U_ESTADO = 'ATIVO'";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -315,6 +318,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         TipoUtilizador.FUNCIONARIO,
                         EstadoUtilizador.ATIVO);
+                u.setFotoPath(rs.getString("U_FOTO"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -353,7 +357,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL FROM UTILIZADOR "
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_FOTO FROM UTILIZADOR "
                 + "WHERE U_TIPO = 'FUNCIONARIO' AND U_ESTADO = 'ATIVO' "
                 + "AND U_ID_UTILIZADOR NOT IN (SELECT U_ID_UTILIZADOR FROM REPARACAO_REJEITADA WHERE R_ID_REPARACAO = ?)";
 
@@ -373,6 +377,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         TipoUtilizador.FUNCIONARIO,
                         EstadoUtilizador.ATIVO);
+                u.setFotoPath(rs.getString("U_FOTO"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -499,7 +504,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO FROM UTILIZADOR";
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -532,6 +537,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         tipoEnum,
                         estadoEnum);
+                u.setFotoPath(rs.getString("U_FOTO"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -764,7 +770,7 @@ public class UtilizadorDAO {
         ResultSet rs = null;
 
         String ordem = ascendente ? "ASC" : "DESC";
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO FROM UTILIZADOR ORDER BY U_NOME "
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR ORDER BY U_NOME "
                 + ordem;
 
         try {
@@ -798,6 +804,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         tipoEnum,
                         estadoEnum);
+                u.setFotoPath(rs.getString("U_FOTO"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -837,7 +844,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO FROM UTILIZADOR WHERE U_ID_UTILIZADOR = ?";
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR WHERE U_ID_UTILIZADOR = ?";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -871,6 +878,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         tipoEnum,
                         estadoEnum);
+                u.setFotoPath(rs.getString("U_FOTO"));
             }
         } catch (SQLException e) {
         } finally {
@@ -956,6 +964,7 @@ public class UtilizadorDAO {
                         rs.getString("U_EMAIL"),
                         tipoEnum,
                         estadoEnum);
+                u.setFotoPath(rs.getString("U_FOTO"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -1045,6 +1054,47 @@ public class UtilizadorDAO {
             ps.setString(1, "removido_" + idUtilizador);
             ps.setString(2, "removido_" + idUtilizador + "@sistema.local");
             ps.setInt(3, idUtilizador);
+            ps.executeUpdate();
+            return true;
+
+        } catch (SQLException e) {
+            return false;
+        } finally {
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    ConexaoBD.fecharBd(conn);
+                } catch (Exception e) {
+                }
+            }
+        }
+    }
+
+    /**
+     * Atualiza o caminho da foto de perfil de um utilizador (R2).
+     *
+     * @param idUtilizador identificador do utilizador
+     * @param fotoPath     caminho relativo da nova foto
+     * @return {@code true} se a atualização for bem sucedida, {@code false} caso
+     *         contrário
+     */
+    public boolean atualizarFoto(int idUtilizador, String fotoPath) {
+        Connection conn = null;
+        PreparedStatement ps = null;
+        String sql = "UPDATE UTILIZADOR SET U_FOTO = ? WHERE U_ID_UTILIZADOR = ?";
+
+        try {
+            conn = ConexaoBD.obterConexao();
+            ps = conn.prepareStatement(sql);
+            ps.clearParameters();
+
+            ps.setString(1, fotoPath);
+            ps.setInt(2, idUtilizador);
             ps.executeUpdate();
             return true;
 

@@ -1,8 +1,14 @@
 package view;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 
 /**
  * Classe utilitária com métodos reutilizáveis para a interface gráfica.
@@ -234,5 +240,122 @@ public class Utilitarios {
             return valor != null ? valor.toString() : null;
         }
         return null;
+    }
+
+    /**
+     * Cria um JPanel com a foto de perfil e um botão para alterar (R2).
+     * Se o caminho da foto for null ou inválido, mostra uma imagem genérica.
+     *
+     * @param fotoPath  caminho relativo da foto (pode ser null)
+     * @param onAlterar ActionListener para o botão "Alterar Foto"
+     * @return JPanel contendo a foto e o botão
+     */
+    public static JPanel criarPainelFoto(String fotoPath, ActionListener onAlterar) {
+        JPanel painel = new JPanel();
+        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+        painel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        JLabel lblFoto = new JLabel();
+        lblFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblFoto.setPreferredSize(new Dimension(100, 100));
+        lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
+        lblFoto.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        lblFoto.setName("lblFoto");
+
+        // Carregar imagem ou mostrar genérica
+        if (fotoPath != null && !fotoPath.isEmpty()) {
+            File ficheiro = new File(fotoPath);
+            if (ficheiro.exists()) {
+                ImageIcon icon = new ImageIcon(fotoPath);
+                Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                lblFoto.setIcon(new ImageIcon(img));
+                lblFoto.setText("");
+            } else {
+                lblFoto.setIcon(null);
+                lblFoto.setText("Sem Foto");
+            }
+        } else {
+            lblFoto.setIcon(null);
+            lblFoto.setText("Sem Foto");
+        }
+
+        JButton btnAlterar = new JButton("Alterar Foto");
+        btnAlterar.setAlignmentX(Component.CENTER_ALIGNMENT);
+        btnAlterar.setToolTipText("Clique para escolher uma foto de perfil (R2)");
+        btnAlterar.addActionListener(onAlterar);
+
+        painel.add(Box.createVerticalStrut(5));
+        painel.add(lblFoto);
+        painel.add(Box.createVerticalStrut(5));
+        painel.add(btnAlterar);
+        painel.add(Box.createVerticalStrut(10));
+
+        return painel;
+    }
+
+    /**
+     * Abre um JFileChooser para o utilizador selecionar uma imagem.
+     * Copia o ficheiro para a pasta "fotos/" do projeto e retorna o caminho.
+     *
+     * @param pai           componente pai para o diálogo
+     * @param idUtilizador  identificador do utilizador (para nomear o ficheiro)
+     * @return caminho relativo da foto copiada (ex: fotos/user_42.png), ou null se cancelar
+     */
+    public static String escolherFicheiroImagem(Component pai, int idUtilizador) {
+        JFileChooser fc = new JFileChooser();
+        fc.setDialogTitle("Escolher Foto de Perfil");
+        fc.setFileFilter(new FileNameExtensionFilter("Imagens (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
+        fc.setAcceptAllFileFilterUsed(false);
+
+        int resultado = fc.showOpenDialog(pai);
+        if (resultado == JFileChooser.APPROVE_OPTION) {
+            File ficheiroOrigem = fc.getSelectedFile();
+            try {
+                // Criar pasta fotos/ se não existir
+                File pastaFotos = new File("fotos");
+                if (!pastaFotos.exists()) {
+                    pastaFotos.mkdirs();
+                }
+
+                // Obter extensão do ficheiro original
+                String nomeOriginal = ficheiroOrigem.getName();
+                String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf('.'));
+
+                // Copiar para fotos/user_ID.extensao
+                String nomeDestino = "user_" + idUtilizador + extensao;
+                File ficheiroDestino = new File(pastaFotos, nomeDestino);
+                Files.copy(ficheiroOrigem.toPath(), ficheiroDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                return "fotos" + File.separator + nomeDestino;
+            } catch (IOException e) {
+                mostrarErro(pai, "Erro ao copiar a foto: " + e.getMessage());
+                return null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Atualiza a imagem apresentada num painel de foto (R2).
+     *
+     * @param painelFoto JPanel criado por criarPainelFoto
+     * @param fotoPath   novo caminho da foto
+     */
+    public static void atualizarImagemPainel(JPanel painelFoto, String fotoPath) {
+        for (Component c : painelFoto.getComponents()) {
+            if (c instanceof JLabel && "lblFoto".equals(c.getName())) {
+                JLabel lbl = (JLabel) c;
+                if (fotoPath != null && !fotoPath.isEmpty() && new File(fotoPath).exists()) {
+                    ImageIcon icon = new ImageIcon(fotoPath);
+                    Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                    lbl.setIcon(new ImageIcon(img));
+                    lbl.setText("");
+                } else {
+                    lbl.setIcon(null);
+                    lbl.setText("Sem Foto");
+                }
+                break;
+            }
+        }
     }
 }

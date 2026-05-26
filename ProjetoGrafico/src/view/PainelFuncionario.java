@@ -271,6 +271,26 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
+        // Foto de perfil (R2)
+        final JPanel[] painelFotoRef = new JPanel[1];
+        painelFotoRef[0] = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                String novaFoto = Utilitarios.escolherFicheiroImagem(PainelFuncionario.this,
+                        utilizadorLogado.getIdUtilizador());
+                if (novaFoto != null) {
+                    boolean ok = cUtilizador.atualizarFoto(utilizadorLogado.getIdUtilizador(),
+                            novaFoto, utilizadorLogado.getLogin());
+                    if (ok) {
+                        utilizadorLogado.setFotoPath(novaFoto);
+                        Utilitarios.atualizarImagemPainel(painelFotoRef[0], novaFoto);
+                        Utilitarios.mostrarSucesso(PainelFuncionario.this, "Foto atualizada com sucesso!");
+                    }
+                }
+            }
+        });
+        p.add(painelFotoRef[0]);
+
         JTextField cEmail = new JTextField(utilizadorLogado.getEmail(), 20);
         JPasswordField cPass = new JPasswordField(20);
         JTextField cTel = new JTextField(20);
