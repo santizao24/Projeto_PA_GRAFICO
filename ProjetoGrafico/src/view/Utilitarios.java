@@ -6,9 +6,9 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 /**
  * Classe utilitária com métodos reutilizáveis para a interface gráfica.
@@ -48,7 +48,7 @@ public class Utilitarios {
         JTable tabela = new JTable(modelo);
         tabela.setAutoCreateRowSorter(true);
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabela.getTableHeader().setReorderingAllowed(false);
+
         JScrollPane scrollPane = new JScrollPane(tabela);
         scrollPane.setPreferredSize(new Dimension(700, 300));
         return scrollPane;
@@ -259,7 +259,6 @@ public class Utilitarios {
         lblFoto.setPreferredSize(new Dimension(100, 100));
         lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
         lblFoto.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-        lblFoto.setName("lblFoto");
 
         String pathAtual = fotoPath;
         if (pathAtual == null || pathAtual.isEmpty() || !new File(pathAtual).exists()) {
@@ -304,7 +303,7 @@ public class Utilitarios {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Escolher Foto de Perfil");
         fc.setFileFilter(new FileNameExtensionFilter("Imagens (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
-        fc.setAcceptAllFileFilterUsed(false);
+
 
         int resultado = fc.showOpenDialog(pai);
         if (resultado == JFileChooser.APPROVE_OPTION) {
@@ -320,7 +319,15 @@ public class Utilitarios {
 
                 String nomeDestino = "user_" + idUtilizador + extensao;
                 File ficheiroDestino = new File(pastaFotos, nomeDestino);
-                Files.copy(ficheiroOrigem.toPath(), ficheiroDestino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                FileInputStream fis = new FileInputStream(ficheiroOrigem);
+                FileOutputStream fos = new FileOutputStream(ficheiroDestino);
+                byte[] buffer = new byte[1024];
+                int bytesLidos;
+                while ((bytesLidos = fis.read(buffer)) > 0) {
+                    fos.write(buffer, 0, bytesLidos);
+                }
+                fis.close();
+                fos.close();
 
                 return "fotos" + File.separator + nomeDestino;
             } catch (IOException e) {
@@ -339,7 +346,7 @@ public class Utilitarios {
      */
     public static void atualizarImagemPainel(JPanel painelFoto, String fotoPath) {
         for (Component c : painelFoto.getComponents()) {
-            if (c instanceof JLabel && "lblFoto".equals(c.getName())) {
+            if (c instanceof JLabel) {
                 JLabel lbl = (JLabel) c;
                 String pathAtual = fotoPath;
                 if (pathAtual == null || pathAtual.isEmpty() || !new File(pathAtual).exists()) {
