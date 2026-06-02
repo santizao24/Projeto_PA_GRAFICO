@@ -93,7 +93,7 @@ create table NOTIFICACAO
    N_MENSAGEM           varchar(1024) not null,
    N_DATA_CRIACAO       varchar(20) not null,
    N_ESTADO             varchar(20) not null,
-   N_CATEGORIA_         varchar(30) not null,
+   N_CATEGORIA          varchar(30) not null,
    primary key (N_ID_NOTIFICACAO)
 );
 
