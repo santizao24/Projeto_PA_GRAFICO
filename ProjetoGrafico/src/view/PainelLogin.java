@@ -38,7 +38,6 @@ public class PainelLogin extends JPanel implements ActionListener {
         gbc.insets = new Insets(5, 5, 5, 5);
 
         JLabel titulo = new JLabel("Sistema de Gestão de Oficina");
-        titulo.setFont(new Font("SansSerif", Font.BOLD, 20));
         gbc.gridx = 0;
         gbc.gridy = 0;
         gbc.gridwidth = 2;
@@ -46,7 +45,6 @@ public class PainelLogin extends JPanel implements ActionListener {
         add(titulo, gbc);
 
         JLabel subtitulo = new JLabel("Autenticação");
-        subtitulo.setFont(new Font("SansSerif", Font.PLAIN, 14));
         gbc.gridy = 1;
         add(subtitulo, gbc);
 
@@ -76,7 +74,7 @@ public class PainelLogin extends JPanel implements ActionListener {
         gbc.anchor = GridBagConstraints.WEST;
         add(campoPassword, gbc);
 
-        JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        JPanel painelBotoes = new JPanel(new FlowLayout());
         btnEntrar = new JButton("Entrar");
         btnEntrar.setToolTipText("Efetuar login no sistema");
         btnEntrar.addActionListener(this);

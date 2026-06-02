@@ -20,6 +20,7 @@ import Enums.CategoriaNotificacao;
 import Enums.EstadoReparacao;
 import Enums.EstadoUtilizador;
 import Enums.TipoUtilizador;
+import util.Validacoes;
 
 /**
  * Painel com as funcionalidades disponíveis para o utilizador do tipo Gestor.
@@ -41,7 +42,7 @@ public class PainelGestor extends JPanel implements ActionListener {
     private JPanel painelAtualConteudo;
     private JButton btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers;
     private JButton btnListagens, btnNotifs, btnLogs, btnToggleContas;
-    private JButton btnPedidosRemocao, btnMinhaRemocao, btnLogout;
+    private JButton btnPedidosRemocao, btnMinhaRemocao, btnPerfil, btnLogout;
 
     /**
      * Constrói o painel do gestor.
@@ -58,14 +59,10 @@ public class PainelGestor extends JPanel implements ActionListener {
 
         JPanel painelMenu = new JPanel();
         painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
-        painelMenu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelMenu.setPreferredSize(new Dimension(220, 0));
 
         JLabel titulo = new JLabel("Menu Gestor");
-        titulo.setFont(new Font("SansSerif", Font.BOLD, 16));
-        titulo.setAlignmentX(Component.LEFT_ALIGNMENT);
         painelMenu.add(titulo);
-        painelMenu.add(Box.createVerticalStrut(10));
 
         btnAtivarContas = criarBotaoMenu("Ativar Contas", "Aprovar ou rejeitar contas pendentes");
         btnGerirRep = criarBotaoMenu("Gerir Reparações", "Atribuir reparações a funcionários");
@@ -76,24 +73,23 @@ public class PainelGestor extends JPanel implements ActionListener {
         btnLogs = criarBotaoMenu("Logs", "Consultar registos de auditoria");
         btnToggleContas = criarBotaoMenu("Ativar/Inativar", "Alterar estado de contas");
         btnPedidosRemocao = criarBotaoMenu("Pedidos Remoção", "Gerir pedidos de remoção");
+        btnPerfil = criarBotaoMenu("O Meu Perfil", "Editar os dados do perfil");
         btnMinhaRemocao = criarBotaoMenu("Minha Remoção", "Solicitar remoção da minha conta");
         btnLogout = criarBotaoMenu("Logout", "Terminar sessão");
 
         JButton[] botoes = { btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers,
                 btnListagens, btnNotifs, btnLogs, btnToggleContas, btnPedidosRemocao,
-                btnMinhaRemocao, btnLogout };
+                btnPerfil, btnMinhaRemocao, btnLogout };
         int idx = 0;
         while (idx < botoes.length) {
             painelMenu.add(botoes[idx]);
-            painelMenu.add(Box.createVerticalStrut(3));
             idx++;
         }
         add(painelMenu, BorderLayout.WEST);
 
         painelConteudo = new JPanel(new BorderLayout());
-        painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelAtualConteudo = new JPanel();
-        painelAtualConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER));
+        painelAtualConteudo.add(new JLabel("Selecione uma opção do menu."));
         painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);
         add(painelConteudo, BorderLayout.CENTER);
     }
@@ -117,7 +113,6 @@ public class PainelGestor extends JPanel implements ActionListener {
     private JButton criarBotaoMenu(String texto, String tooltip) {
         JButton btn = new JButton(texto);
         btn.setToolTipText(tooltip);
-        btn.setAlignmentX(Component.LEFT_ALIGNMENT);
         btn.setMaximumSize(new Dimension(200, 30));
         btn.addActionListener(this);
         return btn;
@@ -157,6 +152,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             mostrarToggleContas();
         else if (src.equals(btnPedidosRemocao))
             mostrarPedidosRemocao();
+        else if (src.equals(btnPerfil))
+            mostrarPerfil();
         else if (src.equals(btnMinhaRemocao))
             solicitarMinhaRemocao();
     }
@@ -198,7 +195,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Apresenta o painel de ativação/rejeição de contas pendentes.
      */
     private void mostrarAtivarContas() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Ativar/Rejeitar Contas Pendentes"));
         ArrayList<Utilizador> pend = cUtilizador.obterContasPendentes();
         Object[][] d = new Object[pend.size()][4];
@@ -252,7 +249,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Apresenta o painel de gestão de pedidos de reparação pendentes.
      */
     private void mostrarGerirReparacoes() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Gerir Pedidos de Reparação"));
         ArrayList<Reparacao> pend = cReparacao.listarPedidosPendentes();
         JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
@@ -315,7 +312,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Apresenta o painel de arquivamento de processos finalizados.
      */
     private void mostrarArquivar() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Arquivar Processos Finalizados"));
         ArrayList<Reparacao> fin = cReparacao.obterReparacoesProntasAArquivar();
         JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
@@ -344,7 +341,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Apresenta o painel de edição de dados de utilizadores.
      */
     private void mostrarEditarUsers() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Editar Utilizadores"));
         ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
         Object[][] d = new Object[todos.size()][5];
@@ -377,9 +374,28 @@ public class PainelGestor extends JPanel implements ActionListener {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
                 }
-                boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, cNome.getText(),
-                        cEmail.getText(), new String(cPass.getPassword()),
-                        cUser.getText(), utilizadorLogado.getLogin());
+                String nome = cNome.getText();
+                String email = cEmail.getText();
+                String pass = new String(cPass.getPassword());
+                String user = cUser.getText();
+                if (nome.isEmpty()) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "O nome não pode estar vazio!");
+                    return;
+                }
+                if (!Validacoes.emailValido(email)) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Email inválido!");
+                    return;
+                }
+                if (pass.isEmpty()) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Password não pode estar vazia!");
+                    return;
+                }
+                if (user.isEmpty()) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "O username não pode estar vazio!");
+                    return;
+                }
+                boolean ok = cUtilizador.atualizarPerfilPeloGestor(id, nome,
+                        email, pass, user, utilizadorLogado.getLogin());
                 if (ok) {
                     Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados com sucesso!");
                     mostrarEditarUsers();
@@ -388,13 +404,9 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         form.add(Utilitarios.criarCampoFormulario("Nome:", cNome, "Novo nome"));
-        form.add(Box.createVerticalStrut(5));
         form.add(Utilitarios.criarCampoFormulario("Username:", cUser, "Novo username"));
-        form.add(Box.createVerticalStrut(5));
         form.add(Utilitarios.criarCampoFormulario("Email:", cEmail, "Novo email"));
-        form.add(Box.createVerticalStrut(5));
         form.add(Utilitarios.criarCampoFormulario("Pass:", cPass, "Nova password"));
-        form.add(Box.createVerticalStrut(10));
         JPanel pBtns = new JPanel(new FlowLayout(FlowLayout.LEFT));
         pBtns.add(bSave);
         form.add(pBtns);
@@ -407,7 +419,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Os campos de pesquisa mostram-se ou escondem-se conforme a opção selecionada.
      */
     private void mostrarListagens() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Listagens e Pesquisas"));
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JComboBox<String> comboTipo = new JComboBox<>(new String[] {
@@ -422,11 +434,11 @@ public class PainelGestor extends JPanel implements ActionListener {
 
         JLabel lblDataInicio = new JLabel("Data inicial:");
         JTextField campoDataInicio = new JTextField(10);
-        campoDataInicio.setToolTipText("Data inicial (YYYY-MM-DD)");
+        campoDataInicio.setToolTipText("Data inicial (dd/MM/yyyy ou yyyy-MM-dd)");
 
         JLabel lblDataFim = new JLabel("Data final:");
         JTextField campoDataFim = new JTextField(10);
-        campoDataFim.setToolTipText("Data final (YYYY-MM-DD)");
+        campoDataFim.setToolTipText("Data final (dd/MM/yyyy ou yyyy-MM-dd)");
 
         JButton bExec = new JButton("Executar");
         bExec.setToolTipText("Executar a listagem ou pesquisa");
@@ -568,11 +580,12 @@ public class PainelGestor extends JPanel implements ActionListener {
                     }
                     Utilitarios.atualizarTabela(st, new String[] { "ID", "Marca", "Modelo", "SKU" }, dd);
                 } else if (sel == 6) {
-                    String dataInicio = campoDataInicio.getText();
-                    String dataFim = campoDataFim.getText();
+                    String dataInicio = Validacoes.normalizarData(campoDataInicio.getText());
+                    String dataFim = Validacoes.normalizarData(campoDataFim.getText());
                     ArrayList<Reparacao> l;
-                    if (dataInicio.isEmpty() || dataFim.isEmpty()) {
-                        l = cReparacao.obterTodasReparacoes();
+                    if (dataInicio == null || dataFim == null) {
+                        Utilitarios.mostrarErro(PainelGestor.this, "Data inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
+                        return;
                     } else {
                         l = cReparacao.pesquisarReparacoesPorData(dataInicio, dataFim);
                     }
@@ -593,7 +606,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Permite visualizar e marcar notificações como lidas, filtradas por categoria.
      */
     private void mostrarNotificacoes() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Dashboard de Notificações"));
         int id = utilizadorLogado.getIdUtilizador();
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -652,7 +665,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Permite visualizar todos os logs ou pesquisar por username específico.
      */
     private void mostrarLogs() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Registos de Auditoria (Logs)"));
         JPanel top = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JTextField campoUser = new JTextField(12);
@@ -698,7 +711,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * O Gestor pode suspender (inativar) contas por mau comportamento ou reativar.
      */
     private void mostrarToggleContas() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Ativar / Inativar Contas"));
         ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
         Object[][] d = new Object[todos.size()][4];
@@ -763,7 +776,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Permite aceitar (e anonimizar/apagar) ou recusar o pedido.
      */
     private void mostrarPedidosRemocao() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pedidos de Remoção de Conta"));
         ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
         ArrayList<Utilizador> pedidos = new ArrayList<>();
@@ -821,6 +834,67 @@ public class PainelGestor extends JPanel implements ActionListener {
         btns.add(bRecusar);
         p.add(btns, BorderLayout.SOUTH);
         trocarConteudo(p, "pedidosRemocao");
+    }
+    /**
+     * Apresenta o painel de edição do perfil do gestor.
+     * Inclui foto de perfil, email e password — consistente com os outros painéis.
+     */
+    private void mostrarPerfil() {
+        JPanel p = new JPanel();
+        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
+
+        final JPanel[] painelFotoRef = new JPanel[1];
+        painelFotoRef[0] = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                String novaFoto = Utilitarios.escolherFicheiroImagem(PainelGestor.this,
+                        utilizadorLogado.getIdUtilizador());
+                if (novaFoto != null) {
+                    boolean ok = cUtilizador.atualizarFoto(utilizadorLogado.getIdUtilizador(),
+                            novaFoto, utilizadorLogado.getLogin());
+                    if (ok) {
+                        utilizadorLogado.setFotoPath(novaFoto);
+                        Utilitarios.atualizarImagemPainel(painelFotoRef[0], novaFoto);
+                        Utilitarios.mostrarSucesso(PainelGestor.this, "Foto atualizada com sucesso!");
+                    }
+                }
+            }
+        });
+        p.add(painelFotoRef[0]);
+
+        JTextField cEmail = new JTextField(utilizadorLogado.getEmail(), 20);
+        JPasswordField cPass = new JPasswordField(20);
+
+        p.add(new JLabel("Nome: " + utilizadorLogado.getNome() + "  (não editável)"));
+        p.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
+        p.add(Utilitarios.criarCampoFormulario("Nova Password:", cPass, "Nova palavra-passe"));
+
+        JButton btnGuardar = new JButton("Guardar Alterações");
+        btnGuardar.setToolTipText("Guardar as alterações ao perfil");
+        btnGuardar.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                String email = cEmail.getText();
+                String pass = new String(cPass.getPassword());
+                if (!Validacoes.emailValido(email)) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Email inválido!");
+                    return;
+                }
+                if (pass.isEmpty()) {
+                    Utilitarios.mostrarErro(PainelGestor.this, "Password não pode estar vazia!");
+                    return;
+                }
+                boolean ok = cUtilizador.atualizarPerfilPeloGestor(utilizadorLogado.getIdUtilizador(),
+                        utilizadorLogado.getNome(), email, pass, utilizadorLogado.getLogin(), utilizadorLogado.getLogin());
+                if (ok)
+                    Utilitarios.mostrarSucesso(PainelGestor.this, "Perfil atualizado com sucesso!");
+                else
+                    Utilitarios.mostrarErro(PainelGestor.this, "Erro ao atualizar. Email pode já estar em uso.");
+            }
+        });
+        p.add(btnGuardar);
+        trocarConteudo(p, "perfil");
     }
 
     /**

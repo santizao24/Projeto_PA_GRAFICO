@@ -1,7 +1,6 @@
 package view;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -149,7 +148,7 @@ public class Utilitarios {
      * @return JPanel contendo a label e o campo
      */
     public static JPanel criarCampoFormulario(String textoLabel, JComponent campo, String tooltip) {
-        JPanel painel = new JPanel(new BorderLayout(5, 0));
+        JPanel painel = new JPanel(new BorderLayout());
         JLabel label = new JLabel(textoLabel);
         label.setPreferredSize(new Dimension(180, 25));
         campo.setToolTipText(tooltip);
@@ -252,12 +251,9 @@ public class Utilitarios {
     public static JPanel criarPainelFoto(String fotoPath, ActionListener onAlterar) {
         JPanel painel = new JPanel();
         painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
-        painel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         JLabel lblFoto = new JLabel();
-        lblFoto.setAlignmentX(Component.CENTER_ALIGNMENT);
         lblFoto.setPreferredSize(new Dimension(100, 100));
-        lblFoto.setHorizontalAlignment(SwingConstants.CENTER);
         lblFoto.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
         String pathAtual = fotoPath;
@@ -277,15 +273,11 @@ public class Utilitarios {
         }
 
         JButton btnAlterar = new JButton("Alterar Foto");
-        btnAlterar.setAlignmentX(Component.CENTER_ALIGNMENT);
         btnAlterar.setToolTipText("Clique para escolher uma foto de perfil (R2)");
         btnAlterar.addActionListener(onAlterar);
 
-        painel.add(Box.createVerticalStrut(5));
         painel.add(lblFoto);
-        painel.add(Box.createVerticalStrut(5));
         painel.add(btnAlterar);
-        painel.add(Box.createVerticalStrut(10));
 
         return painel;
     }
@@ -302,8 +294,6 @@ public class Utilitarios {
     public static String escolherFicheiroImagem(Component pai, int idUtilizador) {
         JFileChooser fc = new JFileChooser();
         fc.setDialogTitle("Escolher Foto de Perfil");
-        fc.setFileFilter(new FileNameExtensionFilter("Imagens (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
-
 
         int resultado = fc.showOpenDialog(pai);
         if (resultado == JFileChooser.APPROVE_OPTION) {
@@ -345,7 +335,10 @@ public class Utilitarios {
      * @param fotoPath   novo caminho da foto
      */
     public static void atualizarImagemPainel(JPanel painelFoto, String fotoPath) {
-        for (Component c : painelFoto.getComponents()) {
+        Component[] componentes = painelFoto.getComponents();
+        int i = 0;
+        while (i < componentes.length) {
+            Component c = componentes[i];
             if (c instanceof JLabel) {
                 JLabel lbl = (JLabel) c;
                 String pathAtual = fotoPath;
@@ -363,6 +356,7 @@ public class Utilitarios {
                 }
                 break;
             }
+            i++;
         }
     }
 }

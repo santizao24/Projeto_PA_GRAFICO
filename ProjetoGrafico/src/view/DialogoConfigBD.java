@@ -38,7 +38,6 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
 
         JPanel painelPrincipal = new JPanel();
         painelPrincipal.setLayout(new BoxLayout(painelPrincipal, BoxLayout.Y_AXIS));
-        painelPrincipal.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
 
         campoIP = new JTextField(20);
         campoPorto = new JTextField(20);
@@ -48,16 +47,12 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
 
         painelPrincipal.add(Utilitarios.criarCampoFormulario("IP do Servidor:", campoIP,
                 "Endereço IP do servidor (ex: localhost ou 127.0.0.1)"));
-        painelPrincipal.add(Box.createVerticalStrut(5));
         painelPrincipal.add(Utilitarios.criarCampoFormulario("Porto:", campoPorto,
                 "Porto de ligação ao servidor (ex: 3306)"));
-        painelPrincipal.add(Box.createVerticalStrut(5));
         painelPrincipal.add(Utilitarios.criarCampoFormulario("Nome da Base de Dados:", campoNomeBD,
                 "Nome da base de dados a utilizar"));
-        painelPrincipal.add(Box.createVerticalStrut(5));
         painelPrincipal.add(Utilitarios.criarCampoFormulario("Username:", campoUser,
                 "Nome de utilizador para acesso à base de dados"));
-        painelPrincipal.add(Box.createVerticalStrut(5));
         painelPrincipal.add(Utilitarios.criarCampoFormulario("Password:", campoPassword,
                 "Palavra-passe para acesso à base de dados"));
 

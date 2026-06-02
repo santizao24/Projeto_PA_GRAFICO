@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import model.Utilizador;
 import util.Validacoes;
@@ -60,11 +59,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
      */
     public PainelRegisto(AplicacaoGUI aplicacao) {
         this.aplicacao = aplicacao;
-        setLayout(new BorderLayout(10, 10));
-        setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        setLayout(new BorderLayout());
 
-        JLabel titulo = new JLabel("Registo de Novo Utilizador", SwingConstants.CENTER);
-        titulo.setFont(new Font("SansSerif", Font.BOLD, 18));
+        JLabel titulo = new JLabel("Registo de Novo Utilizador");
         add(titulo, BorderLayout.NORTH);
 
         JPanel painelFormulario = new JPanel();
@@ -75,8 +72,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
             public void actionPerformed(ActionEvent ev) {
                 JFileChooser fc = new JFileChooser();
                 fc.setDialogTitle("Escolher Foto para o Novo Perfil");
-                fc.setFileFilter(new FileNameExtensionFilter("Imagens (JPG, PNG, GIF)", "jpg", "jpeg", "png", "gif"));
-                fc.setAcceptAllFileFilterUsed(false);
 
                 if (fc.showOpenDialog(PainelRegisto.this) == JFileChooser.APPROVE_OPTION) {
                     fotoSelecionada = fc.getSelectedFile();
@@ -85,7 +80,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
             }
         });
         painelFormulario.add(painelFoto);
-        painelFormulario.add(Box.createVerticalStrut(10));
 
         campoNome = new JTextField(20);
         campoEmail = new JTextField(20);
@@ -97,19 +91,14 @@ public class PainelRegisto extends JPanel implements ActionListener {
 
         painelFormulario.add(Utilitarios.criarCampoFormulario("Nome:", campoNome,
                 "Nome completo do utilizador"));
-        painelFormulario.add(Box.createVerticalStrut(5));
         painelFormulario.add(Utilitarios.criarCampoFormulario("Email:", campoEmail,
                 "Endereço de email no formato designacao@entidade.dominio"));
-        painelFormulario.add(Box.createVerticalStrut(5));
         painelFormulario.add(Utilitarios.criarCampoFormulario("Username:", campoUsername,
                 "Nome de utilizador para autenticação no sistema"));
-        painelFormulario.add(Box.createVerticalStrut(5));
         painelFormulario.add(Utilitarios.criarCampoFormulario("Password:", campoPassword,
                 "Palavra-passe para acesso ao sistema"));
-        painelFormulario.add(Box.createVerticalStrut(5));
         painelFormulario.add(Utilitarios.criarCampoFormulario("Tipo de Utilizador:", comboTipo,
                 "Selecione Funcionário ou Cliente"));
-        painelFormulario.add(Box.createVerticalStrut(10));
 
         painelCamposEspecificos = new JPanel(new BorderLayout());
         construirPainelFuncionario();
@@ -117,10 +106,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
         painelCamposEspecificos.add(painelFuncionario, BorderLayout.CENTER);
         painelFormulario.add(painelCamposEspecificos);
 
-        painelFormulario.add(Box.createVerticalStrut(10));
         campoObservacoes = new JTextArea(3, 20);
-        campoObservacoes.setLineWrap(true);
-        campoObservacoes.setWrapStyleWord(true);
         JScrollPane scrollObs = new JScrollPane(campoObservacoes);
         painelFormulario.add(Utilitarios.criarCampoFormulario("Observações:", scrollObs,
                 "Observações ou comentários adicionais sobre o registo"));
@@ -156,18 +142,14 @@ public class PainelRegisto extends JPanel implements ActionListener {
 
         painelFuncionario.add(Utilitarios.criarCampoFormulario("NIF:", campoNifFunc,
                 "Número de Identificação Fiscal com 9 dígitos numéricos"));
-        painelFuncionario.add(Box.createVerticalStrut(5));
         painelFuncionario.add(Utilitarios.criarCampoFormulario("Telefone:", campoTelFunc,
                 "Número de telefone com 9 dígitos (começa por 2, 3 ou 9)"));
-        painelFuncionario.add(Box.createVerticalStrut(5));
         painelFuncionario.add(Utilitarios.criarCampoFormulario("Morada:", campoMoradaFunc,
                 "Morada completa do funcionário"));
-        painelFuncionario.add(Box.createVerticalStrut(5));
         painelFuncionario.add(Utilitarios.criarCampoFormulario("Especialização:", comboEspecializacao,
                 "Nível de especialização de 1 (mínimo) a 5 (máximo)"));
-        painelFuncionario.add(Box.createVerticalStrut(5));
         painelFuncionario.add(Utilitarios.criarCampoFormulario("Data Início:", campoDataInicioFunc,
-                "Data de início de atividade no formato YYYY-MM-DD"));
+                "Data de início de atividade (dd/MM/yyyy ou yyyy-MM-dd)"));
     }
 
     /**
@@ -185,16 +167,12 @@ public class PainelRegisto extends JPanel implements ActionListener {
 
         painelCliente.add(Utilitarios.criarCampoFormulario("NIF:", campoNifCliente,
                 "Número de Identificação Fiscal com 9 dígitos numéricos"));
-        painelCliente.add(Box.createVerticalStrut(5));
         painelCliente.add(Utilitarios.criarCampoFormulario("Telefone:", campoTelCliente,
                 "Número de telefone com 9 dígitos (começa por 2, 3 ou 9)"));
-        painelCliente.add(Box.createVerticalStrut(5));
         painelCliente.add(Utilitarios.criarCampoFormulario("Morada:", campoMoradaCliente,
                 "Morada completa do cliente"));
-        painelCliente.add(Box.createVerticalStrut(5));
         painelCliente.add(Utilitarios.criarCampoFormulario("Setor de Atividade:", campoSetor,
                 "Setor de atividade profissional do cliente"));
-        painelCliente.add(Box.createVerticalStrut(5));
         painelCliente.add(Utilitarios.criarCampoFormulario("Escalão:", comboEscalao,
                 "Escalão do cliente: A, B, C ou D"));
     }

@@ -58,14 +58,10 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         JPanel painelMenu = new JPanel();
         painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
-        painelMenu.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelMenu.setPreferredSize(new Dimension(220, 0));
 
         JLabel titulo = new JLabel("Menu Cliente");
-        titulo.setFont(new Font("SansSerif", Font.BOLD, 16));
-        titulo.setAlignmentX(Component.LEFT_ALIGNMENT);
         painelMenu.add(titulo);
-        painelMenu.add(Box.createVerticalStrut(10));
 
         btnInserirEquip = criarBotaoMenu("Inserir Equipamento", "Registar um novo equipamento");
         btnPedirRep = criarBotaoMenu("Pedir Reparação", "Submeter pedido de reparação");
@@ -85,16 +81,14 @@ public class PainelCliente extends JPanel implements ActionListener {
         int idx = 0;
         while (idx < botoes.length) {
             painelMenu.add(botoes[idx]);
-            painelMenu.add(Box.createVerticalStrut(3));
             idx++;
         }
 
         add(painelMenu, BorderLayout.WEST);
 
         painelConteudo = new JPanel(new BorderLayout());
-        painelConteudo.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         painelAtualConteudo = new JPanel();
-        painelAtualConteudo.add(new JLabel("Selecione uma opção do menu.", SwingConstants.CENTER));
+        painelAtualConteudo.add(new JLabel("Selecione uma opção do menu."));
         painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);
         add(painelConteudo, BorderLayout.CENTER);
     }
@@ -118,7 +112,6 @@ public class PainelCliente extends JPanel implements ActionListener {
     private JButton criarBotaoMenu(String texto, String tooltip) {
         JButton btn = new JButton(texto);
         btn.setToolTipText(tooltip);
-        btn.setAlignmentX(Component.LEFT_ALIGNMENT);
         btn.setMaximumSize(new Dimension(200, 30));
         btn.addActionListener(this);
         return btn;
@@ -175,18 +168,12 @@ public class PainelCliente extends JPanel implements ActionListener {
         JTextField cDataFab = new JTextField(20);
         JTextField cLote = new JTextField(20);
         JTextArea cObs = new JTextArea(3, 20);
-        cObs.setLineWrap(true);
 
         p.add(Utilitarios.criarCampoFormulario("Marca:", cMarca, "Marca do equipamento"));
-        p.add(Box.createVerticalStrut(5));
         p.add(Utilitarios.criarCampoFormulario("Modelo:", cModelo, "Código do modelo do equipamento"));
-        p.add(Box.createVerticalStrut(5));
-        p.add(Utilitarios.criarCampoFormulario("Data Fabrico:", cDataFab, "Data de fabrico (YYYY-MM-DD)"));
-        p.add(Box.createVerticalStrut(5));
+        p.add(Utilitarios.criarCampoFormulario("Data Fabrico:", cDataFab, "Data de fabrico (dd/MM/yyyy ou yyyy-MM-dd)"));
         p.add(Utilitarios.criarCampoFormulario("Lote:", cLote, "Identificação do lote de fabrico"));
-        p.add(Box.createVerticalStrut(5));
         p.add(Utilitarios.criarCampoFormulario("Observações:", new JScrollPane(cObs), "Comentários adicionais (R4)"));
-        p.add(Box.createVerticalStrut(10));
 
         JButton btnSubmeter = new JButton("Registar Equipamento");
         btnSubmeter.setToolTipText("Submeter o registo do equipamento");
@@ -228,7 +215,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      * cliente.
      */
     private void mostrarPedirReparacao() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pedir Reparação"));
 
         ArrayList<Equipamento> meusEquip = cEquipamento.listarEquipamentos(utilizadorLogado.getIdUtilizador());
@@ -302,15 +289,10 @@ public class PainelCliente extends JPanel implements ActionListener {
         JTextField cMorada = new JTextField(20);
 
         p.add(new JLabel("Nome: " + utilizadorLogado.getNome() + "  (não editável)"));
-        p.add(Box.createVerticalStrut(5));
         p.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
-        p.add(Box.createVerticalStrut(5));
         p.add(Utilitarios.criarCampoFormulario("Nova Password:", cPass, "Nova palavra-passe"));
-        p.add(Box.createVerticalStrut(5));
         p.add(Utilitarios.criarCampoFormulario("Novo Telefone:", cTel, "Novo telefone (9 dígitos)"));
-        p.add(Box.createVerticalStrut(5));
         p.add(Utilitarios.criarCampoFormulario("Nova Morada:", cMorada, "Nova morada"));
-        p.add(Box.createVerticalStrut(10));
 
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
@@ -350,7 +332,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      * cliente.
      */
     private void mostrarListarReparacoes() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Listar Pedidos de Reparação"));
 
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -427,7 +409,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      * Apresenta o painel para pesquisar reparações do cliente por termo.
      */
     private void mostrarPesquisarReparacoes() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pesquisar Reparações"));
 
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -465,7 +447,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      * Apresenta o painel com a listagem de todos os equipamentos do cliente.
      */
     private void mostrarListarEquipamentos() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Listar Equipamentos"));
 
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -502,7 +484,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      * Apresenta o painel para pesquisar equipamentos do cliente por termo.
      */
     private void mostrarPesquisarEquipamentos() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pesquisar Equipamentos"));
 
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -548,7 +530,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      * Permite ler e marcar notificações como lidas.
      */
     private void mostrarNotificacoes() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("As Minhas Notificações"));
 
         ArrayList<Notificacao> lista = cNotificacao.obterNotificacoes(utilizadorLogado.getIdUtilizador());
@@ -603,7 +585,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      * através do seu número de identificação.
      */
     private void mostrarConsultarEstado() {
-        JPanel p = new JPanel(new BorderLayout(5, 5));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Estado das Minhas Reparações"));
 
         ArrayList<Reparacao> lista = cReparacao.obterMinhasReparacoes(utilizadorLogado.getIdUtilizador());
