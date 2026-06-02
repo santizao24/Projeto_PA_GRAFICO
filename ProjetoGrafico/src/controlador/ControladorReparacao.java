@@ -39,16 +39,18 @@ public class ControladorReparacao {
      *
      * @param idEquipamento  identificador do equipamento a reparar
      * @param usernameLogado username do utilizador autenticado (para log)
+     * @param obs            observações do cliente sobre o pedido (R4)
      */
-    public void registarNovoPedido(int idEquipamento, String usernameLogado) {
+    public void registarNovoPedido(int idEquipamento, String usernameLogado, String obs) {
         LocalDateTime agora = LocalDateTime.now();
         String dataFormatada = agora.format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"));
         int numSequencial = rDao.contarReparacoes() + 1;
         String numRep = numSequencial + dataFormatada;
         String dataAtualBD = agora.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
 
+        String observacoes = (obs != null && !obs.trim().isEmpty()) ? obs.trim() : null;
         Reparacao novaReparacao = new Reparacao(0, numRep, idEquipamento, 0, dataAtualBD, null, null, 0, 0.0,
-                EstadoReparacao.CRIADO, null);
+                EstadoReparacao.CRIADO, observacoes);
         rDao.inserirReparacao(novaReparacao);
         cNotificacao.gerarNotificacaoParaGestores(
                 "Novo pedido de reparação submetido (Equipamento ID: " + idEquipamento + ").",

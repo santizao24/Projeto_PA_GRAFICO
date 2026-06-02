@@ -14,8 +14,8 @@ import javax.mail.internet.*;
  */
 public class ServicoEmail {
 
-    private static final String EMAIL_REMETENTE = "";
-    private static final String PASSWORD = "";
+    private static final String EMAIL_REMETENTE = "a2023153270@alunos.estgoh.ipc.pt";
+    private static final String PASSWORD = "Andreps2005?";
 
     private static final String SMTP_HOST = "mail.estgoh.ipc.pt";
     private static final String SMTP_PORT = "587";

@@ -28,7 +28,7 @@ public class ReparacaoDAO {
         Connection conn = null;
         PreparedStatement ps = null;
 
-        String sql = "INSERT INTO REPARACAO (R_NUM_REPARACAO, E_ID_EQUIPAMENTO, U_ID_UTILIZADOR, R_DATA_CRIACAO, R_ESTADO) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO REPARACAO (R_NUM_REPARACAO, E_ID_EQUIPAMENTO, U_ID_UTILIZADOR, R_DATA_CRIACAO, R_ESTADO, R_OBSERVACOES) VALUES (?, ?, ?, ?, ?, ?)";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -47,6 +47,7 @@ public class ReparacaoDAO {
 
             ps.setString(4, aReparacao.getDataCriacao());
             ps.setString(5, aReparacao.getEstado().name());
+            ps.setString(6, aReparacao.getObservacoes());
 
             ps.executeUpdate();
             return true;

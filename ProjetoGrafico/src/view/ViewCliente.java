@@ -246,7 +246,9 @@ public class ViewCliente {
             return;
         }
 
-        cReparacao.registarNovoPedido(idEq, utilizadorLogado.getLogin());
+        System.out.print("Observações (Enter para saltar): ");
+        String obs = ler.nextLine();
+        cReparacao.registarNovoPedido(idEq, utilizadorLogado.getLogin(), obs);
         System.out.println("Pedido de reparação submetido com sucesso!");
     }
 

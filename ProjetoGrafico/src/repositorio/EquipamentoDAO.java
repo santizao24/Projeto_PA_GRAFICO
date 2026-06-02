@@ -27,7 +27,7 @@ public class EquipamentoDAO {
      *         contrário
      */
     public boolean inserirEquipamento(Utilizador clienteLogado, Equipamento aEquipamento) {
-        String sql = "INSERT INTO EQUIPAMENTO (U_ID_UTILIZADOR, E_MARCA, E_CODIGO_MODELO, E_CODIGO_SKU, E_DATA_FABRICO, E_LOTE) values (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO EQUIPAMENTO (U_ID_UTILIZADOR, E_MARCA, E_CODIGO_MODELO, E_CODIGO_SKU, E_DATA_FABRICO, E_LOTE, E_OBSERVACOES) values (?, ?, ?, ?, ?, ?, ?)";
         Connection conn = null;
         PreparedStatement ps = null;
 
@@ -42,6 +42,7 @@ public class EquipamentoDAO {
             ps.setInt(4, aEquipamento.getSku());
             ps.setString(5, aEquipamento.getDataFabrico());
             ps.setString(6, aEquipamento.getLote());
+            ps.setString(7, aEquipamento.getObservacoes());
 
             ps.executeUpdate();
             return true;

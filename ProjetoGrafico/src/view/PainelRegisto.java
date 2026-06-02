@@ -272,11 +272,17 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 return;
             }
 
+            String dataNormalizada = Validacoes.normalizarData(dataInicio);
+            if (dataNormalizada == null) {
+                Utilitarios.mostrarErro(this, "Data de início inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
+                return;
+            }
+
             int esp = Integer.parseInt((String) comboEspecializacao.getSelectedItem());
 
             String obs = campoObservacoes.getText();
             sucesso = aplicacao.getControladorUtilizador().registarFuncionario(
-                    nome, email, user, pass, nif, tel, morada, esp, dataInicio, obs);
+                    nome, email, user, pass, nif, tel, morada, esp, dataNormalizada, obs);
         } else {
             String nif = campoNifCliente.getText();
             String tel = campoTelCliente.getText();

@@ -20,6 +20,7 @@ public class Utilizador {
     private TipoUtilizador tipo;
     private EstadoUtilizador estado;
     private String fotoPath;
+    private String observacoes;
 
     /**
      * Constrói um novo Utilizador com todos os atributos.
@@ -42,6 +43,7 @@ public class Utilizador {
         tipo = aTipo;
         estado = aEstado;
         fotoPath = null;
+        observacoes = null;
     }
 
     /**
@@ -186,5 +188,23 @@ public class Utilizador {
      */
     public String getFotoPath() {
         return fotoPath;
+    }
+
+    /**
+     * Define as observações do utilizador (R4).
+     *
+     * @param aObservacoes texto das observações
+     */
+    public void setObservacoes(String aObservacoes) {
+        observacoes = aObservacoes;
+    }
+
+    /**
+     * Obtém as observações do utilizador (R4).
+     *
+     * @return observações (pode ser null)
+     */
+    public String getObservacoes() {
+        return observacoes;
     }
 }

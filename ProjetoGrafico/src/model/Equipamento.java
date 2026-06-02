@@ -16,6 +16,7 @@ public class Equipamento {
     private int sku;
     private String dataFabrico;
     private String lote;
+    private String observacoes;
 
     /**
      * Constrói um novo Equipamento com todos os atributos.
@@ -37,6 +38,7 @@ public class Equipamento {
         sku = aSku;
         dataFabrico = aDataFabrico;
         lote = aLote;
+        observacoes = null;
     }
 
     /**
@@ -163,5 +165,23 @@ public class Equipamento {
      */
     public String getLote() {
         return lote;
+    }
+
+    /**
+     * Define as observações do equipamento (R4).
+     *
+     * @param aObservacoes texto das observações
+     */
+    public void setObservacoes(String aObservacoes) {
+        observacoes = aObservacoes;
+    }
+
+    /**
+     * Obtém as observações do equipamento (R4).
+     *
+     * @return observações (pode ser null)
+     */
+    public String getObservacoes() {
+        return observacoes;
     }
 }

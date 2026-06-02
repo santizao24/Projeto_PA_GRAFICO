@@ -90,14 +90,14 @@ public class ControladorUtilizador {
             String morada, int especializacao, String dataInicio, String obs) {
         Funcionario novo = new Funcionario(0, user, pass, nome, email, TipoUtilizador.FUNCIONARIO,
                 EstadoUtilizador.ATIVO, nif, telefone, morada, especializacao, dataInicio);
+        if (obs != null && !obs.trim().isEmpty()) {
+            novo.setObservacoes(obs.trim());
+        }
         boolean sucesso = uDao.inserirUtilizador(novo);
         if (sucesso) {
             cNotificacao.gerarNotificacaoParaGestores("Novo Funcionário registado e ativado: " + nome + ".",
                     CategoriaNotificacao.REGISTO);
             ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Funcionário");
-            if (obs != null && !obs.trim().isEmpty()) {
-                cLog.registarAcao(user, "Adicionou observações no registo: " + obs.trim());
-            }
         }
         return sucesso;
     }
@@ -122,14 +122,14 @@ public class ControladorUtilizador {
             String morada, String setorAtividade, String escalao, String obs) {
         Cliente novo = new Cliente(0, user, pass, nome, email, TipoUtilizador.CLIENTE, EstadoUtilizador.ATIVO, nif,
                 telefone, morada, setorAtividade, escalao);
+        if (obs != null && !obs.trim().isEmpty()) {
+            novo.setObservacoes(obs.trim());
+        }
         boolean sucesso = uDao.inserirUtilizador(novo);
         if (sucesso) {
             cNotificacao.gerarNotificacaoParaGestores("Novo Cliente registado e ativado: " + nome + ".",
                     CategoriaNotificacao.REGISTO);
             ServicoEmail.enviarEmailConfirmacaoRegisto(email, nome, "Cliente");
-            if (obs != null && !obs.trim().isEmpty()) {
-                cLog.registarAcao(user, "Adicionou observações no registo: " + obs.trim());
-            }
         }
         return sucesso;
     }

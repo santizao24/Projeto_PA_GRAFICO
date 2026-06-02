@@ -204,8 +204,15 @@ public class PainelCliente extends JPanel implements ActionListener {
                             "Já existe um equipamento com o código de modelo '" + modelo + "'.");
                     return;
                 }
+                
+                String dataNormalizada = Validacoes.normalizarData(cDataFab.getText());
+                if (dataNormalizada == null) {
+                    Utilitarios.mostrarErro(PainelCliente.this, "Data de fabrico inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
+                    return;
+                }
+                
                 int codSKU = cEquipamento.gerarSkuUnico();
-                cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU, cDataFab.getText(),
+                cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU, dataNormalizada,
                         cLote.getText(), utilizadorLogado.getLogin(), cObs.getText());
                 Utilitarios.mostrarSucesso(PainelCliente.this,
                         "Equipamento registado com sucesso! (SKU: " + codSKU + ")");
@@ -252,7 +259,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                     Utilitarios.mostrarErro(PainelCliente.this, "Selecione um equipamento da tabela!");
                     return;
                 }
-                cReparacao.registarNovoPedido(idEq, utilizadorLogado.getLogin());
+                cReparacao.registarNovoPedido(idEq, utilizadorLogado.getLogin(), cObs.getText());
                 Utilitarios.mostrarSucesso(PainelCliente.this, "Pedido de reparação submetido com sucesso!");
             }
         });
@@ -349,7 +356,10 @@ public class PainelCliente extends JPanel implements ActionListener {
         JPanel filtros = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton btnListar = new JButton("Listar");
         btnListar.setToolTipText("Listar reparações");
+        JButton btnImprimir = new JButton("Imprimir Extrato");
+        btnImprimir.setToolTipText("Imprimir extrato da reparação selecionada (R6)");
         filtros.add(btnListar);
+        filtros.add(btnImprimir);
         p.add(filtros, BorderLayout.NORTH);
 
         JScrollPane scrollTabela = Utilitarios.criarTabela(
@@ -363,6 +373,50 @@ public class PainelCliente extends JPanel implements ActionListener {
                         utilizadorLogado.getIdUtilizador(), 1, true);
                 Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(lista));
+            }
+        });
+
+        btnImprimir.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ev) {
+                int idSel = Utilitarios.obterIdSelecionado(scrollTabela);
+                if (idSel == -1) {
+                    Utilitarios.mostrarErro(PainelCliente.this,
+                            "Selecione uma reparação na tabela para imprimir o extrato.");
+                    return;
+                }
+                ArrayList<Reparacao> todas = cReparacao.obterMinhasReparacoes(
+                        utilizadorLogado.getIdUtilizador());
+                Reparacao repSel = null;
+                Iterator<Reparacao> it = todas.iterator();
+                while (it.hasNext()) {
+                    Reparacao r = it.next();
+                    if (r.getIdReparacao() == idSel) {
+                        repSel = r;
+                        break;
+                    }
+                }
+                if (repSel == null) {
+                    Utilitarios.mostrarErro(PainelCliente.this, "Reparação não encontrada.");
+                    return;
+                }
+
+                // Obter info do equipamento
+                String equipInfo = "ID Equip: " + repSel.getIdEquipamento();
+                ArrayList<Equipamento> equips = cEquipamento.listarEquipamentos(
+                        utilizadorLogado.getIdUtilizador());
+                Iterator<Equipamento> itEq = equips.iterator();
+                while (itEq.hasNext()) {
+                    Equipamento eq = itEq.next();
+                    if (eq.getIdEquipamento() == repSel.getIdEquipamento()) {
+                        equipInfo = eq.getMarca() + " - " + eq.getModelo() + " (SKU: " + eq.getSku() + ")";
+                        break;
+                    }
+                }
+
+                ExtractoReparacao extrato = new ExtractoReparacao(repSel,
+                        utilizadorLogado.getNome(), equipInfo);
+                extrato.imprimir(PainelCliente.this);
             }
         });
 

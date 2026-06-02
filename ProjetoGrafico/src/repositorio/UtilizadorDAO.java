@@ -33,7 +33,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sqlUtilizador = "INSERT INTO UTILIZADOR (U_NOME, U_USERNAME, U_EMAIL, U_PASSWORD, U_TIPO, U_ESTADO, U_FOTO) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String sqlUtilizador = "INSERT INTO UTILIZADOR (U_NOME, U_USERNAME, U_EMAIL, U_PASSWORD, U_TIPO, U_ESTADO, U_FOTO, U_OBSERVACOES) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -49,6 +49,7 @@ public class UtilizadorDAO {
             ps.setString(5, aUtilizador.getTipo().name());
             ps.setString(6, aUtilizador.getEstado().name());
             ps.setString(7, aUtilizador.getFotoPath());
+            ps.setString(8, aUtilizador.getObservacoes());
 
             ps.executeUpdate();
 
@@ -189,6 +190,7 @@ public class UtilizadorDAO {
                         tipoEnum,
                         estadoUtilizador);
                 utilizadorEncontrado.setFotoPath(rs.getString("U_FOTO"));
+                utilizadorEncontrado.setObservacoes(rs.getString("U_OBSERVACOES"));
             }
         } catch (SQLException e) {
         } finally {
@@ -226,7 +228,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_NOME, U_USERNAME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR WHERE (U_ESTADO = 'PENDENTE' OR U_ESTADO = 'REJEITADO') AND U_TIPO != 'GESTOR'";
+        String sql = "SELECT U_ID_UTILIZADOR, U_NOME, U_USERNAME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO, U_OBSERVACOES FROM UTILIZADOR WHERE (U_ESTADO = 'PENDENTE' OR U_ESTADO = 'REJEITADO') AND U_TIPO != 'GESTOR'";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -264,6 +266,7 @@ public class UtilizadorDAO {
                         tipoEnum,
                         estadoUtilizador);
                 u.setFotoPath(rs.getString("U_FOTO"));
+                u.setObservacoes(rs.getString("U_OBSERVACOES"));
                 lista.add(u);
             }
         } catch (Exception e) {
@@ -301,7 +304,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_FOTO FROM UTILIZADOR WHERE U_TIPO = 'FUNCIONARIO' AND U_ESTADO = 'ATIVO'";
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_FOTO, U_OBSERVACOES FROM UTILIZADOR WHERE U_TIPO = 'FUNCIONARIO' AND U_ESTADO = 'ATIVO'";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -319,6 +322,7 @@ public class UtilizadorDAO {
                         TipoUtilizador.FUNCIONARIO,
                         EstadoUtilizador.ATIVO);
                 u.setFotoPath(rs.getString("U_FOTO"));
+                u.setObservacoes(rs.getString("U_OBSERVACOES"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -357,7 +361,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_FOTO FROM UTILIZADOR "
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_FOTO, U_OBSERVACOES FROM UTILIZADOR "
                 + "WHERE U_TIPO = 'FUNCIONARIO' AND U_ESTADO = 'ATIVO' "
                 + "AND U_ID_UTILIZADOR NOT IN (SELECT U_ID_UTILIZADOR FROM REPARACAO_REJEITADA WHERE R_ID_REPARACAO = ?)";
 
@@ -378,6 +382,7 @@ public class UtilizadorDAO {
                         TipoUtilizador.FUNCIONARIO,
                         EstadoUtilizador.ATIVO);
                 u.setFotoPath(rs.getString("U_FOTO"));
+                u.setObservacoes(rs.getString("U_OBSERVACOES"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -504,7 +509,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR";
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO, U_OBSERVACOES FROM UTILIZADOR";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -538,6 +543,7 @@ public class UtilizadorDAO {
                         tipoEnum,
                         estadoEnum);
                 u.setFotoPath(rs.getString("U_FOTO"));
+                u.setObservacoes(rs.getString("U_OBSERVACOES"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -719,7 +725,8 @@ public class UtilizadorDAO {
      * @return {@code true} se a atualização for bem sucedida, {@code false} caso
      *         contrário
      */
-    public boolean atualizarDadosGenericos(int idUtilizador, String novoNome, String novoEmail, String novaPassword, String novoUsername) {
+    public boolean atualizarDadosGenericos(int idUtilizador, String novoNome, String novoEmail, String novaPassword,
+            String novoUsername) {
         Connection conn = null;
         PreparedStatement ps = null;
         String sql = "UPDATE UTILIZADOR SET U_NOME = ?, U_EMAIL = ?, U_PASSWORD = ?, U_USERNAME = ? WHERE U_ID_UTILIZADOR = ?";
@@ -770,7 +777,7 @@ public class UtilizadorDAO {
         ResultSet rs = null;
 
         String ordem = ascendente ? "ASC" : "DESC";
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR ORDER BY U_NOME "
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO, U_OBSERVACOES FROM UTILIZADOR ORDER BY U_NOME "
                 + ordem;
 
         try {
@@ -805,6 +812,7 @@ public class UtilizadorDAO {
                         tipoEnum,
                         estadoEnum);
                 u.setFotoPath(rs.getString("U_FOTO"));
+                u.setObservacoes(rs.getString("U_OBSERVACOES"));
                 lista.add(u);
             }
         } catch (SQLException e) {
@@ -844,7 +852,7 @@ public class UtilizadorDAO {
         PreparedStatement ps = null;
         ResultSet rs = null;
 
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO FROM UTILIZADOR WHERE U_ID_UTILIZADOR = ?";
+        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO, U_OBSERVACOES FROM UTILIZADOR WHERE U_ID_UTILIZADOR = ?";
 
         try {
             conn = ConexaoBD.obterConexao();
@@ -879,6 +887,7 @@ public class UtilizadorDAO {
                         tipoEnum,
                         estadoEnum);
                 u.setFotoPath(rs.getString("U_FOTO"));
+                u.setObservacoes(rs.getString("U_OBSERVACOES"));
             }
         } catch (SQLException e) {
         } finally {
@@ -965,6 +974,7 @@ public class UtilizadorDAO {
                         tipoEnum,
                         estadoEnum);
                 u.setFotoPath(rs.getString("U_FOTO"));
+                u.setObservacoes(rs.getString("U_OBSERVACOES"));
                 lista.add(u);
             }
         } catch (SQLException e) {

@@ -4,8 +4,10 @@ import java.util.Scanner;
 import java.util.InputMismatchException;
 
 /**
- * Classe utilitária que contém métodos estáticos para validação de dados de entrada.
- * Inclui validações de leitura segura (inteiros e doubles) e validações de formato
+ * Classe utilitária que contém métodos estáticos para validação de dados de
+ * entrada.
+ * Inclui validações de leitura segura (inteiros e doubles) e validações de
+ * formato
  * para telefone, NIF e email.
  *
  * @author Santiago
@@ -34,7 +36,8 @@ public class Validacoes {
     }
 
     /**
-     * Lê um número decimal (double) a partir da entrada do utilizador, repetindo a leitura
+     * Lê um número decimal (double) a partir da entrada do utilizador, repetindo a
+     * leitura
      * até que um valor válido seja introduzido.
      *
      * @param ler objeto {@link Scanner} para leitura da entrada
@@ -113,5 +116,45 @@ public class Validacoes {
             return false;
         }
         return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
+    }
+
+    /**
+     * Tenta ler uma data em vários formatos comuns e converte-a para o formato da
+     * BD (yyyy-MM-dd).
+     * Usa um ciclo while para percorrer os formatos.
+     * 
+     * @param dataInserida A string que o utilizador escreveu
+     * @return A data no formato "yyyy-MM-dd", ou null se o formato não for
+     *         reconhecido.
+     */
+    public static String normalizarData(String dataInserida) {
+        if (dataInserida == null || dataInserida.trim().isEmpty()) {
+            return null;
+        }
+
+        String[] formatosAceites = {
+                "dd/MM/yyyy",
+                "dd-MM-yyyy",
+                "yyyy-MM-dd",
+                "dd.MM.yyyy"
+        };
+
+        int i = 0;
+        while (i < formatosAceites.length) {
+            try {
+                java.time.format.DateTimeFormatter formatterEntrada = java.time.format.DateTimeFormatter
+                        .ofPattern(formatosAceites[i]);
+                java.time.LocalDate dataConvertida = java.time.LocalDate.parse(dataInserida.trim(), formatterEntrada);
+
+                java.time.format.DateTimeFormatter formatterBD = java.time.format.DateTimeFormatter
+                        .ofPattern("yyyy-MM-dd");
+                return dataConvertida.format(formatterBD);
+
+            } catch (java.time.format.DateTimeParseException e) {
+            }
+            i++;
+        }
+
+        return null;
     }
 }
