@@ -229,6 +229,10 @@ public class Aplicacao extends JFrame implements ActionListener {
         return cNotificacao;
     }
 
+    /**
+     * Inicia a aplicação gráfica, tornando a janela principal visível.
+     * Verifica a existência da base de dados e a necessidade de criar um Gestor inicial.
+     */
     public void iniciar() {
         setVisible(true);
 
@@ -252,6 +256,11 @@ public class Aplicacao extends JFrame implements ActionListener {
         }
     }
 
+    /**
+     * Inicia o diálogo para forçar a criação do primeiro gestor do sistema.
+     *
+     * @param app a instância principal da aplicação para servir de pai ao diálogo
+     */
     private static void criarPrimeiroGestor(Aplicacao app) {
         JTextField cNome = new JTextField();
         JTextField cEmail = new JTextField();

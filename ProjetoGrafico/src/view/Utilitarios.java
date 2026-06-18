@@ -19,6 +19,13 @@ import java.io.IOException;
  */
 public class Utilitarios {
 
+    /**
+     * Cria uma JTable configurada com modelo não editável e ordenação automática.
+     * 
+     * @param colunas array com os nomes das colunas
+     * @param dados matriz bidimensional com os dados da tabela
+     * @return a JTable configurada e pronta a usar
+     */
     public static javax.swing.JTable criarTabela(String[] colunas, Object[][] dados) {
         javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(dados, colunas) {
             @Override
@@ -40,6 +47,12 @@ public class Utilitarios {
         return tabela;
     }
 
+    /**
+     * Cria uma JList simples com um conjunto de itens de texto.
+     * 
+     * @param itens array com os itens a mostrar na lista
+     * @return a JList parametrizada com strings
+     */
     public static javax.swing.JList<String> criarLista(String[] itens) {
         javax.swing.JList<String> lista = new javax.swing.JList<>(itens);
         lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
