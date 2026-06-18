@@ -12,14 +12,14 @@ import Enums.EstadoUtilizador;
  * Painel de autenticação do sistema de gestão de oficina.
  * Permite ao utilizador inserir as credenciais (username e password)
  * para aceder ao sistema. Após autenticação, verifica notificações
- * pendentes e apresenta um alerta ao utilizador (R5).
+ * pendentes e apresenta um alerta ao utilizador.
  *
  * @author Santiago e Hugo
  * @version 1.0
  */
 public class PainelLogin extends JPanel implements ActionListener {
 
-    private AplicacaoGUI aplicacao;
+    private Aplicacao aplicacao;
     private JTextField campoUsername;
     private JPasswordField campoPassword;
     private JButton btnEntrar;
@@ -31,48 +31,30 @@ public class PainelLogin extends JPanel implements ActionListener {
      *
      * @param aplicacao referência para a aplicação principal
      */
-    public PainelLogin(AplicacaoGUI aplicacao) {
+    public PainelLogin(Aplicacao aplicacao) {
         this.aplicacao = aplicacao;
-        setLayout(new GridBagLayout());
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        setLayout(new BorderLayout());
 
-        JLabel titulo = new JLabel("Sistema de Gestão de Oficina");
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        add(titulo, gbc);
+        JPanel painelCabecalho = new JPanel(new GridLayout(4, 1));
 
-        JLabel subtitulo = new JLabel("Autenticação");
-        gbc.gridy = 1;
-        add(subtitulo, gbc);
+        JPanel painelTitulo = new JPanel(new FlowLayout());
+        JLabel titulo = new JLabel("Sistema de Gestão de Oficina - Autenticação");
+        painelTitulo.add(titulo);
+        painelCabecalho.add(painelTitulo);
 
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.EAST;
-
-        JLabel lblUsername = new JLabel("Username:");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        add(lblUsername, gbc);
-
+        JPanel painelUsername = new JPanel(new FlowLayout());
+        painelUsername.add(new JLabel("Username:"));
         campoUsername = new JTextField(20);
         campoUsername.setToolTipText("Introduza o seu nome de utilizador");
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        add(campoUsername, gbc);
+        painelUsername.add(campoUsername);
+        painelCabecalho.add(painelUsername);
 
-        gbc.anchor = GridBagConstraints.EAST;
-        JLabel lblPassword = new JLabel("Password:");
-        gbc.gridx = 0;
-        gbc.gridy = 3;
-        add(lblPassword, gbc);
-
+        JPanel painelPassword = new JPanel(new FlowLayout());
+        painelPassword.add(new JLabel("Password:"));
         campoPassword = new JPasswordField(20);
         campoPassword.setToolTipText("Introduza a sua palavra-passe");
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.WEST;
-        add(campoPassword, gbc);
+        painelPassword.add(campoPassword);
+        painelCabecalho.add(painelPassword);
 
         JPanel painelBotoes = new JPanel(new FlowLayout());
         btnEntrar = new JButton("Entrar");
@@ -87,17 +69,16 @@ public class PainelLogin extends JPanel implements ActionListener {
         painelBotoes.add(btnEntrar);
         painelBotoes.add(btnRegistar);
         painelBotoes.add(btnConfigBD);
+        painelCabecalho.add(painelBotoes);
 
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        add(painelBotoes, gbc);
+        JPanel painelCentral = new JPanel(new GridBagLayout());
+        painelCentral.add(painelCabecalho);
+        add(painelCentral, BorderLayout.CENTER);
     }
 
     /**
      * Processa os eventos dos botões Entrar, Registar e Configurar BD.
-     * No caso de login bem-sucedido, verifica notificações pendentes (R5).
+     * No caso de login bem-sucedido, verifica notificações pendentes.
      *
      * @param e evento de ação gerado
      */

@@ -2,14 +2,14 @@ package view;
 
 import java.awt.*;
 import java.awt.print.*;
+import java.text.DecimalFormat;
 
 import model.Reparacao;
 
 /**
- * Classe responsável pela impressão do extrato de uma reparação (R6).
- * Implementa a interface Printable seguindo o padrão ensinado no
- * Cap 06.0 (slide 28) para gerar uma folha de impressão com os
- * detalhes do processo de reparação.
+ * Classe responsável pela formatação e impressão do extrato de uma reparação.
+ * Implementa a interface {@link Printable} para gerar e renderizar um documento
+ * paginado com os detalhes estruturados do processo de reparação.
  *
  * @author Santiago e Hugo
  * @version 1.0
@@ -36,7 +36,7 @@ public class ExtractoReparacao implements Printable {
     /**
      * Método de impressão invocado pelo PrinterJob.
      * Define o conteúdo a imprimir na folha usando Graphics2D e drawString,
-     * conforme o padrão do slide 28 do Cap 06.0.
+     * conforme o padrão.
      *
      * @param g    contexto gráfico para desenhar o conteúdo
      * @param pf   formato da página (dimensões e margens)
@@ -99,7 +99,8 @@ public class ExtractoReparacao implements Printable {
         y = y + 20;
 
         g.setFont(new Font("SansSerif", Font.BOLD, 13));
-        g.drawString("Custo Total: " + String.format("%.2f", reparacao.getCusto()) + " EUR", 70, y);
+        DecimalFormat formatoMoeda = new DecimalFormat("0.00");
+        g.drawString("Custo Total: " + formatoMoeda.format(reparacao.getCusto()) + " EUR", 70, y);
         y = y + 20;
 
         if (reparacao.getObservacoes() != null && !reparacao.getObservacoes().isEmpty()) {
@@ -124,10 +125,9 @@ public class ExtractoReparacao implements Printable {
     }
 
     /**
-     * Lança o processo de impressão do extrato.
-     * Segue os 5 passos do padrão de impressão ensinado no Cap 06.0:
-     * Step 2: getPrinterJob(), Step 3: setPrintable(),
-     * Step 4: printDialog(), Step 5: print().
+     * Inicia o processo de impressão do extrato, configurando o trabalho de impressão
+     * e exibindo a caixa de diálogo nativa para o utilizador confirmar a operação.
+     * Em caso de aprovação, o documento é enviado para a impressora selecionada.
      *
      * @param pai componente pai para mensagens de erro
      */

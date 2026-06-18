@@ -1086,7 +1086,7 @@ public class UtilizadorDAO {
     }
 
     /**
-     * Atualiza o caminho da foto de perfil de um utilizador (R2).
+     * Atualiza o caminho da foto de perfil de um utilizador.
      *
      * @param idUtilizador identificador do utilizador
      * @param fotoPath     caminho relativo da nova foto

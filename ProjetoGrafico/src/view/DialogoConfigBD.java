@@ -4,8 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileOutputStream;
-import java.util.Properties;
+
 
 /**
  * Diálogo para configuração dos parâmetros de acesso à base de dados.
@@ -92,13 +91,8 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
             }
 
             String url = "jdbc:mysql://" + ip + ":" + porto + "/" + bd;
-            Properties prop = new Properties();
-
-            try (FileOutputStream fos = new FileOutputStream("configbd.txt")) {
-                prop.setProperty("url", url);
-                prop.setProperty("user", user);
-                prop.setProperty("password", password);
-                prop.store(fos, "Configuracoes da Base de Dados");
+            try {
+                util.ConexaoBD.guardarConfiguracao(url, user, password);
                 Utilitarios.mostrarSucesso(this,
                         "Parâmetros de acesso guardados com sucesso no ficheiro 'configbd.txt'!");
                 dispose();

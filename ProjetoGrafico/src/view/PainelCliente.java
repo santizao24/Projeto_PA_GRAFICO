@@ -29,7 +29,7 @@ import Enums.CategoriaNotificacao;
  */
 public class PainelCliente extends JPanel implements ActionListener {
 
-    private AplicacaoGUI aplicacao;
+    private Aplicacao aplicacao;
     private Utilizador utilizadorLogado;
     private ControladorUtilizador cUtilizador;
     private ControladorEquipamento cEquipamento;
@@ -48,7 +48,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      *
      * @param aplicacao referência para a aplicação principal
      */
-    public PainelCliente(AplicacaoGUI aplicacao) {
+    public PainelCliente(Aplicacao aplicacao) {
         this.aplicacao = aplicacao;
         this.cUtilizador = aplicacao.getControladorUtilizador();
         this.cEquipamento = aplicacao.getControladorEquipamento();
@@ -173,7 +173,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.add(Utilitarios.criarCampoFormulario("Modelo:", cModelo, "Código do modelo do equipamento"));
         p.add(Utilitarios.criarCampoFormulario("Data Fabrico:", cDataFab, "Data de fabrico (dd/MM/yyyy ou yyyy-MM-dd)"));
         p.add(Utilitarios.criarCampoFormulario("Lote:", cLote, "Identificação do lote de fabrico"));
-        p.add(Utilitarios.criarCampoFormulario("Observações:", new JScrollPane(cObs), "Comentários adicionais (R4)"));
+        p.add(Utilitarios.criarCampoFormulario("Observações:", new JScrollPane(cObs), "Comentários adicionais"));
 
         JButton btnSubmeter = new JButton("Registar Equipamento");
         btnSubmeter.setToolTipText("Submeter o registo do equipamento");
@@ -191,13 +191,13 @@ public class PainelCliente extends JPanel implements ActionListener {
                             "Já existe um equipamento com o código de modelo '" + modelo + "'.");
                     return;
                 }
-                
+
                 String dataNormalizada = Validacoes.normalizarData(cDataFab.getText());
                 if (dataNormalizada == null) {
                     Utilitarios.mostrarErro(PainelCliente.this, "Data de fabrico inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
                     return;
                 }
-                
+
                 int codSKU = cEquipamento.gerarSkuUnico();
                 cEquipamento.registarEquipamento(utilizadorLogado, marca, modelo, codSKU, dataNormalizada,
                         cLote.getText(), utilizadorLogado.getLogin(), cObs.getText());
@@ -227,13 +227,13 @@ public class PainelCliente extends JPanel implements ActionListener {
             dados[i] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
             i++;
         }
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         JPanel painelAcao = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JTextArea cObs = new JTextArea(2, 30);
-        cObs.setToolTipText("Observações sobre o pedido de reparação (R4)");
+        cObs.setToolTipText("Observações sobre o pedido de reparação");
         painelAcao.add(new JLabel("Observações:"));
         painelAcao.add(new JScrollPane(cObs));
         JButton btnPedir = new JButton("Pedir Reparação");
@@ -241,7 +241,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         btnPedir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int idEq = Utilitarios.obterIdSelecionado(scrollTabela);
+                int idEq = Utilitarios.obterIdSelecionado(tabela);
                 if (idEq == -1) {
                     Utilitarios.mostrarErro(PainelCliente.this, "Selecione um equipamento da tabela!");
                     return;
@@ -339,21 +339,21 @@ public class PainelCliente extends JPanel implements ActionListener {
         JButton btnListar = new JButton("Listar");
         btnListar.setToolTipText("Listar reparações");
         JButton btnImprimir = new JButton("Imprimir Extrato");
-        btnImprimir.setToolTipText("Imprimir extrato da reparação selecionada (R6)");
+        btnImprimir.setToolTipText("Imprimir extrato da reparação selecionada");
         filtros.add(btnListar);
         filtros.add(btnImprimir);
         p.add(filtros, BorderLayout.NORTH);
 
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Reparacao> lista = cReparacao.listarReparacoesClienteOrdenadas(
                         utilizadorLogado.getIdUtilizador(), 1, true);
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(lista));
             }
         });
@@ -361,7 +361,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         btnImprimir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int idSel = Utilitarios.obterIdSelecionado(scrollTabela);
+                int idSel = Utilitarios.obterIdSelecionado(tabela);
                 if (idSel == -1) {
                     Utilitarios.mostrarErro(PainelCliente.this,
                             "Selecione uma reparação na tabela para imprimir o extrato.");
@@ -383,7 +383,6 @@ public class PainelCliente extends JPanel implements ActionListener {
                     return;
                 }
 
-                // Obter info do equipamento
                 String equipInfo = "ID Equip: " + repSel.getIdEquipamento();
                 ArrayList<Equipamento> equips = cEquipamento.listarEquipamentos(
                         utilizadorLogado.getIdUtilizador());
@@ -425,9 +424,9 @@ public class PainelCliente extends JPanel implements ActionListener {
         filtros.add(btnPesq);
         p.add(filtros, BorderLayout.NORTH);
 
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnPesq.addActionListener(new ActionListener() {
             @Override
@@ -435,7 +434,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                 ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesCliente(
                         utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                         campoTermo.getText());
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(res));
             }
         });
@@ -456,9 +455,9 @@ public class PainelCliente extends JPanel implements ActionListener {
         filtros.add(btnListar);
         p.add(filtros, BorderLayout.NORTH);
 
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Marca", "Modelo", "SKU" }, new Object[][] {});
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnListar.addActionListener(new ActionListener() {
             @Override
@@ -473,7 +472,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                     dados[i] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
                     i++;
                 }
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
+                Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
             }
         });
 
@@ -500,9 +499,9 @@ public class PainelCliente extends JPanel implements ActionListener {
         filtros.add(btnPesq);
         p.add(filtros, BorderLayout.NORTH);
 
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Marca", "Modelo", "SKU" }, new Object[][] {});
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnPesq.addActionListener(new ActionListener() {
             @Override
@@ -518,7 +517,7 @@ public class PainelCliente extends JPanel implements ActionListener {
                     dados[i] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
                     i++;
                 }
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
+                Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dados);
             }
         });
 
@@ -542,8 +541,8 @@ public class PainelCliente extends JPanel implements ActionListener {
             dados[i] = new Object[] { n.getDataCriacao(), n.getEstado(), n.getMensagem() };
             i++;
         }
-        JScrollPane scrollTabela = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, dados);
-        p.add(scrollTabela, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, dados);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         JButton btnMarcar = new JButton("Marcar Todas como Lidas");
         btnMarcar.setToolTipText("Marcar todas as notificações pendentes como lidas");
@@ -597,8 +596,8 @@ public class PainelCliente extends JPanel implements ActionListener {
             dados[i] = "Processo Nº " + r.getNumReparacao() + "  ->  Estado: " + r.getEstado();
             i++;
         }
-        JScrollPane scrollTabela = Utilitarios.criarLista(dados);
-        p.add(scrollTabela, BorderLayout.CENTER);
+        JList<String> listaSwing = Utilitarios.criarLista(dados);
+        p.add(new JScrollPane(listaSwing), BorderLayout.CENTER);
 
         trocarConteudo(p, "consultarEstado");
     }

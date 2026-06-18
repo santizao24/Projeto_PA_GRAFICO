@@ -173,7 +173,7 @@ public class Utilizador {
     }
 
     /**
-     * Define o caminho da foto de perfil do utilizador (R2).
+     * Define o caminho da foto de perfil do utilizador.
      *
      * @param aFotoPath caminho relativo para a foto (ex: fotos/user_42.png)
      */
@@ -182,7 +182,7 @@ public class Utilizador {
     }
 
     /**
-     * Obtém o caminho da foto de perfil do utilizador (R2).
+     * Obtém o caminho da foto de perfil do utilizador.
      *
      * @return caminho relativo da foto, ou null se não tiver foto
      */
@@ -191,7 +191,7 @@ public class Utilizador {
     }
 
     /**
-     * Define as observações do utilizador (R4).
+     * Define as observações do utilizador.
      *
      * @param aObservacoes texto das observações
      */
@@ -200,7 +200,7 @@ public class Utilizador {
     }
 
     /**
-     * Obtém as observações do utilizador (R4).
+     * Obtém as observações do utilizador.
      *
      * @return observações (pode ser null)
      */

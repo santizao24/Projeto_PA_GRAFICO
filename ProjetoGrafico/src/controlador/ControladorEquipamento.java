@@ -37,8 +37,8 @@ public class ControladorEquipamento {
             String dataFabrico, String lote, String usernameLogado, String obs) {
         Equipamento eq = new Equipamento(0, clienteLogado.getIdUtilizador(), marca, codModelo, codSKU, dataFabrico,
                 lote);
-        if (obs != null && !obs.trim().isEmpty()) {
-            eq.setObservacoes(obs.trim());
+        if (obs != null && !obs.isEmpty()) {
+            eq.setObservacoes(obs);
         }
 
         eDao.inserirEquipamento(clienteLogado, eq);

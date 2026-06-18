@@ -5,9 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 
 import model.Utilizador;
 import util.Validacoes;
@@ -15,15 +12,15 @@ import util.Validacoes;
 /**
  * Painel de registo de novos utilizadores no sistema.
  * Permite registar funcionários ou clientes, apresentando campos
- * dinâmicos conforme o tipo selecionado. Inclui campo de observações (R4)
- * e tooltips de ajuda em todos os campos (R10).
+ * dinâmicos conforme o tipo selecionado. Inclui campo de observações
+ * e tooltips de ajuda em todos os campos.
  *
  * @author Santiago e Hugo
  * @version 1.0
  */
 public class PainelRegisto extends JPanel implements ActionListener {
 
-    private AplicacaoGUI aplicacao;
+    private Aplicacao aplicacao;
     private JTextField campoNome;
     private JTextField campoEmail;
     private JTextField campoUsername;
@@ -57,7 +54,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
      *
      * @param aplicacao referência para a aplicação principal
      */
-    public PainelRegisto(AplicacaoGUI aplicacao) {
+    public PainelRegisto(Aplicacao aplicacao) {
         this.aplicacao = aplicacao;
         setLayout(new BorderLayout());
 
@@ -100,10 +97,11 @@ public class PainelRegisto extends JPanel implements ActionListener {
         painelFormulario.add(Utilitarios.criarCampoFormulario("Tipo de Utilizador:", comboTipo,
                 "Selecione Funcionário ou Cliente"));
 
-        painelCamposEspecificos = new JPanel(new BorderLayout());
+        painelCamposEspecificos = new JPanel();
+        painelCamposEspecificos.setLayout(new BoxLayout(painelCamposEspecificos, BoxLayout.Y_AXIS));
         construirPainelFuncionario();
         construirPainelCliente();
-        painelCamposEspecificos.add(painelFuncionario, BorderLayout.CENTER);
+        painelCamposEspecificos.add(painelFuncionario);
         painelFormulario.add(painelCamposEspecificos);
 
         campoObservacoes = new JTextArea(3, 20);
@@ -111,8 +109,10 @@ public class PainelRegisto extends JPanel implements ActionListener {
         painelFormulario.add(Utilitarios.criarCampoFormulario("Observações:", scrollObs,
                 "Observações ou comentários adicionais sobre o registo"));
 
-        JScrollPane scrollFormulario = new JScrollPane(painelFormulario);
-        scrollFormulario.setBorder(null);
+        JPanel painelAuxiliar = new JPanel(new BorderLayout());
+        painelAuxiliar.add(painelFormulario, BorderLayout.NORTH);
+
+        JScrollPane scrollFormulario = new JScrollPane(painelAuxiliar);
         add(scrollFormulario, BorderLayout.CENTER);
 
         JPanel painelBotoes = new JPanel(new FlowLayout(FlowLayout.RIGHT));
@@ -188,9 +188,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
             String tipoSel = (String) comboTipo.getSelectedItem();
             painelCamposEspecificos.removeAll();
             if (tipoSel.equals("Funcionário")) {
-                painelCamposEspecificos.add(painelFuncionario, BorderLayout.CENTER);
+                painelCamposEspecificos.add(painelFuncionario);
             } else {
-                painelCamposEspecificos.add(painelCliente, BorderLayout.CENTER);
+                painelCamposEspecificos.add(painelCliente);
             }
             painelCamposEspecificos.revalidate();
             painelCamposEspecificos.repaint();
@@ -290,15 +290,10 @@ public class PainelRegisto extends JPanel implements ActionListener {
                     String nomeOriginal = fotoSelecionada.getName();
                     String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf('.'));
                     String nomeDestino = "user_" + uNovo.getIdUtilizador() + extensao;
-                    File destino = new File("fotos", nomeDestino);
-                    try {
-                        File pastaFotos = new File("fotos");
-                        if (!pastaFotos.exists())
-                            pastaFotos.mkdirs();
-                        Files.copy(fotoSelecionada.toPath(), destino.toPath(), StandardCopyOption.REPLACE_EXISTING);
+                    String caminhoDestino = "fotos" + File.separator + nomeDestino;
+                    if (util.GestorFicheiros.guardarFotoPerfil(fotoSelecionada, caminhoDestino)) {
                         aplicacao.getControladorUtilizador().atualizarFoto(uNovo.getIdUtilizador(),
-                                "fotos" + File.separator + nomeDestino, "Sistema");
-                    } catch (IOException ex) {
+                                caminhoDestino, "Sistema");
                     }
                 }
             } else {

@@ -90,8 +90,8 @@ public class ControladorUtilizador {
             String morada, int especializacao, String dataInicio, String obs) {
         Funcionario novo = new Funcionario(0, user, pass, nome, email, TipoUtilizador.FUNCIONARIO,
                 EstadoUtilizador.ATIVO, nif, telefone, morada, especializacao, dataInicio);
-        if (obs != null && !obs.trim().isEmpty()) {
-            novo.setObservacoes(obs.trim());
+        if (obs != null && !obs.isEmpty()) {
+            novo.setObservacoes(obs);
         }
         boolean sucesso = uDao.inserirUtilizador(novo);
         if (sucesso) {
@@ -122,8 +122,8 @@ public class ControladorUtilizador {
             String morada, String setorAtividade, String escalao, String obs) {
         Cliente novo = new Cliente(0, user, pass, nome, email, TipoUtilizador.CLIENTE, EstadoUtilizador.ATIVO, nif,
                 telefone, morada, setorAtividade, escalao);
-        if (obs != null && !obs.trim().isEmpty()) {
-            novo.setObservacoes(obs.trim());
+        if (obs != null && !obs.isEmpty()) {
+            novo.setObservacoes(obs);
         }
         boolean sucesso = uDao.inserirUtilizador(novo);
         if (sucesso) {
@@ -345,7 +345,7 @@ public class ControladorUtilizador {
     }
 
     /**
-     * Atualiza o caminho da foto de perfil de um utilizador (R2).
+     * Atualiza o caminho da foto de perfil de um utilizador.
      *
      * @param idUtilizador   identificador do utilizador
      * @param fotoPath       caminho relativo da nova foto

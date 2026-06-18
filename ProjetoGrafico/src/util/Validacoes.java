@@ -128,7 +128,7 @@ public class Validacoes {
      *         reconhecido.
      */
     public static String normalizarData(String dataInserida) {
-        if (dataInserida == null || dataInserida.trim().isEmpty()) {
+        if (dataInserida == null || dataInserida.isEmpty()) {
             return null;
         }
 
@@ -144,7 +144,7 @@ public class Validacoes {
             try {
                 java.time.format.DateTimeFormatter formatterEntrada = java.time.format.DateTimeFormatter
                         .ofPattern(formatosAceites[i]);
-                java.time.LocalDate dataConvertida = java.time.LocalDate.parse(dataInserida.trim(), formatterEntrada);
+                java.time.LocalDate dataConvertida = java.time.LocalDate.parse(dataInserida, formatterEntrada);
 
                 java.time.format.DateTimeFormatter formatterBD = java.time.format.DateTimeFormatter
                         .ofPattern("yyyy-MM-dd");

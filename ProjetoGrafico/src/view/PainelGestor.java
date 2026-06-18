@@ -32,7 +32,7 @@ import util.Validacoes;
  */
 public class PainelGestor extends JPanel implements ActionListener {
 
-    private AplicacaoGUI aplicacao;
+    private Aplicacao aplicacao;
     private Utilizador utilizadorLogado;
     private ControladorUtilizador cUtilizador;
     private ControladorReparacao cReparacao;
@@ -49,7 +49,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      *
      * @param aplicacao referência para a aplicação principal
      */
-    public PainelGestor(AplicacaoGUI aplicacao) {
+    public PainelGestor(Aplicacao aplicacao) {
         this.aplicacao = aplicacao;
         this.cUtilizador = aplicacao.getControladorUtilizador();
         this.cReparacao = aplicacao.getControladorReparacao();
@@ -206,8 +206,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             d[i] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo() };
             i++;
         }
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo" }, d);
-        p.add(st, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo" }, d);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton bAtiv = new JButton("Ativar");
         bAtiv.setToolTipText("Aprovar a conta selecionada");
@@ -216,7 +216,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAtiv.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
@@ -229,7 +229,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bRej.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
@@ -252,9 +252,9 @@ public class PainelGestor extends JPanel implements ActionListener {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Gerir Pedidos de Reparação"));
         ArrayList<Reparacao> pend = cReparacao.listarPedidosPendentes();
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
+        JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
                 converterReparacoes(pend));
-        p.add(st, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
         ArrayList<Utilizador> funcs = cUtilizador.obterFuncionariosAtivos();
         JComboBox<String> comboFunc = new JComboBox<>();
@@ -271,7 +271,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAceitar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione um pedido!");
                     return;
@@ -290,7 +290,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bRejeitar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione um pedido!");
                     return;
@@ -315,15 +315,15 @@ public class PainelGestor extends JPanel implements ActionListener {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Arquivar Processos Finalizados"));
         ArrayList<Reparacao> fin = cReparacao.obterReparacoesProntasAArquivar();
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
+        JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Número", "Data", "Estado" },
                 converterReparacoes(fin));
-        p.add(st, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JButton bArq = new JButton("Arquivar Selecionado");
         bArq.setToolTipText("Arquivar a reparação selecionada");
         bArq.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma reparação!");
                     return;
@@ -352,8 +352,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             d[i] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo(), u.getEstado() };
             i++;
         }
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, d);
-        p.add(st, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, d);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel form = new JPanel();
         form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
         JTextField cNome = new JTextField(10);
@@ -369,7 +369,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bSave.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
@@ -479,8 +479,8 @@ public class PainelGestor extends JPanel implements ActionListener {
         });
 
         p.add(top, BorderLayout.NORTH);
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "Resultado" }, new Object[][] {});
-        p.add(st, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "Resultado" }, new Object[][] {});
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         bExec.addActionListener(new ActionListener() {
             @Override
@@ -498,14 +498,14 @@ public class PainelGestor extends JPanel implements ActionListener {
                                 u.getEstado() };
                         j++;
                     }
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
                 } else if (sel == 1) {
                     ArrayList<Reparacao> l = cReparacao.listarReparacoesOrdenadas(1, true);
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 } else if (sel == 2) {
                     ArrayList<Reparacao> l = cReparacao.listarReparacoesNaoFinalizadas();
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 } else if (sel == 3) {
                     ArrayList<Reparacao> l;
@@ -544,7 +544,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                                 l.add(r);
                         }
                     }
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 } else if (sel == 4) {
                     ArrayList<Utilizador> l;
@@ -562,7 +562,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                                 u.getEstado() };
                         j++;
                     }
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
                 } else if (sel == 5) {
                     ArrayList<Equipamento> l;
                     if (termo.isEmpty()) {
@@ -578,7 +578,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                         dd[j] = new Object[] { eq.getIdEquipamento(), eq.getMarca(), eq.getModelo(), eq.getSku() };
                         j++;
                     }
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Marca", "Modelo", "SKU" }, dd);
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dd);
                 } else if (sel == 6) {
                     String dataInicio = Validacoes.normalizarData(campoDataInicio.getText());
                     String dataFim = Validacoes.normalizarData(campoDataFim.getText());
@@ -589,11 +589,11 @@ public class PainelGestor extends JPanel implements ActionListener {
                     } else {
                         l = cReparacao.pesquisarReparacoesPorData(dataInicio, dataFim);
                     }
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 } else if (sel == 7) {
                     ArrayList<Reparacao> l = cReparacao.obterTodasReparacoes();
-                    Utilitarios.atualizarTabela(st, new String[] { "ID", "Número", "Data", "Estado" },
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
                 }
             }
@@ -630,8 +630,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             idxCat++;
         }
         p.add(top, BorderLayout.NORTH);
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, new Object[][] {});
-        p.add(st, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, new Object[][] {});
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         bVer.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
@@ -645,7 +645,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                     dd[j] = new Object[] { n.getDataCriacao(), n.getEstado(), n.getMensagem() };
                     j++;
                 }
-                Utilitarios.atualizarTabela(st, new String[] { "Data", "Estado", "Mensagem" }, dd);
+                Utilitarios.atualizarTabela(tabela, new String[] { "Data", "Estado", "Mensagem" }, dd);
             }
         });
         bMarcar.addActionListener(new ActionListener() {
@@ -679,9 +679,9 @@ public class PainelGestor extends JPanel implements ActionListener {
         top.add(bPesq);
         top.add(bTodos);
         p.add(top, BorderLayout.NORTH);
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "Data", "Hora", "Utilizador", "Ação" },
+        JTable tabela = Utilitarios.criarTabela(new String[] { "Data", "Hora", "Utilizador", "Ação" },
                 new Object[][] {});
-        p.add(st, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         ActionListener carregarLogs = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
@@ -698,7 +698,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                     dd[j] = new Object[] { l.getData(), l.getHora(), l.getUtilizador(), l.getAcao() };
                     j++;
                 }
-                Utilitarios.atualizarTabela(st, new String[] { "Data", "Hora", "Utilizador", "Ação" }, dd);
+                Utilitarios.atualizarTabela(tabela, new String[] { "Data", "Hora", "Utilizador", "Ação" }, dd);
             }
         };
         bPesq.addActionListener(carregarLogs);
@@ -722,8 +722,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             d[i] = new Object[] { u.getIdUtilizador(), u.getLogin(), u.getTipo(), u.getEstado() };
             i++;
         }
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Username", "Tipo", "Estado" }, d);
-        p.add(st, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Username", "Tipo", "Estado" }, d);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton bAtiv = new JButton("Tornar ATIVO");
         bAtiv.setToolTipText("Mudar conta para estado ATIVO");
@@ -732,7 +732,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAtiv.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
@@ -750,7 +750,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bInat.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
@@ -794,8 +794,8 @@ public class PainelGestor extends JPanel implements ActionListener {
             d[i] = new Object[] { u.getIdUtilizador(), u.getLogin(), u.getTipo() };
             i++;
         }
-        JScrollPane st = Utilitarios.criarTabela(new String[] { "ID", "Username", "Tipo" }, d);
-        p.add(st, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Username", "Tipo" }, d);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton bAceitar = new JButton("Aceitar Remoção");
         bAceitar.setToolTipText("Aceitar e apagar dados");
@@ -804,7 +804,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bAceitar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;
@@ -818,7 +818,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         bRecusar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(st);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
                     return;

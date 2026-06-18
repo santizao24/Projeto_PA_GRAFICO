@@ -168,7 +168,7 @@ public class Equipamento {
     }
 
     /**
-     * Define as observações do equipamento (R4).
+     * Define as observações do equipamento.
      *
      * @param aObservacoes texto das observações
      */
@@ -177,7 +177,7 @@ public class Equipamento {
     }
 
     /**
-     * Obtém as observações do equipamento (R4).
+     * Obtém as observações do equipamento.
      *
      * @return observações (pode ser null)
      */

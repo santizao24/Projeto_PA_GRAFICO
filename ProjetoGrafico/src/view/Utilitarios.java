@@ -11,7 +11,7 @@ import java.io.IOException;
 
 /**
  * Classe utilitária com métodos reutilizáveis para a interface gráfica.
- * Garante a harmonização do código (R14) ao centralizar a criação de
+ * Garante a harmonização do código ao centralizar a criação de
  * componentes comuns como tabelas, campos de formulário e diálogos.
  *
  * @author Santiago e Hugo
@@ -19,18 +19,8 @@ import java.io.IOException;
  */
 public class Utilitarios {
 
-    /**
-     * Cria uma JTable não editável com JScrollPane, usando as colunas e dados
-     * fornecidos.
-     * As tabelas são colocadas dentro de JScrollPane para barras de deslocamento
-     * (R7).
-     *
-     * @param colunas nomes das colunas da tabela
-     * @param dados   dados a preencher na tabela (pode ser vazio)
-     * @return JScrollPane contendo a JTable criada
-     */
-    public static JScrollPane criarTabela(String[] colunas, Object[][] dados) {
-        DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
+    public static javax.swing.JTable criarTabela(String[] colunas, Object[][] dados) {
+        javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(dados, colunas) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -44,80 +34,28 @@ public class Utilitarios {
                 return Object.class;
             }
         };
-        JTable tabela = new JTable(modelo);
+        javax.swing.JTable tabela = new javax.swing.JTable(modelo);
         tabela.setAutoCreateRowSorter(true);
-        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
-        JScrollPane scrollPane = new JScrollPane(tabela);
-        scrollPane.setPreferredSize(new Dimension(700, 300));
-        return scrollPane;
+        tabela.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        return tabela;
     }
 
-    /**
-     * Cria uma JList com JScrollPane para listagens de coluna única (R9).
-     * Deve ser usada quando os dados a apresentar têm apenas uma coluna.
-     *
-     * @param itens array de elementos a listar
-     * @return JScrollPane contendo a JList criada
-     */
-    public static JScrollPane criarLista(String[] itens) {
-        JList<String> lista = new JList<>(itens);
-        lista.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        JScrollPane scrollPane = new JScrollPane(lista);
-        scrollPane.setPreferredSize(new Dimension(700, 300));
-        return scrollPane;
+    public static javax.swing.JList<String> criarLista(String[] itens) {
+        javax.swing.JList<String> lista = new javax.swing.JList<>(itens);
+        lista.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        return lista;
     }
 
-    /**
-     * Obtém a JList contida dentro de um JScrollPane.
-     *
-     * @param scrollPane o JScrollPane que contém a lista
-     * @return a JList contida, ou null se não existir
-     */
-    @SuppressWarnings("unchecked")
-    public static JList<String> obterLista(JScrollPane scrollPane) {
-        if (scrollPane.getViewport().getView() instanceof JList) {
-            return (JList<String>) scrollPane.getViewport().getView();
-        }
-        return null;
-    }
 
-    /**
-     * Obtém o item selecionado numa JList.
-     *
-     * @param scrollPane o JScrollPane que contém a JList
-     * @return o item selecionado, ou null se nada estiver selecionado
-     */
-    public static String obterItemSelecionado(JScrollPane scrollPane) {
-        JList<String> lista = obterLista(scrollPane);
-        if (lista != null) {
-            return lista.getSelectedValue();
-        }
-        return null;
-    }
-
-    /**
-     * Obtém a JTable contida dentro de um JScrollPane.
-     *
-     * @param scrollPane o JScrollPane que contém a tabela
-     * @return a JTable contida, ou null se não existir
-     */
-    public static JTable obterTabela(JScrollPane scrollPane) {
-        if (scrollPane.getViewport().getView() instanceof JTable) {
-            return (JTable) scrollPane.getViewport().getView();
-        }
-        return null;
-    }
 
     /**
      * Atualiza os dados de uma JTable existente dentro de um JScrollPane.
      *
-     * @param scrollPane o JScrollPane que contém a tabela
+     * @param tabela a JTable a analisar
      * @param colunas    nomes das colunas
      * @param dados      novos dados para a tabela
      */
-    public static void atualizarTabela(JScrollPane scrollPane, String[] colunas, Object[][] dados) {
-        JTable tabela = obterTabela(scrollPane);
+    public static void atualizarTabela(JTable tabela, String[] colunas, Object[][] dados) {
         if (tabela != null) {
             DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
                 @Override
@@ -140,11 +78,11 @@ public class Utilitarios {
 
     /**
      * Cria um JPanel com um JLabel e um componente de input lado a lado,
-     * aplicando um tooltip de ajuda (R10) ao componente.
+     * aplicando um tooltip de ajuda ao componente.
      *
      * @param textoLabel texto da label descritiva
      * @param campo      componente de input (JTextField, JComboBox, etc.)
-     * @param tooltip    texto de ajuda que aparece ao passar o rato (R10)
+     * @param tooltip    texto de ajuda que aparece ao passar o rato
      * @return JPanel contendo a label e o campo
      */
     public static JPanel criarCampoFormulario(String textoLabel, JComponent campo, String tooltip) {
@@ -204,12 +142,11 @@ public class Utilitarios {
     /**
      * Obtém o ID (primeira coluna) da linha selecionada numa JTable.
      *
-     * @param scrollPane o JScrollPane que contém a tabela
+     * @param tabela a JTable a analisar
      * @return o valor da primeira coluna da linha selecionada, ou -1 se nada
      *         estiver selecionado
      */
-    public static int obterIdSelecionado(JScrollPane scrollPane) {
-        JTable tabela = obterTabela(scrollPane);
+    public static int obterIdSelecionado(JTable tabela) {
         if (tabela != null && tabela.getSelectedRow() != -1) {
             Object valor = tabela.getValueAt(tabela.getSelectedRow(), 0);
             if (valor instanceof Integer) {
@@ -227,12 +164,11 @@ public class Utilitarios {
     /**
      * Obtém o valor de uma coluna específica da linha selecionada numa JTable.
      *
-     * @param scrollPane o JScrollPane que contém a tabela
+     * @param tabela a JTable a analisar
      * @param coluna     índice da coluna (0-based)
      * @return o valor da coluna como String, ou null se nada estiver selecionado
      */
-    public static String obterValorSelecionado(JScrollPane scrollPane, int coluna) {
-        JTable tabela = obterTabela(scrollPane);
+    public static String obterValorSelecionado(JTable tabela, int coluna) {
         if (tabela != null && tabela.getSelectedRow() != -1) {
             Object valor = tabela.getValueAt(tabela.getSelectedRow(), coluna);
             return valor != null ? valor.toString() : null;
@@ -241,7 +177,7 @@ public class Utilitarios {
     }
 
     /**
-     * Cria um JPanel com a foto de perfil e um botão para alterar (R2).
+     * Cria um JPanel com a foto de perfil e um botão para alterar.
      * Se o caminho da foto for null ou inválido, mostra uma imagem genérica.
      *
      * @param fotoPath  caminho relativo da foto (pode ser null)
@@ -273,7 +209,7 @@ public class Utilitarios {
         }
 
         JButton btnAlterar = new JButton("Alterar Foto");
-        btnAlterar.setToolTipText("Clique para escolher uma foto de perfil (R2)");
+        btnAlterar.setToolTipText("Clique para escolher uma foto de perfil");
         btnAlterar.addActionListener(onAlterar);
 
         painel.add(lblFoto);
@@ -329,7 +265,7 @@ public class Utilitarios {
     }
 
     /**
-     * Atualiza a imagem apresentada num painel de foto (R2).
+     * Atualiza a imagem apresentada num painel de foto.
      *
      * @param painelFoto JPanel criado por criarPainelFoto
      * @param fotoPath   novo caminho da foto

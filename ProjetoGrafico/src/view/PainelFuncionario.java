@@ -22,14 +22,14 @@ import Enums.CategoriaNotificacao;
  * Painel com as funcionalidades disponíveis para o utilizador do tipo
  * Funcionário.
  * Inclui gestão de reparações atribuídas, perfil, notificações e consultas.
- * A manipulação de peças e testes NÃO é incluída na GUI (R12).
+ * A manipulação de peças e testes é gerida internamente.
  *
  * @author Santiago e Hugo
  * @version 1.0
  */
 public class PainelFuncionario extends JPanel implements ActionListener {
 
-    private AplicacaoGUI aplicacao;
+    private Aplicacao aplicacao;
     private Utilizador utilizadorLogado;
     private ControladorUtilizador cUtilizador;
     private ControladorReparacao cReparacao;
@@ -46,7 +46,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
      * 
      * @param aplicacao referência para a aplicação principal
      */
-    public PainelFuncionario(AplicacaoGUI aplicacao) {
+    public PainelFuncionario(Aplicacao aplicacao) {
         this.aplicacao = aplicacao;
         this.cUtilizador = aplicacao.getControladorUtilizador();
         this.cReparacao = aplicacao.getControladorReparacao();
@@ -149,10 +149,10 @@ public class PainelFuncionario extends JPanel implements ActionListener {
 
         ArrayList<Reparacao> lista = cReparacao.listarReparacoesPorEstado(
                 utilizadorLogado.getIdUtilizador(), EstadoReparacao.ACEITE.name());
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Número", "Data Criação", "Estado" },
                 converterReparacoes(lista));
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         JPanel painelBtns = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JButton btnAceitar = new JButton("Aceitar e Iniciar");
@@ -160,7 +160,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         btnAceitar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(scrollTabela);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelFuncionario.this, "Selecione um pedido!");
                     return;
@@ -176,7 +176,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         btnRejeitar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(scrollTabela);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelFuncionario.this, "Selecione um pedido!");
                     return;
@@ -198,20 +198,20 @@ public class PainelFuncionario extends JPanel implements ActionListener {
      */
     private void mostrarEmCurso() {
         JPanel p = new JPanel(new BorderLayout());
-        p.setBorder(BorderFactory.createTitledBorder("Reparações em Curso (sem peças/testes na GUI — R12)"));
+        p.setBorder(BorderFactory.createTitledBorder("Reparações em Curso"));
 
         ArrayList<Reparacao> lista = cReparacao.listarReparacoesPorEstado(
                 utilizadorLogado.getIdUtilizador(), EstadoReparacao.DECORRER.name());
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Número", "Data Criação", "Estado" },
                 converterReparacoes(lista));
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         JPanel painelConclusao = new JPanel(new FlowLayout(FlowLayout.LEFT));
         JTextField campoCusto = new JTextField(8);
         campoCusto.setToolTipText("Custo final da reparação em euros");
         JTextArea campoObs = new JTextArea(2, 20);
-        campoObs.setToolTipText("Observações sobre o trabalho realizado (R4)");
+        campoObs.setToolTipText("Observações sobre o trabalho realizado");
         JButton btnConcluir = new JButton("Concluir Reparação");
         btnConcluir.setToolTipText("Finalizar a reparação selecionada");
 
@@ -224,7 +224,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         btnConcluir.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(scrollTabela);
+                int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
                     Utilitarios.mostrarErro(PainelFuncionario.this, "Selecione uma reparação!");
                     return;
@@ -342,16 +342,16 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         filtros.add(btnListar);
         p.add(filtros, BorderLayout.NORTH);
 
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Reparacao> lista = cReparacao.listarReparacoesFuncionarioOrdenadas(
                         utilizadorLogado.getIdUtilizador(), 1, true);
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(lista));
             }
         });
@@ -378,9 +378,9 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         filtros.add(btnPesq);
         p.add(filtros, BorderLayout.NORTH);
 
-        JScrollPane scrollTabela = Utilitarios.criarTabela(
+        JTable tabela = Utilitarios.criarTabela(
                 new String[] { "ID", "Número", "Data", "Estado" }, new Object[][] {});
-        p.add(scrollTabela, BorderLayout.CENTER);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnPesq.addActionListener(new ActionListener() {
             @Override
@@ -388,7 +388,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                 ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesFuncionario(
                         utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
                         campoTermo.getText());
-                Utilitarios.atualizarTabela(scrollTabela, new String[] { "ID", "Número", "Data", "Estado" },
+                Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(res));
             }
         });
@@ -411,8 +411,8 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             dados[i] = new Object[] { n.getDataCriacao(), n.getEstado(), n.getMensagem() };
             i++;
         }
-        JScrollPane scrollTabela = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, dados);
-        p.add(scrollTabela, BorderLayout.CENTER);
+        JTable tabela = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, dados);
+        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         JButton btnMarcar = new JButton("Marcar Todas como Lidas");
         btnMarcar.setToolTipText("Marcar notificações como lidas");

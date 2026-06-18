@@ -1,6 +1,7 @@
 package util;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.sql.*;
 import java.util.Properties;
 
@@ -36,6 +37,30 @@ public class ConexaoBD {
         }
 
         return DriverManager.getConnection(url, user, password);
+    }
+
+    /**
+     * Guarda as configurações de acesso no ficheiro {@code configbd.txt}.
+     *
+     * @param url URL da base de dados
+     * @param user username
+     * @param password password
+     * @throws Exception em caso de erro na gravação do ficheiro
+     */
+    public static void guardarConfiguracao(String url, String user, String password) throws Exception {
+        Properties prop = new Properties();
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream("configbd.txt");
+            prop.setProperty("url", url);
+            prop.setProperty("user", user);
+            prop.setProperty("password", password);
+            prop.store(fos, "Configuracoes da Base de Dados");
+        } finally {
+            if (fos != null) {
+                fos.close();
+            }
+        }
     }
 
     /**
