@@ -190,8 +190,7 @@ public class Utilitarios {
      * @return JPanel contendo a foto e o botão
      */
     public static JPanel criarPainelFoto(String fotoPath, ActionListener onAlterar) {
-        JPanel painel = new JPanel();
-        painel.setLayout(new GridLayout(2, 1));
+        JPanel painel = new JPanel(new FlowLayout(FlowLayout.LEFT, 20, 10));
 
         JLabel lblFoto = new JLabel();
         lblFoto.setPreferredSize(new Dimension(100, 100));

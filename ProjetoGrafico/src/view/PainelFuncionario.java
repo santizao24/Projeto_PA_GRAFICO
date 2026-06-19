@@ -258,8 +258,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
      * Apresenta o painel de edição do perfil do funcionário.
      */
     private void mostrarPerfil() {
-        JPanel p = new JPanel();
-        p.setLayout(new GridLayout(7, 1));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
         painelFoto = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
@@ -277,18 +276,23 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                 }
             }
         });
-        p.add(painelFoto);
+        p.add(painelFoto, BorderLayout.NORTH);
 
         JTextField cEmail = new JTextField(utilizadorLogado.getEmail(), 20);
         JPasswordField cPass = new JPasswordField(20);
         JTextField cTel = new JTextField(20);
         JTextField cMorada = new JTextField(20);
 
-        p.add(new JLabel("Nome: " + utilizadorLogado.getNome() + "  (não editável)"));
-        p.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
-        p.add(Utilitarios.criarCampoFormulario("Nova Password:", cPass, "Nova palavra-passe"));
-        p.add(Utilitarios.criarCampoFormulario("Novo Telefone:", cTel, "Novo telefone (9 dígitos)"));
-        p.add(Utilitarios.criarCampoFormulario("Nova Morada:", cMorada, "Nova morada"));
+        JPanel campos = new JPanel(new GridLayout(5, 1));
+        campos.add(new JLabel("Nome: " + utilizadorLogado.getNome() + "  (não editável)"));
+        campos.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
+        campos.add(Utilitarios.criarCampoFormulario("Nova Password:", cPass, "Nova palavra-passe"));
+        campos.add(Utilitarios.criarCampoFormulario("Novo Telefone:", cTel, "Novo telefone (9 dígitos)"));
+        campos.add(Utilitarios.criarCampoFormulario("Nova Morada:", cMorada, "Nova morada"));
+
+        JPanel centro = new JPanel(new BorderLayout());
+        centro.add(campos, BorderLayout.NORTH);
+        p.add(centro, BorderLayout.CENTER);
 
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
@@ -317,7 +321,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                     Utilitarios.mostrarErro(PainelFuncionario.this, "Erro ao atualizar perfil.");
             }
         });
-        p.add(btnGuardar);
+        p.add(btnGuardar, BorderLayout.SOUTH);
         trocarConteudo(p, "perfil");
     }
 

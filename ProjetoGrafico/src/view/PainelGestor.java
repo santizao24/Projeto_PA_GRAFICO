@@ -826,8 +826,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Inclui foto de perfil, email e password — consistente com os outros painéis.
      */
     private void mostrarPerfil() {
-        JPanel p = new JPanel();
-        p.setLayout(new GridLayout(5, 1));
+        JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
         painelFoto = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
@@ -845,14 +844,19 @@ public class PainelGestor extends JPanel implements ActionListener {
                 }
             }
         });
-        p.add(painelFoto);
+        p.add(painelFoto, BorderLayout.NORTH);
 
         JTextField cEmail = new JTextField(utilizadorLogado.getEmail(), 20);
         JPasswordField cPass = new JPasswordField(20);
 
-        p.add(new JLabel("Nome: " + utilizadorLogado.getNome() + "  (não editável)"));
-        p.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
-        p.add(Utilitarios.criarCampoFormulario("Nova Password:", cPass, "Nova palavra-passe"));
+        JPanel campos = new JPanel(new GridLayout(3, 1));
+        campos.add(new JLabel("Nome: " + utilizadorLogado.getNome() + "  (não editável)"));
+        campos.add(Utilitarios.criarCampoFormulario("Novo Email:", cEmail, "Novo endereço de email"));
+        campos.add(Utilitarios.criarCampoFormulario("Nova Password:", cPass, "Nova palavra-passe"));
+
+        JPanel centro = new JPanel(new BorderLayout());
+        centro.add(campos, BorderLayout.NORTH);
+        p.add(centro, BorderLayout.CENTER);
 
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
@@ -876,7 +880,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                     Utilitarios.mostrarErro(PainelGestor.this, "Erro ao atualizar. Email pode já estar em uso.");
             }
         });
-        p.add(btnGuardar);
+        p.add(btnGuardar, BorderLayout.SOUTH);
         trocarConteudo(p, "perfil");
     }
 

@@ -61,8 +61,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
         JLabel titulo = new JLabel("Registo de Novo Utilizador");
         add(titulo, BorderLayout.NORTH);
 
-        JPanel painelFormulario = new JPanel();
-        painelFormulario.setLayout(new GridLayout(8, 1));
+        JPanel painelFormulario = new JPanel(new BorderLayout());
 
         painelFoto = Utilitarios.criarPainelFoto(null, new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
@@ -75,7 +74,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 }
             }
         });
-        painelFormulario.add(painelFoto);
+        painelFormulario.add(painelFoto, BorderLayout.NORTH);
+
+        JPanel camposBasicos = new JPanel(new GridLayout(5, 1));
 
         campoNome = new JTextField(20);
         campoEmail = new JTextField(20);
@@ -85,15 +86,15 @@ public class PainelRegisto extends JPanel implements ActionListener {
         comboTipo.setToolTipText("Selecione o tipo de utilizador a registar");
         comboTipo.addActionListener(this);
 
-        painelFormulario.add(Utilitarios.criarCampoFormulario("Nome:", campoNome,
+        camposBasicos.add(Utilitarios.criarCampoFormulario("Nome:", campoNome,
                 "Nome completo do utilizador"));
-        painelFormulario.add(Utilitarios.criarCampoFormulario("Email:", campoEmail,
+        camposBasicos.add(Utilitarios.criarCampoFormulario("Email:", campoEmail,
                 "Endereço de email no formato designacao@entidade.dominio"));
-        painelFormulario.add(Utilitarios.criarCampoFormulario("Username:", campoUsername,
+        camposBasicos.add(Utilitarios.criarCampoFormulario("Username:", campoUsername,
                 "Nome de utilizador para autenticação no sistema"));
-        painelFormulario.add(Utilitarios.criarCampoFormulario("Password:", campoPassword,
+        camposBasicos.add(Utilitarios.criarCampoFormulario("Password:", campoPassword,
                 "Palavra-passe para acesso ao sistema"));
-        painelFormulario.add(Utilitarios.criarCampoFormulario("Tipo de Utilizador:", comboTipo,
+        camposBasicos.add(Utilitarios.criarCampoFormulario("Tipo de Utilizador:", comboTipo,
                 "Selecione Funcionário ou Cliente"));
 
         painelCamposEspecificos = new JPanel();
@@ -101,12 +102,16 @@ public class PainelRegisto extends JPanel implements ActionListener {
         construirPainelFuncionario();
         construirPainelCliente();
         painelCamposEspecificos.add(painelFuncionario);
-        painelFormulario.add(painelCamposEspecificos);
 
         campoObservacoes = new JTextArea(3, 20);
         JScrollPane scrollObs = new JScrollPane(campoObservacoes);
-        painelFormulario.add(Utilitarios.criarCampoFormulario("Observações:", scrollObs,
-                "Observações ou comentários adicionais sobre o registo"));
+
+        JPanel meio = new JPanel(new BorderLayout());
+        meio.add(camposBasicos, BorderLayout.NORTH);
+        meio.add(painelCamposEspecificos, BorderLayout.CENTER);
+        meio.add(Utilitarios.criarCampoFormulario("Observações:", scrollObs,
+                "Observações ou comentários adicionais sobre o registo"), BorderLayout.SOUTH);
+        painelFormulario.add(meio, BorderLayout.CENTER);
 
         JPanel painelAuxiliar = new JPanel(new BorderLayout());
         painelAuxiliar.add(painelFormulario, BorderLayout.NORTH);
