@@ -71,7 +71,7 @@ public class PainelLogin extends JPanel implements ActionListener {
         painelBotoes.add(btnConfigBD);
         painelCabecalho.add(painelBotoes);
 
-        JPanel painelCentral = new JPanel(new GridBagLayout());
+        JPanel painelCentral = new JPanel(new FlowLayout());
         painelCentral.add(painelCabecalho);
         add(painelCentral, BorderLayout.CENTER);
     }
@@ -82,7 +82,6 @@ public class PainelLogin extends JPanel implements ActionListener {
      *
      * @param e evento de ação gerado
      */
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnEntrar)) {
             String user = campoUsername.getText();

@@ -38,6 +38,7 @@ public class PainelCliente extends JPanel implements ActionListener {
 
     private JPanel painelConteudo;
     private JPanel painelAtualConteudo;
+    private JPanel painelFoto;
 
     private JButton btnInserirEquip, btnPedirRep, btnPerfil, btnListarRep;
     private JButton btnPesquisarRep, btnListarEquip, btnPesquisarEquip;
@@ -57,8 +58,8 @@ public class PainelCliente extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         JPanel painelMenu = new JPanel();
-        painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
-        painelMenu.setPreferredSize(new Dimension(220, 0));
+        painelMenu.setLayout(new GridLayout(0, 1));
+        painelMenu.setPreferredSize(new Dimension(220, 600));
 
         JLabel titulo = new JLabel("Menu Cliente");
         painelMenu.add(titulo);
@@ -112,7 +113,6 @@ public class PainelCliente extends JPanel implements ActionListener {
     private JButton criarBotaoMenu(String texto, String tooltip) {
         JButton btn = new JButton(texto);
         btn.setToolTipText(tooltip);
-        btn.setMaximumSize(new Dimension(200, 30));
         btn.addActionListener(this);
         return btn;
     }
@@ -122,7 +122,6 @@ public class PainelCliente extends JPanel implements ActionListener {
      *
      * @param e evento de ação gerado pelo botão clicado
      */
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (utilizadorLogado == null)
             return;
@@ -160,7 +159,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      */
     private void mostrarInserirEquipamento() {
         JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setLayout(new GridLayout(0, 1));
         p.setBorder(BorderFactory.createTitledBorder("Inserir Novo Equipamento"));
 
         JTextField cMarca = new JTextField(20);
@@ -178,7 +177,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         JButton btnSubmeter = new JButton("Registar Equipamento");
         btnSubmeter.setToolTipText("Submeter o registo do equipamento");
         btnSubmeter.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 String marca = cMarca.getText();
                 String modelo = cModelo.getText();
@@ -239,7 +237,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         JButton btnPedir = new JButton("Pedir Reparação");
         btnPedir.setToolTipText("Submeter pedido para o equipamento selecionado");
         btnPedir.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int idEq = Utilitarios.obterIdSelecionado(tabela);
                 if (idEq == -1) {
@@ -261,12 +258,10 @@ public class PainelCliente extends JPanel implements ActionListener {
      */
     private void mostrarEditarPerfil() {
         JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setLayout(new GridLayout(0, 1));
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
-        final JPanel[] painelFotoRef = new JPanel[1];
-        painelFotoRef[0] = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
-            @Override
+        painelFoto = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 String novaFoto = Utilitarios.escolherFicheiroImagem(PainelCliente.this,
                         utilizadorLogado.getIdUtilizador());
@@ -275,13 +270,13 @@ public class PainelCliente extends JPanel implements ActionListener {
                             novaFoto, utilizadorLogado.getLogin());
                     if (ok) {
                         utilizadorLogado.setFotoPath(novaFoto);
-                        Utilitarios.atualizarImagemPainel(painelFotoRef[0], novaFoto);
+                        Utilitarios.atualizarImagemPainel(painelFoto, novaFoto);
                         Utilitarios.mostrarSucesso(PainelCliente.this, "Foto atualizada com sucesso!");
                     }
                 }
             }
         });
-        p.add(painelFotoRef[0]);
+        p.add(painelFoto);
 
         JTextField cEmail = new JTextField(utilizadorLogado.getEmail(), 20);
         JPasswordField cPass = new JPasswordField(20);
@@ -297,7 +292,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
         btnGuardar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 String email = cEmail.getText();
                 String pass = new String(cPass.getPassword());
@@ -349,7 +343,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnListar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Reparacao> lista = cReparacao.listarReparacoesClienteOrdenadas(
                         utilizadorLogado.getIdUtilizador(), 1, true);
@@ -359,7 +352,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         });
 
         btnImprimir.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int idSel = Utilitarios.obterIdSelecionado(tabela);
                 if (idSel == -1) {
@@ -429,10 +421,14 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnPesq.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
+                String crit = (String) comboCrit.getSelectedItem();
+                int criterio = 1;
+                if (crit.equals("Estado")) {
+                    criterio = 2;
+                }
                 ArrayList<Reparacao> res = cReparacao.pesquisarReparacoesCliente(
-                        utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
+                        utilizadorLogado.getIdUtilizador(), criterio,
                         campoTermo.getText());
                 Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                         converterReparacoes(res));
@@ -460,7 +456,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnListar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Equipamento> lista = cEquipamento.listarEquipamentosClienteOrdenados(
                         utilizadorLogado.getIdUtilizador(), 1, true);
@@ -504,10 +499,14 @@ public class PainelCliente extends JPanel implements ActionListener {
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         btnPesq.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
+                String crit = (String) comboCrit.getSelectedItem();
+                int criterio = 1;
+                if (crit.equals("Código de Modelo")) {
+                    criterio = 2;
+                }
                 ArrayList<Equipamento> res = cEquipamento.pesquisarEquipamentosCliente(
-                        utilizadorLogado.getIdUtilizador(), comboCrit.getSelectedIndex() + 1,
+                        utilizadorLogado.getIdUtilizador(), criterio,
                         campoTermo.getText());
                 Object[][] dados = new Object[res.size()][4];
                 Iterator<Equipamento> it = res.iterator();
@@ -547,7 +546,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         JButton btnMarcar = new JButton("Marcar Todas como Lidas");
         btnMarcar.setToolTipText("Marcar todas as notificações pendentes como lidas");
         btnMarcar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 cNotificacao.marcarComoLidas(utilizadorLogado.getIdUtilizador());
                 Utilitarios.mostrarSucesso(PainelCliente.this, "Notificações marcadas como lidas!");

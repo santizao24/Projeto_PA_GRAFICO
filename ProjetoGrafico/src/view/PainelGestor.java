@@ -40,6 +40,7 @@ public class PainelGestor extends JPanel implements ActionListener {
     private ControladorNotificacao cNotificacao;
     private JPanel painelConteudo;
     private JPanel painelAtualConteudo;
+    private JPanel painelFoto;
     private JButton btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers;
     private JButton btnListagens, btnNotifs, btnLogs, btnToggleContas;
     private JButton btnPedidosRemocao, btnMinhaRemocao, btnPerfil, btnLogout;
@@ -58,8 +59,8 @@ public class PainelGestor extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         JPanel painelMenu = new JPanel();
-        painelMenu.setLayout(new BoxLayout(painelMenu, BoxLayout.Y_AXIS));
-        painelMenu.setPreferredSize(new Dimension(220, 0));
+        painelMenu.setLayout(new GridLayout(0, 1));
+        painelMenu.setPreferredSize(new Dimension(220, 600));
 
         JLabel titulo = new JLabel("Menu Gestor");
         painelMenu.add(titulo);
@@ -113,7 +114,6 @@ public class PainelGestor extends JPanel implements ActionListener {
     private JButton criarBotaoMenu(String texto, String tooltip) {
         JButton btn = new JButton(texto);
         btn.setToolTipText(tooltip);
-        btn.setMaximumSize(new Dimension(200, 30));
         btn.addActionListener(this);
         return btn;
     }
@@ -123,7 +123,6 @@ public class PainelGestor extends JPanel implements ActionListener {
      *
      * @param e evento de ação gerado pelo botão clicado
      */
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (utilizadorLogado == null)
             return;
@@ -214,7 +213,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton bRej = new JButton("Rejeitar");
         bRej.setToolTipText("Rejeitar a conta selecionada");
         bAtiv.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -227,7 +225,6 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         bRej.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -269,7 +266,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton bRejeitar = new JButton("Rejeitar");
         bRejeitar.setToolTipText("Rejeitar o pedido");
         bAceitar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -288,7 +284,6 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         bRejeitar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -321,7 +316,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton bArq = new JButton("Arquivar Selecionado");
         bArq.setToolTipText("Arquivar a reparação selecionada");
         bArq.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -355,7 +349,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, d);
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel form = new JPanel();
-        form.setLayout(new BoxLayout(form, BoxLayout.Y_AXIS));
+        form.setLayout(new GridLayout(0, 1));
         JTextField cNome = new JTextField(10);
         cNome.setToolTipText("Novo nome");
         JTextField cUser = new JTextField(10);
@@ -367,7 +361,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton bSave = new JButton("Guardar");
         bSave.setToolTipText("Guardar alterações");
         bSave.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -460,11 +453,12 @@ public class PainelGestor extends JPanel implements ActionListener {
         campoDataFim.setVisible(false);
 
         comboTipo.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
-                int sel = comboTipo.getSelectedIndex();
-                boolean mostrarTermo = (sel == 3 || sel == 4 || sel == 5);
-                boolean mostrarDatas = (sel == 6);
+                String sel = (String) comboTipo.getSelectedItem();
+                boolean mostrarTermo = sel.equals("Pesquisar Reparações")
+                        || sel.equals("Pesquisar Utilizadores")
+                        || sel.equals("Pesquisar Equipamentos");
+                boolean mostrarDatas = sel.equals("Reparações por Data");
 
                 lblTermo.setVisible(mostrarTermo);
                 campoTermo.setVisible(mostrarTermo);
@@ -483,11 +477,10 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
 
         bExec.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
-                int sel = comboTipo.getSelectedIndex();
+                String sel = (String) comboTipo.getSelectedItem();
                 String termo = campoTermo.getText();
-                if (sel == 0) {
+                if (sel.equals("Utilizadores")) {
                     ArrayList<Utilizador> l = cUtilizador.listarUtilizadoresOrdenados(true);
                     Object[][] dd = new Object[l.size()][5];
                     Iterator<Utilizador> it2 = l.iterator();
@@ -499,15 +492,15 @@ public class PainelGestor extends JPanel implements ActionListener {
                         j++;
                     }
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
-                } else if (sel == 1) {
+                } else if (sel.equals("Reparações")) {
                     ArrayList<Reparacao> l = cReparacao.listarReparacoesOrdenadas(1, true);
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
-                } else if (sel == 2) {
+                } else if (sel.equals("Reparações Não Finalizadas")) {
                     ArrayList<Reparacao> l = cReparacao.listarReparacoesNaoFinalizadas();
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
-                } else if (sel == 3) {
+                } else if (sel.equals("Pesquisar Reparações")) {
                     ArrayList<Reparacao> l;
                     if (termo.isEmpty()) {
                         l = cReparacao.listarReparacoesOrdenadas(1, true);
@@ -546,7 +539,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                     }
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
-                } else if (sel == 4) {
+                } else if (sel.equals("Pesquisar Utilizadores")) {
                     ArrayList<Utilizador> l;
                     if (termo.isEmpty()) {
                         l = cUtilizador.listarUtilizadoresOrdenados(true);
@@ -563,7 +556,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                         j++;
                     }
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
-                } else if (sel == 5) {
+                } else if (sel.equals("Pesquisar Equipamentos")) {
                     ArrayList<Equipamento> l;
                     if (termo.isEmpty()) {
                         l = cEquipamento.pesquisarEquipamentos(1, "");
@@ -579,7 +572,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                         j++;
                     }
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Marca", "Modelo", "SKU" }, dd);
-                } else if (sel == 6) {
+                } else if (sel.equals("Reparações por Data")) {
                     String dataInicio = Validacoes.normalizarData(campoDataInicio.getText());
                     String dataFim = Validacoes.normalizarData(campoDataFim.getText());
                     ArrayList<Reparacao> l;
@@ -591,7 +584,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                     }
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
-                } else if (sel == 7) {
+                } else if (sel.equals("Todas as Reparações")) {
                     ArrayList<Reparacao> l = cReparacao.obterTodasReparacoes();
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
                             converterReparacoes(l));
@@ -633,7 +626,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JTable tabela = Utilitarios.criarTabela(new String[] { "Data", "Estado", "Mensagem" }, new Object[][] {});
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         bVer.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
                 ArrayList<Notificacao> l = cNotificacao.obterNotificacoesPorCategoria(id, cat);
@@ -649,7 +641,6 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         bMarcar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 CategoriaNotificacao cat = CategoriaNotificacao.valueOf((String) comboCat.getSelectedItem());
                 cNotificacao.marcarComoLidasPorCategoria(id, cat);
@@ -683,7 +674,6 @@ public class PainelGestor extends JPanel implements ActionListener {
                 new Object[][] {});
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         ActionListener carregarLogs = new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 ArrayList<Log> lista;
                 if (ev.getSource().equals(bPesq) && !campoUser.getText().isEmpty())
@@ -730,7 +720,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton bInat = new JButton("Tornar INATIVO");
         bInat.setToolTipText("Mudar conta para estado INATIVO");
         bAtiv.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -748,7 +737,6 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         bInat.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -802,7 +790,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton bRecusar = new JButton("Recusar");
         bRecusar.setToolTipText("Recusar e devolver ao estado ATIVO");
         bAceitar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -816,7 +803,6 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         bRecusar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 int id = Utilitarios.obterIdSelecionado(tabela);
                 if (id == -1) {
@@ -841,12 +827,10 @@ public class PainelGestor extends JPanel implements ActionListener {
      */
     private void mostrarPerfil() {
         JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+        p.setLayout(new GridLayout(0, 1));
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
-        final JPanel[] painelFotoRef = new JPanel[1];
-        painelFotoRef[0] = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
-            @Override
+        painelFoto = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
                 String novaFoto = Utilitarios.escolherFicheiroImagem(PainelGestor.this,
                         utilizadorLogado.getIdUtilizador());
@@ -855,13 +839,13 @@ public class PainelGestor extends JPanel implements ActionListener {
                             novaFoto, utilizadorLogado.getLogin());
                     if (ok) {
                         utilizadorLogado.setFotoPath(novaFoto);
-                        Utilitarios.atualizarImagemPainel(painelFotoRef[0], novaFoto);
+                        Utilitarios.atualizarImagemPainel(painelFoto, novaFoto);
                         Utilitarios.mostrarSucesso(PainelGestor.this, "Foto atualizada com sucesso!");
                     }
                 }
             }
         });
-        p.add(painelFotoRef[0]);
+        p.add(painelFoto);
 
         JTextField cEmail = new JTextField(utilizadorLogado.getEmail(), 20);
         JPasswordField cPass = new JPasswordField(20);
@@ -873,7 +857,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         JButton btnGuardar = new JButton("Guardar Alterações");
         btnGuardar.setToolTipText("Guardar as alterações ao perfil");
         btnGuardar.addActionListener(new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 String email = cEmail.getText();
                 String pass = new String(cPass.getPassword());

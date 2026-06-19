@@ -62,10 +62,9 @@ public class PainelRegisto extends JPanel implements ActionListener {
         add(titulo, BorderLayout.NORTH);
 
         JPanel painelFormulario = new JPanel();
-        painelFormulario.setLayout(new BoxLayout(painelFormulario, BoxLayout.Y_AXIS));
+        painelFormulario.setLayout(new GridLayout(0, 1));
 
         painelFoto = Utilitarios.criarPainelFoto(null, new ActionListener() {
-            @Override
             public void actionPerformed(ActionEvent ev) {
                 JFileChooser fc = new JFileChooser();
                 fc.setDialogTitle("Escolher Foto para o Novo Perfil");
@@ -98,7 +97,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 "Selecione Funcionário ou Cliente"));
 
         painelCamposEspecificos = new JPanel();
-        painelCamposEspecificos.setLayout(new BoxLayout(painelCamposEspecificos, BoxLayout.Y_AXIS));
+        painelCamposEspecificos.setLayout(new GridLayout(0, 1));
         construirPainelFuncionario();
         construirPainelCliente();
         painelCamposEspecificos.add(painelFuncionario);
@@ -132,7 +131,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
      */
     private void construirPainelFuncionario() {
         painelFuncionario = new JPanel();
-        painelFuncionario.setLayout(new BoxLayout(painelFuncionario, BoxLayout.Y_AXIS));
+        painelFuncionario.setLayout(new GridLayout(0, 1));
 
         campoNifFunc = new JTextField(20);
         campoTelFunc = new JTextField(20);
@@ -157,7 +156,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
      */
     private void construirPainelCliente() {
         painelCliente = new JPanel();
-        painelCliente.setLayout(new BoxLayout(painelCliente, BoxLayout.Y_AXIS));
+        painelCliente.setLayout(new GridLayout(0, 1));
 
         campoNifCliente = new JTextField(20);
         campoTelCliente = new JTextField(20);
@@ -182,7 +181,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
      *
      * @param e evento de ação gerado
      */
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(comboTipo)) {
             String tipoSel = (String) comboTipo.getSelectedItem();

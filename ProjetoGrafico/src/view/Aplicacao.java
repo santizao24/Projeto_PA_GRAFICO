@@ -8,8 +8,6 @@ import java.io.File;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 
-
-
 import controlador.ControladorUtilizador;
 import controlador.ControladorReparacao;
 import controlador.ControladorEquipamento;
@@ -71,17 +69,14 @@ public class Aplicacao extends JFrame implements ActionListener {
         JMenuBar menuBar = new JMenuBar();
         JMenu menuFicheiro = new JMenu("Ficheiro");
         menuConfigBD = new JMenuItem("Configurar BD");
-        menuConfigBD.setToolTipText("Configurar ligação à base de dados");
         menuConfigBD.addActionListener(this);
         menuSair = new JMenuItem("Sair");
-        menuSair.setToolTipText("Encerrar a aplicação");
         menuSair.addActionListener(this);
         menuFicheiro.add(menuConfigBD);
         menuFicheiro.addSeparator();
         menuFicheiro.add(menuSair);
         JMenu menuAjuda = new JMenu("Ajuda");
         menuSobre = new JMenuItem("Sobre");
-        menuSobre.setToolTipText("Informações sobre a aplicação");
         menuSobre.addActionListener(this);
         menuAjuda.add(menuSobre);
         menuBar.add(menuFicheiro);
@@ -113,7 +108,6 @@ public class Aplicacao extends JFrame implements ActionListener {
      *
      * @param e evento de ação gerado pelos itens do menu
      */
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(menuConfigBD)) {
             DialogoConfigBD d = new DialogoConfigBD(this);

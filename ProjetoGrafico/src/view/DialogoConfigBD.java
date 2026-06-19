@@ -36,7 +36,7 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
         setResizable(false);
 
         JPanel painelPrincipal = new JPanel();
-        painelPrincipal.setLayout(new BoxLayout(painelPrincipal, BoxLayout.Y_AXIS));
+        painelPrincipal.setLayout(new GridLayout(0, 1));
 
         campoIP = new JTextField(20);
         campoPorto = new JTextField(20);
@@ -76,7 +76,6 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
      *
      * @param e evento de ação gerado
      */
-    @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource().equals(btnGuardar)) {
             String ip = campoIP.getText();

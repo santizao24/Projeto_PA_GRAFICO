@@ -5,9 +5,6 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Classe utilitária com métodos reutilizáveis para a interface gráfica.
@@ -28,12 +25,10 @@ public class Utilitarios {
      */
     public static javax.swing.JTable criarTabela(String[] colunas, Object[][] dados) {
         javax.swing.table.DefaultTableModel modelo = new javax.swing.table.DefaultTableModel(dados, colunas) {
-            @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
 
-            @Override
             public Class<?> getColumnClass(int columnIndex) {
                 if (getRowCount() > 0 && getValueAt(0, columnIndex) != null) {
                     return getValueAt(0, columnIndex).getClass();
@@ -71,12 +66,10 @@ public class Utilitarios {
     public static void atualizarTabela(JTable tabela, String[] colunas, Object[][] dados) {
         if (tabela != null) {
             DefaultTableModel modelo = new DefaultTableModel(dados, colunas) {
-                @Override
                 public boolean isCellEditable(int row, int column) {
                     return false;
                 }
 
-                @Override
                 public Class<?> getColumnClass(int columnIndex) {
                     if (getRowCount() > 0 && getValueAt(0, columnIndex) != null) {
                         return getValueAt(0, columnIndex).getClass();
@@ -105,7 +98,6 @@ public class Utilitarios {
         campo.setToolTipText(tooltip);
         painel.add(label, BorderLayout.WEST);
         painel.add(campo, BorderLayout.CENTER);
-        painel.setMaximumSize(new Dimension(400, 30));
         return painel;
     }
 
@@ -199,7 +191,7 @@ public class Utilitarios {
      */
     public static JPanel criarPainelFoto(String fotoPath, ActionListener onAlterar) {
         JPanel painel = new JPanel();
-        painel.setLayout(new BoxLayout(painel, BoxLayout.Y_AXIS));
+        painel.setLayout(new GridLayout(0, 1));
 
         JLabel lblFoto = new JLabel();
         lblFoto.setPreferredSize(new Dimension(100, 100));
@@ -213,7 +205,7 @@ public class Utilitarios {
         File ficheiro = new File(pathAtual);
         if (ficheiro.exists()) {
             ImageIcon icon = new ImageIcon(pathAtual);
-            Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+            Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
             lblFoto.setIcon(new ImageIcon(img));
             lblFoto.setText("");
         } else {
@@ -247,32 +239,13 @@ public class Utilitarios {
         int resultado = fc.showOpenDialog(pai);
         if (resultado == JFileChooser.APPROVE_OPTION) {
             File ficheiroOrigem = fc.getSelectedFile();
-            try {
-                File pastaFotos = new File("fotos");
-                if (!pastaFotos.exists()) {
-                    pastaFotos.mkdirs();
-                }
-
-                String nomeOriginal = ficheiroOrigem.getName();
-                String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf('.'));
-
-                String nomeDestino = "user_" + idUtilizador + extensao;
-                File ficheiroDestino = new File(pastaFotos, nomeDestino);
-                FileInputStream fis = new FileInputStream(ficheiroOrigem);
-                FileOutputStream fos = new FileOutputStream(ficheiroDestino);
-                byte[] buffer = new byte[1024];
-                int bytesLidos;
-                while ((bytesLidos = fis.read(buffer)) > 0) {
-                    fos.write(buffer, 0, bytesLidos);
-                }
-                fis.close();
-                fos.close();
-
-                return "fotos" + File.separator + nomeDestino;
-            } catch (IOException e) {
-                mostrarErro(pai, "Erro ao copiar a foto: " + e.getMessage());
-                return null;
+            String nomeOriginal = ficheiroOrigem.getName();
+            String extensao = nomeOriginal.substring(nomeOriginal.lastIndexOf('.'));
+            String caminhoDestino = "fotos" + File.separator + "user_" + idUtilizador + extensao;
+            if (util.GestorFicheiros.guardarFotoPerfil(ficheiroOrigem, caminhoDestino)) {
+                return caminhoDestino;
             }
+            mostrarErro(pai, "Erro ao copiar a foto.");
         }
         return null;
     }
@@ -296,7 +269,7 @@ public class Utilitarios {
                 }
                 if (new File(pathAtual).exists()) {
                     ImageIcon icon = new ImageIcon(pathAtual);
-                    Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+                    Image img = icon.getImage().getScaledInstance(100, 100, Image.SCALE_DEFAULT);
                     lbl.setIcon(new ImageIcon(img));
                     lbl.setText("");
                 } else {
