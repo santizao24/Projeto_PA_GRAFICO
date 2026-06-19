@@ -191,7 +191,7 @@ public class Utilitarios {
      */
     public static JPanel criarPainelFoto(String fotoPath, ActionListener onAlterar) {
         JPanel painel = new JPanel();
-        painel.setLayout(new GridLayout(0, 1));
+        painel.setLayout(new GridLayout(2, 1));
 
         JLabel lblFoto = new JLabel();
         lblFoto.setPreferredSize(new Dimension(100, 100));

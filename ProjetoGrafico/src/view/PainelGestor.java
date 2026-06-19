@@ -59,7 +59,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         JPanel painelMenu = new JPanel();
-        painelMenu.setLayout(new GridLayout(0, 1));
+        painelMenu.setLayout(new GridLayout(13, 1));
         painelMenu.setPreferredSize(new Dimension(220, 600));
 
         JLabel titulo = new JLabel("Menu Gestor");
@@ -349,7 +349,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, d);
         p.add(new JScrollPane(tabela), BorderLayout.CENTER);
         JPanel form = new JPanel();
-        form.setLayout(new GridLayout(0, 1));
+        form.setLayout(new GridLayout(5, 1));
         JTextField cNome = new JTextField(10);
         cNome.setToolTipText("Novo nome");
         JTextField cUser = new JTextField(10);
@@ -827,7 +827,7 @@ public class PainelGestor extends JPanel implements ActionListener {
      */
     private void mostrarPerfil() {
         JPanel p = new JPanel();
-        p.setLayout(new GridLayout(0, 1));
+        p.setLayout(new GridLayout(5, 1));
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
         painelFoto = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {

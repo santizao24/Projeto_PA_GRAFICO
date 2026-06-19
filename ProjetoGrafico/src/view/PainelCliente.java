@@ -58,7 +58,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         JPanel painelMenu = new JPanel();
-        painelMenu.setLayout(new GridLayout(0, 1));
+        painelMenu.setLayout(new GridLayout(12, 1));
         painelMenu.setPreferredSize(new Dimension(220, 600));
 
         JLabel titulo = new JLabel("Menu Cliente");
@@ -159,7 +159,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      */
     private void mostrarInserirEquipamento() {
         JPanel p = new JPanel();
-        p.setLayout(new GridLayout(0, 1));
+        p.setLayout(new GridLayout(6, 1));
         p.setBorder(BorderFactory.createTitledBorder("Inserir Novo Equipamento"));
 
         JTextField cMarca = new JTextField(20);
@@ -258,7 +258,7 @@ public class PainelCliente extends JPanel implements ActionListener {
      */
     private void mostrarEditarPerfil() {
         JPanel p = new JPanel();
-        p.setLayout(new GridLayout(0, 1));
+        p.setLayout(new GridLayout(7, 1));
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
 
         painelFoto = Utilitarios.criarPainelFoto(utilizadorLogado.getFotoPath(), new ActionListener() {

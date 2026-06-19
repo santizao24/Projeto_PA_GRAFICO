@@ -62,7 +62,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
         add(titulo, BorderLayout.NORTH);
 
         JPanel painelFormulario = new JPanel();
-        painelFormulario.setLayout(new GridLayout(0, 1));
+        painelFormulario.setLayout(new GridLayout(8, 1));
 
         painelFoto = Utilitarios.criarPainelFoto(null, new ActionListener() {
             public void actionPerformed(ActionEvent ev) {
@@ -97,7 +97,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 "Selecione Funcionário ou Cliente"));
 
         painelCamposEspecificos = new JPanel();
-        painelCamposEspecificos.setLayout(new GridLayout(0, 1));
+        painelCamposEspecificos.setLayout(new GridLayout(1, 1));
         construirPainelFuncionario();
         construirPainelCliente();
         painelCamposEspecificos.add(painelFuncionario);
@@ -131,7 +131,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
      */
     private void construirPainelFuncionario() {
         painelFuncionario = new JPanel();
-        painelFuncionario.setLayout(new GridLayout(0, 1));
+        painelFuncionario.setLayout(new GridLayout(5, 1));
 
         campoNifFunc = new JTextField(20);
         campoTelFunc = new JTextField(20);
@@ -156,7 +156,7 @@ public class PainelRegisto extends JPanel implements ActionListener {
      */
     private void construirPainelCliente() {
         painelCliente = new JPanel();
-        painelCliente.setLayout(new GridLayout(0, 1));
+        painelCliente.setLayout(new GridLayout(5, 1));
 
         campoNifCliente = new JTextField(20);
         campoTelCliente = new JTextField(20);

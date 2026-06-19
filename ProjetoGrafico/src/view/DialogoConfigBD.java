@@ -36,7 +36,7 @@ public class DialogoConfigBD extends JDialog implements ActionListener {
         setResizable(false);
 
         JPanel painelPrincipal = new JPanel();
-        painelPrincipal.setLayout(new GridLayout(0, 1));
+        painelPrincipal.setLayout(new GridLayout(5, 1));
 
         campoIP = new JTextField(20);
         campoPorto = new JTextField(20);
