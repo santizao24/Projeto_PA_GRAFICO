@@ -18,6 +18,7 @@ public class ExtractoReparacao implements Printable {
 
     private Reparacao reparacao;
     private String nomeCliente;
+    private String nomeFuncionario;
     private String equipamentoInfo;
 
     /**
@@ -25,11 +26,14 @@ public class ExtractoReparacao implements Printable {
      *
      * @param aReparacao       objeto Reparacao com os dados do processo
      * @param aNomeCliente     nome do cliente proprietário do equipamento
+     * @param anomeFuncionario nome do funcionario que executou a reparação
      * @param aEquipamentoInfo informação do equipamento (marca e modelo)
      */
-    public ExtractoReparacao(Reparacao aReparacao, String aNomeCliente, String aEquipamentoInfo) {
+    public ExtractoReparacao(Reparacao aReparacao, String aNomeCliente, String aNomeFuncionario,
+            String aEquipamentoInfo) {
         reparacao = aReparacao;
         nomeCliente = aNomeCliente;
+        nomeFuncionario = aNomeFuncionario;
         equipamentoInfo = aEquipamentoInfo;
     }
 
@@ -69,6 +73,8 @@ public class ExtractoReparacao implements Printable {
         g.drawString("Nº Processo: " + reparacao.getNumReparacao(), 70, y);
         y = y + 20;
         g.drawString("Cliente: " + nomeCliente, 70, y);
+        y = y + 20;
+        g.drawString("Reparação efetuada por: " + nomeFuncionario, 70, y);
         y = y + 20;
         g.drawString("Equipamento: " + equipamentoInfo, 70, y);
         y = y + 30;
@@ -124,7 +130,8 @@ public class ExtractoReparacao implements Printable {
     }
 
     /**
-     * Inicia o processo de impressão do extrato, configurando o trabalho de impressão
+     * Inicia o processo de impressão do extrato, configurando o trabalho de
+     * impressão
      * e exibindo a caixa de diálogo nativa para o utilizador confirmar a operação.
      * Em caso de aprovação, o documento é enviado para a impressora selecionada.
      *

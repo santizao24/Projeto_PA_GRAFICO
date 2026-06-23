@@ -170,7 +170,8 @@ public class PainelCliente extends JPanel implements ActionListener {
 
         p.add(Utilitarios.criarCampoFormulario("Marca:", cMarca, "Marca do equipamento"));
         p.add(Utilitarios.criarCampoFormulario("Modelo:", cModelo, "Código do modelo do equipamento"));
-        p.add(Utilitarios.criarCampoFormulario("Data Fabrico:", cDataFab, "Data de fabrico (dd/MM/yyyy ou yyyy-MM-dd)"));
+        p.add(Utilitarios.criarCampoFormulario("Data Fabrico:", cDataFab,
+                "Data de fabrico (dd/MM/yyyy ou yyyy-MM-dd)"));
         p.add(Utilitarios.criarCampoFormulario("Lote:", cLote, "Identificação do lote de fabrico"));
         p.add(Utilitarios.criarCampoFormulario("Observações:", new JScrollPane(cObs), "Comentários adicionais"));
 
@@ -192,7 +193,8 @@ public class PainelCliente extends JPanel implements ActionListener {
 
                 String dataNormalizada = Validacoes.normalizarData(cDataFab.getText());
                 if (dataNormalizada == null) {
-                    Utilitarios.mostrarErro(PainelCliente.this, "Data de fabrico inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
+                    Utilitarios.mostrarErro(PainelCliente.this,
+                            "Data de fabrico inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
                     return;
                 }
 
@@ -391,8 +393,16 @@ public class PainelCliente extends JPanel implements ActionListener {
                     }
                 }
 
-                ExtractoReparacao extrato = new ExtractoReparacao(repSel,
-                        utilizadorLogado.getNome(), equipInfo);
+                String nomeFunc = "Não atribuído";
+                if (repSel.getIdUtilizador() > 0) {
+                    Utilizador func = cUtilizador.obterUtilizadorPorId(repSel.getIdUtilizador());
+                    if (func != null) {
+                        nomeFunc = func.getNome();
+                    }
+                }
+
+                ExtractoReparacao extrato = new ExtractoReparacao(repSel, utilizadorLogado.getNome(), nomeFunc,
+                        equipInfo);
                 extrato.imprimir(PainelCliente.this);
             }
         });
