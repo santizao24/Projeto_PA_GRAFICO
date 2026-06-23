@@ -3,31 +3,10 @@
     "configurations": [
         {
             "type": "java",
-            "name": "AplicacaoGUI",
-            "request": "launch",
-            "mainClass": "view.AplicacaoGUI",
-            "projectName": "ProjetoGrafico_456597ba"
-        },
-        {
-            "type": "java",
-            "name": "AplicacaoGUI",
-            "request": "launch",
-            "mainClass": "view.AplicacaoGUI",
-            "projectName": "PROJETOGRAFICO",
-            "classPaths": [
-                "src",
-                "lib/flatlaf-3.4.jar"
-            ]
-        },
-        {
-            "type": "java",
-            "name": "Aplicacao (Consola)",
+            "name": "Aplicacao",
             "request": "launch",
             "mainClass": "view.Aplicacao",
-            "projectName": "PROJETOGRAFICO",
-            "classPaths": [
-                "src"
-            ]
+            "projectName": "PROJETOGRAFICO"
         }
     ]
 }
