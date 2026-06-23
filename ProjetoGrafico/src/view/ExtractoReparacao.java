@@ -26,7 +26,7 @@ public class ExtractoReparacao implements Printable {
      *
      * @param aReparacao       objeto Reparacao com os dados do processo
      * @param aNomeCliente     nome do cliente proprietário do equipamento
-     * @param anomeFuncionario nome do funcionario que executou a reparação
+     * @param aNomeFuncionario nome do funcionario que executou a reparação
      * @param aEquipamentoInfo informação do equipamento (marca e modelo)
      */
     public ExtractoReparacao(Reparacao aReparacao, String aNomeCliente, String aNomeFuncionario,
@@ -80,18 +80,22 @@ public class ExtractoReparacao implements Printable {
         y = y + 30;
 
         g.setFont(new Font("Helvetica", Font.BOLD, 12));
-        g.drawString("Datas", 50, y);
+        g.drawString("Histórico de Ações", 50, y);
         y = y + 25;
 
         g.setFont(new Font("Helvetica", Font.PLAIN, 11));
-        g.drawString("Data de Criação: " + (reparacao.getDataCriacao() != null ? reparacao.getDataCriacao() : "N/A"),
-                70, y);
+        g.drawString("Pedido submetido por " + nomeCliente + " em "
+                + (reparacao.getDataCriacao() != null ? reparacao.getDataCriacao() : "N/A"), 70, y);
         y = y + 20;
-        g.drawString("Data de Início: " + (reparacao.getDataInicio() != null ? reparacao.getDataInicio() : "N/A"), 70,
-                y);
-        y = y + 20;
-        g.drawString("Data de Conclusão: " + (reparacao.getDataFim() != null ? reparacao.getDataFim() : "N/A"), 70, y);
-        y = y + 30;
+        if (reparacao.getDataInicio() != null) {
+            g.drawString("Reparação iniciada por " + nomeFuncionario + " em " + reparacao.getDataInicio(), 70, y);
+            y = y + 20;
+        }
+        if (reparacao.getDataFim() != null) {
+            g.drawString("Reparação concluída por " + nomeFuncionario + " em " + reparacao.getDataFim(), 70, y);
+            y = y + 20;
+        }
+        y = y + 10;
 
         g.setFont(new Font("Helvetica", Font.BOLD, 12));
         g.drawString("Resumo", 50, y);
