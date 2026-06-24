@@ -71,8 +71,9 @@ public class ControladorUtilizador {
     }
 
     /**
-     * Regista um novo utilizador do tipo Funcionário com o estado PENDENTE.
-     * Gera uma notificação para todos os gestores a informar do novo registo.
+     * Regista um novo utilizador do tipo Funcionário com o estado ATIVO
+     * (ativação automática). Gera uma notificação para todos os gestores a
+     * informar do novo registo e envia um email de confirmação.
      *
      * @param nome           nome completo do funcionário
      * @param email          endereço de email
@@ -103,8 +104,9 @@ public class ControladorUtilizador {
     }
 
     /**
-     * Regista um novo utilizador do tipo Cliente com o estado PENDENTE.
-     * Gera uma notificação para todos os gestores a informar do novo registo.
+     * Regista um novo utilizador do tipo Cliente com o estado ATIVO
+     * (ativação automática). Gera uma notificação para todos os gestores a
+     * informar do novo registo e envia um email de confirmação.
      *
      * @param nome           nome completo do cliente
      * @param email          endereço de email
@@ -135,49 +137,12 @@ public class ControladorUtilizador {
     }
 
     /**
-     * Obtém todas as contas de utilizadores com estado PENDENTE ou REJEITADO
-     * (excluindo gestores).
-     *
-     * @return lista de utilizadores com contas pendentes de aprovação
-     */
-    public ArrayList<Utilizador> obterContasPendentes() {
-        return uDao.listarUtilizadoresPendentes();
-    }
-
-    /**
-     * Altera o estado de uma conta de utilizador (ativar ou rejeitar).
-     *
-     * @param id             identificador do utilizador
-     * @param ativar         {@code true} para ativar, {@code false} para rejeitar
-     * @param usernameLogado username do gestor que realizou a ação (para log)
-     */
-    public void alterarEstadoConta(int id, boolean ativar, String usernameLogado) {
-        uDao.alterarEstadoUtilizador(id, ativar);
-        if (ativar) {
-            cLog.registarAcao(usernameLogado, "Aprovou o registo do utilizador ID: " + id);
-        } else {
-            cLog.registarAcao(usernameLogado, "Recusou o registo do utilizador ID: " + id);
-        }
-    }
-
-    /**
      * Obtém todos os funcionários com o estado ATIVO.
      *
      * @return lista de funcionários ativos
      */
     public ArrayList<Utilizador> obterFuncionariosAtivos() {
         return uDao.listarFuncionariosAtivos();
-    }
-
-    /**
-     * Obtém os funcionários ativos disponíveis para atribuição a uma reparação,
-     * excluindo aqueles que já rejeitaram essa reparação.
-     *
-     * @param idReparacao identificador da reparação
-     * @return lista de funcionários disponíveis
-     */
-    public ArrayList<Utilizador> obterFuncionariosDisponiveis(int idReparacao) {
-        return uDao.listarFuncionariosDisponiveis(idReparacao);
     }
 
     /**

@@ -109,10 +109,6 @@ public class PainelLogin extends JPanel implements ActionListener {
 
                     aplicacao.autenticar(utilizador);
                     limparCampos();
-                } else if (utilizador.getEstado() == EstadoUtilizador.PENDENTE) {
-                    Utilitarios.mostrarInfo(this, "Conta aguardando ativação pelo Gestor.");
-                } else if (utilizador.getEstado() == EstadoUtilizador.REJEITADO) {
-                    Utilitarios.mostrarInfo(this, "Conta com registo Recusado!");
                 } else if (utilizador.getEstado() == EstadoUtilizador.INATIVO) {
                     Utilitarios.mostrarInfo(this, "A tua conta encontra-se INATIVA. Contacta um gestor.");
                 } else if (utilizador.getEstado() == EstadoUtilizador.AGUARDA_REMOCAO) {

@@ -72,16 +72,6 @@ public class ControladorEquipamento {
     }
 
     /**
-     * Verifica se um código SKU já existe na base de dados.
-     *
-     * @param sku código SKU a verificar
-     * @return {@code true} se o SKU já existir, {@code false} caso contrário
-     */
-    public boolean skuExiste(int sku) {
-        return eDao.skuExiste(sku);
-    }
-
-    /**
      * Verifica se um código de modelo já existe na base de dados.
      *
      * @param codigoModelo código de modelo a verificar
@@ -118,7 +108,7 @@ public class ControladorEquipamento {
      * Pesquisa equipamentos de um cliente específico com base num critério e termo.
      *
      * @param IdCliente identificador do cliente
-     * @param escolha   critério de pesquisa (1 = marca, 2 = código SKU)
+     * @param escolha   critério de pesquisa (1 = marca, 2 = código de modelo)
      * @param termo     termo de pesquisa parcial
      * @return lista de equipamentos que correspondem aos critérios
      */

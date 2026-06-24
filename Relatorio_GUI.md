@@ -158,13 +158,10 @@ O desenvolvimento seguiu uma abordagem iterativa, onde cada funcionalidade foi i
 | | Utilizador.java | X | |
 | | Cliente.java | X | |
 | | Reparacao.java | X | |
-| | Peca.java | X | |
-| | TesteOperacionalidade.java | X | |
 | | Funcionario.java | | X |
 | | Equipamento.java | | X |
 | | Notificacao.java | | X |
 | | Log.java | | X |
-| | ReparacaoPeca.java | | X |
 
 **Tabela 2-3 - Planeamento Enums**
 
@@ -178,12 +175,11 @@ O desenvolvimento seguiu uma abordagem iterativa, onde cada funcionalidade foi i
 | Controlador | Tarefa | Santiago | Hugo |
 |---|---|:---:|:---:|
 | | ControladorUtilizador — autenticação e registo (login, registarGestor, registarFuncionario, existeGestor) | X | |
-| | ControladorUtilizador — gestão de contas e perfis (alterarEstadoConta, mudarEstadoConta, atualizarPerfil, apagarDados) | | X |
+| | ControladorUtilizador — gestão de contas e perfis (mudarEstadoConta, atualizarPerfil, apagarDados) | | X |
 | | ControladorUtilizador — listagens e pesquisas (listarOrdenados, pesquisar, obterPorId, logs) | X | |
 | | ControladorReparacao — criação e gestão de estados (registarPedido, gerirEstado, rejeitarPorFuncionario) | X | |
 | | ControladorReparacao — conclusão e arquivamento (concluirReparacao, arquivar, verificarAtrasos) | | X |
 | | ControladorReparacao — listagens e pesquisas (listarOrdenadas, pesquisar, porCliente, porFuncionario, porData) | | X |
-| | ControladorReparacao — gestão de peças e testes (registarPecaUsada, gerirEntradaPeca, registarTeste) | X | |
 | | ControladorEquipamento | X | |
 | | ControladorNotificacao | | X |
 | | ControladorLog | | X |
@@ -193,23 +189,21 @@ O desenvolvimento seguiu uma abordagem iterativa, onde cada funcionalidade foi i
 | DAO | Tarefa | Santiago | Hugo |
 |---|---|:---:|:---:|
 | | UtilizadorDAO — inserção, login e validação (inserir, validarLogin, existeGestor) | X | |
-| | UtilizadorDAO — gestão de estados e perfis (alterarEstado, atualizar, remover) | | X |
-| | UtilizadorDAO — listagens e pesquisas (listarPendentes, listarAtivos, ordenar, pesquisar) | | X |
+| | UtilizadorDAO — gestão de estados e perfis (atualizarEstado, atualizar, remover) | | X |
+| | UtilizadorDAO — listagens e pesquisas (listarAtivos, ordenar, pesquisar) | | X |
 | | ReparacaoDAO — inserção e gestão de estados (inserir, contarReparacoes, atualizarEstado, registarRejeicao) | X | |
 | | ReparacaoDAO — conclusão e arquivamento (concluir, listarConcluidas, arquivar, obterAtrasadas) | X | |
 | | ReparacaoDAO — listagens e pesquisas (listarOrdenadas, pesquisar, porCliente, porFuncionario, porData) | | X |
 | | EquipamentoDAO | X | |
 | | NotificacaoDAO | | X |
-| | PecaDAO | | X |
 | | LogDAO | X | |
-| | TesteOperacionalidadeDAO | X | |
 
 **Tabela 2-6 - Planeamento View**
 
 | View | Tarefa | Santiago | Hugo |
 |---|---|:---:|:---:|
 | | PainelLogin.java — autenticação (campos, validação, redireccionamento) | X | |
-| | PainelGestor.java — menu, ativar contas, gerir e arquivar reparações, editar utilizadores | X | |
+| | PainelGestor.java — menu, gerir e arquivar reparações, editar utilizadores | X | |
 | | PainelGestor.java — listagens/pesquisas, notificações, logs, estados de conta, pedidos de remoção e perfil | X | |
 | | PainelFuncionario.java — pedidos atribuídos, reparações em curso, perfil, notificações | X | |
 | | ExtractoReparacao.java — impressão do extrato (Printable/PrinterJob) | X | |
@@ -262,7 +256,7 @@ A tabela seguinte indica o estado de cada requisito da Avaliação Periódica (R
 | R9 | Componentes adequadas à informação (JList/JTable, não texto simples) | Implementado |
 | R10 | Ajuda contextual (tooltips) nos elementos dos formulários | Implementado |
 | R11 | Não apresentar boas-vindas/encerramento nem estatísticas de utilização | Não aplicável (dispensado pelo enunciado) |
-| R12 | Não implementar graficamente a manipulação de peças e testes | Não aplicável (dispensado); a lógica permanece na camada de negócio |
+| R12 | Não implementar graficamente a manipulação de peças e testes | Não aplicável (dispensado); a lógica de peças/testes foi removida da aplicação |
 | R13 | Gestores não criam outros gestores pela interface gráfica | Não aplicável (dispensado); apenas a criação do 1.º gestor no arranque |
 | R14 | Código harmonizado e consistente | Implementado |
 
@@ -285,9 +279,6 @@ Contém as classes que representam as entidades do domínio do problema:
 | Funcionario | Estende Utilizador. Adiciona atributos específicos do perfil de funcionário: NIF, telefone, morada, especialização (1-5) e data de início de atividade. |
 | Equipamento | Representa um equipamento registado no sistema. Contém: ID, ID do proprietário, marca, modelo, código SKU, data de fabrico e lote. |
 | Reparacao | Representa um processo de reparação. Contém todo o ciclo de vida: número de reparação, datas (criação, início, fim), tempo decorrido, custo, estado e observações. |
-| Peca | Representa uma peça em armazém. Contém: código interno, designação, fabricante e quantidade em stock. |
-| ReparacaoPeca | Classe de associação entre uma reparação e as peças utilizadas, registando a quantidade usada. |
-| TesteOperacionalidade | Representa um teste de operacionalidade realizado durante uma reparação. Contém: designação, descrição e data de realização. |
 | Log | Registo de auditoria do sistema. Contém: data, hora, username e descrição da ação realizada. |
 | Notificacao | Representa uma notificação do sistema. Contém: destinatário, mensagem, data de criação, estado (POR_LER/LIDA) e categoria. |
 
@@ -315,7 +306,7 @@ Os controladores implementam a lógica e servem como intermediários entre a cam
 |---|---|
 | ControladorUtilizador | Autenticação, registo de utilizadores (Gestor, Funcionário, Cliente), envio de email de confirmação, gestão de contas, edição de perfis, atualização de foto, listagem/pesquisa de utilizadores e consulta de logs. |
 | ControladorEquipamento | Registo de equipamentos, geração de SKU único, listagem, pesquisa e ordenação de equipamentos. |
-| ControladorReparacao | Ciclo de vida completo da reparação: criação de pedidos, gestão de estados, atribuição a funcionários, conclusão, arquivamento, verificação de atrasos e pesquisa por intervalo de datas. (A lógica de peças e testes existe nesta camada, embora não seja exposta na interface — R12.) |
+| ControladorReparacao | Ciclo de vida completo da reparação: criação de pedidos, gestão de estados, atribuição a funcionários, conclusão, arquivamento, verificação de atrasos e pesquisa por intervalo de datas. |
 | ControladorNotificacao | Geração de notificações individuais, listagem, contagem de não lidas e marcação como lidas, incluindo filtragem por categorias. |
 | ControladorLog | Registo automático de ações de auditoria com data e hora, listagem e pesquisa de logs. |
 
@@ -330,10 +321,8 @@ Os DAOs implementam as operações CRUD (Create, Read, Update, Delete) diretamen
 | UtilizadorDAO | Inserção com transação (tabelas UTILIZADOR + CLIENTE/FUNCIONARIO), validação de login, listagens com filtros, atualizações de perfil e remoção de dados. |
 | EquipamentoDAO | CRUD de equipamentos, verificação de SKU/modelo duplicados, pesquisas e ordenações. |
 | ReparacaoDAO | Gestão de reparações na BD: inserção, atualização de estado, conclusão, arquivamento, pesquisa por múltiplos critérios e cálculo de atrasos. |
-| PecaDAO | Gestão de peças na base de dados (camada de negócio, não exposta na interface — R12). |
 | NotificacaoDAO | CRUD de notificações com filtros por utilizador, estado e categoria. |
 | LogDAO | Inserção e consulta de registos de auditoria. |
-| TesteOperacionalidadeDAO | Inserção de testes de operacionalidade (camada de negócio, não exposta na interface — R12). |
 
 Todos os DAOs seguem o mesmo padrão:
 
@@ -355,11 +344,11 @@ A interface gráfica está dividida em classes específicas, desenvolvidas com *
 | PainelRegisto | Registo de novos utilizadores, com campos dinâmicos consoante o tipo (Cliente/Funcionário), upload de foto (R2), campo de observações (R4) e validação dos dados. |
 | PainelCliente | Menu do Cliente: inserir equipamentos, pedir reparações, editar perfil, listar/pesquisar equipamentos e reparações, ver notificações, consultar estado e solicitar remoção. |
 | PainelFuncionario | Menu do Funcionário: ver/aceitar/rejeitar pedidos atribuídos, concluir reparações em curso, editar perfil, notificações e solicitar remoção. |
-| PainelGestor | Menu do Gestor: ativar contas, gerir pedidos de reparação, arquivar processos, editar utilizadores, listagens/pesquisas, notificações, logs, alterar estados de conta e gestão de remoções. |
+| PainelGestor | Menu do Gestor: gerir pedidos de reparação, arquivar processos, editar utilizadores, listagens/pesquisas, notificações, logs, ativar/inativar contas e gestão de remoções. |
 | DialogoConfigBD | Caixa de diálogo (JDialog) para configurar os parâmetros de acesso à base de dados (IP, porto, nome, utilizador, password), gravando no ficheiro configbd.txt. |
 | ExtractoReparacao | Geração e impressão do extrato de uma reparação (R6), implementando a interface Printable (PrinterJob, Graphics2D). |
 
-Conforme o **R12**, a manipulação de peças e testes não é disponibilizada graficamente; a respetiva lógica permanece na camada de negócio (controladores e DAOs). Conforme o **R13**, não é disponibilizada a criação de novos gestores através da interface, sendo apenas criado automaticamente o primeiro gestor no arranque, caso não exista nenhum.
+Conforme o **R12**, a manipulação de peças e testes não é disponibilizada e foi removida da aplicação (as tabelas correspondentes permanecem no esquema da base de dados, mas não são utilizadas). Conforme o **R13**, não é disponibilizada a criação de novos gestores através da interface, sendo apenas criado automaticamente o primeiro gestor no arranque, caso não exista nenhum. O registo de novos utilizadores fica automaticamente ATIVO (ativação automática).
 
 #### Package util
 
@@ -429,12 +418,14 @@ O modelo relacional é composto pelas seguintes tabelas.
 | FUNCIONARIO | Dados específicos de funcionários (NIF, telefone, morada, especialização, data início) — FK para UTILIZADOR |
 | EQUIPAMENTO | Equipamentos registados — FK para UTILIZADOR (proprietário) |
 | REPARACAO | Processos de reparação — FK para EQUIPAMENTO e UTILIZADOR (funcionário) |
-| PECA | Peças em armazém (camada de negócio) |
-| REPARACAO_PECA | Tabela associativa entre reparações e peças (quantidade usada) |
-| TESTE_OPERACIONALIDADE | Testes realizados durante reparações — FK para REPARACAO |
+| PECA | Peças em armazém (legado do modelo de dados; não utilizada pela aplicação) |
+| REPARACAO_PECA | Associação reparação–peças (legado; não utilizada pela aplicação) |
+| TESTE_OPERACIONALIDADE | Testes de reparações (legado; não utilizada pela aplicação) |
 | NOTIFICACAO | Notificações do sistema — FK para UTILIZADOR (destinatário) |
 | LOGS | Registos de auditoria (data, hora, utilizador, ação) |
 | REPARACAO_REJEITADA | Registo de rejeições de reparações por funcionários — FK para REPARACAO e UTILIZADOR |
+
+> As tabelas PECA, REPARACAO_PECA e TESTE_OPERACIONALIDADE fazem parte do modelo de dados original mas não são manipuladas pela aplicação gráfica (R12).
 
 **Figura 3-1 - Modelo ER**
 *(inserir aqui o diagrama de Entidade-Relacionamento, acompanhado de legenda e de um texto a descrever a imagem, conforme exigência do modelo)*
@@ -475,18 +466,13 @@ model
     Funcionario.java
     Log.java
     Notificacao.java
-    Peca.java
     Reparacao.java
-    ReparacaoPeca.java
-    TesteOperacionalidade.java
     Utilizador.java
 repositorio
     EquipamentoDAO.java
     LogDAO.java
     NotificacaoDAO.java
-    PecaDAO.java
     ReparacaoDAO.java
-    TesteOperacionalidadeDAO.java
     UtilizadorDAO.java
 util
     ConexaoBD.java

@@ -41,7 +41,7 @@ public class PainelGestor extends JPanel implements ActionListener {
     private JPanel painelConteudo;
     private JPanel painelAtualConteudo;
     private JPanel painelFoto;
-    private JButton btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers;
+    private JButton btnGerirRep, btnArquivar, btnEditarUsers;
     private JButton btnListagens, btnNotifs, btnLogs, btnToggleContas;
     private JButton btnPedidosRemocao, btnMinhaRemocao, btnPerfil, btnLogout;
 
@@ -59,13 +59,12 @@ public class PainelGestor extends JPanel implements ActionListener {
         setLayout(new BorderLayout());
 
         JPanel painelMenu = new JPanel();
-        painelMenu.setLayout(new GridLayout(13, 1));
+        painelMenu.setLayout(new GridLayout(12, 1));
         painelMenu.setPreferredSize(new Dimension(220, 600));
 
         JLabel titulo = new JLabel("Menu Gestor");
         painelMenu.add(titulo);
 
-        btnAtivarContas = criarBotaoMenu("Ativar Contas", "Aprovar ou rejeitar contas pendentes");
         btnGerirRep = criarBotaoMenu("Gerir Reparações", "Atribuir reparações a funcionários");
         btnArquivar = criarBotaoMenu("Arquivar Processos", "Arquivar reparações finalizadas");
         btnEditarUsers = criarBotaoMenu("Editar Utilizadores", "Editar dados de utilizadores");
@@ -78,7 +77,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         btnMinhaRemocao = criarBotaoMenu("Minha Remoção", "Solicitar remoção da minha conta");
         btnLogout = criarBotaoMenu("Logout", "Terminar sessão");
 
-        JButton[] botoes = { btnAtivarContas, btnGerirRep, btnArquivar, btnEditarUsers,
+        JButton[] botoes = { btnGerirRep, btnArquivar, btnEditarUsers,
                 btnListagens, btnNotifs, btnLogs, btnToggleContas, btnPedidosRemocao,
                 btnPerfil, btnMinhaRemocao, btnLogout };
         int idx = 0;
@@ -133,9 +132,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             aplicacao.terminarSessao();
             return;
         }
-        if (src.equals(btnAtivarContas))
-            mostrarAtivarContas();
-        else if (src.equals(btnGerirRep))
+        if (src.equals(btnGerirRep))
             mostrarGerirReparacoes();
         else if (src.equals(btnArquivar))
             mostrarArquivar();
@@ -161,9 +158,8 @@ public class PainelGestor extends JPanel implements ActionListener {
      * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
      * 
      * @param novoPainel painel a apresentar
-     * @param nome       nome identificador do painel
      */
-    private void trocarConteudo(JPanel novoPainel, String nome) {
+    private void trocarConteudo(JPanel novoPainel) {
         painelConteudo.remove(painelAtualConteudo);
         painelAtualConteudo = novoPainel;
         painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);
@@ -188,58 +184,6 @@ public class PainelGestor extends JPanel implements ActionListener {
             i++;
         }
         return dados;
-    }
-
-    /**
-     * Apresenta o painel de ativação/rejeição de contas pendentes.
-     */
-    private void mostrarAtivarContas() {
-        JPanel p = new JPanel(new BorderLayout());
-        p.setBorder(BorderFactory.createTitledBorder("Ativar/Rejeitar Contas Pendentes"));
-        ArrayList<Utilizador> pend = cUtilizador.obterContasPendentes();
-        Object[][] d = new Object[pend.size()][4];
-        Iterator<Utilizador> it = pend.iterator();
-        int i = 0;
-        while (it.hasNext()) {
-            Utilizador u = it.next();
-            d[i] = new Object[] { u.getIdUtilizador(), u.getNome(), u.getLogin(), u.getTipo() };
-            i++;
-        }
-        JTable tabela = Utilitarios.criarTabela(new String[] { "ID", "Nome", "Username", "Tipo" }, d);
-        p.add(new JScrollPane(tabela), BorderLayout.CENTER);
-        JPanel btns = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JButton bAtiv = new JButton("Ativar");
-        bAtiv.setToolTipText("Aprovar a conta selecionada");
-        JButton bRej = new JButton("Rejeitar");
-        bRej.setToolTipText("Rejeitar a conta selecionada");
-        bAtiv.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(tabela);
-                if (id == -1) {
-                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
-                    return;
-                }
-                cUtilizador.alterarEstadoConta(id, true, utilizadorLogado.getLogin());
-                Utilitarios.mostrarSucesso(PainelGestor.this, "Conta ativada!");
-                mostrarAtivarContas();
-            }
-        });
-        bRej.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ev) {
-                int id = Utilitarios.obterIdSelecionado(tabela);
-                if (id == -1) {
-                    Utilitarios.mostrarErro(PainelGestor.this, "Selecione uma conta!");
-                    return;
-                }
-                cUtilizador.alterarEstadoConta(id, false, utilizadorLogado.getLogin());
-                Utilitarios.mostrarSucesso(PainelGestor.this, "Conta rejeitada!");
-                mostrarAtivarContas();
-            }
-        });
-        btns.add(bAtiv);
-        btns.add(bRej);
-        p.add(btns, BorderLayout.SOUTH);
-        trocarConteudo(p, "ativarContas");
     }
 
     /**
@@ -300,7 +244,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         btns.add(bAceitar);
         btns.add(bRejeitar);
         p.add(btns, BorderLayout.SOUTH);
-        trocarConteudo(p, "gerirRep");
+        trocarConteudo(p);
     }
 
     /**
@@ -328,7 +272,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         p.add(bArq, BorderLayout.SOUTH);
-        trocarConteudo(p, "arquivar");
+        trocarConteudo(p);
     }
 
     /**
@@ -404,7 +348,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         pBtns.add(bSave);
         form.add(pBtns);
         p.add(form, BorderLayout.SOUTH);
-        trocarConteudo(p, "editarUsers");
+        trocarConteudo(p);
     }
 
     /**
@@ -591,7 +535,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                 }
             }
         });
-        trocarConteudo(p, "listagens");
+        trocarConteudo(p);
     }
 
     /**
@@ -648,7 +592,7 @@ public class PainelGestor extends JPanel implements ActionListener {
                 mostrarNotificacoes();
             }
         });
-        trocarConteudo(p, "notifs");
+        trocarConteudo(p);
     }
 
     /**
@@ -693,7 +637,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         };
         bPesq.addActionListener(carregarLogs);
         bTodos.addActionListener(carregarLogs);
-        trocarConteudo(p, "logs");
+        trocarConteudo(p);
     }
 
     /**
@@ -756,7 +700,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         btns.add(bAtiv);
         btns.add(bInat);
         p.add(btns, BorderLayout.SOUTH);
-        trocarConteudo(p, "toggleContas");
+        trocarConteudo(p);
     }
 
     /**
@@ -819,7 +763,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         btns.add(bAceitar);
         btns.add(bRecusar);
         p.add(btns, BorderLayout.SOUTH);
-        trocarConteudo(p, "pedidosRemocao");
+        trocarConteudo(p);
     }
     /**
      * Apresenta o painel de edição do perfil do gestor.
@@ -881,7 +825,7 @@ public class PainelGestor extends JPanel implements ActionListener {
             }
         });
         p.add(btnGuardar, BorderLayout.SOUTH);
-        trocarConteudo(p, "perfil");
+        trocarConteudo(p);
     }
 
     /**

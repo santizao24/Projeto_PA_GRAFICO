@@ -7,19 +7,14 @@ import java.util.Date;
 import java.util.ArrayList;
 
 import Enums.EstadoReparacao;
-import model.Peca;
 import model.Reparacao;
-import model.TesteOperacionalidade;
 import Enums.CategoriaNotificacao;
-import repositorio.PecaDAO;
 import repositorio.ReparacaoDAO;
-import repositorio.TesteOperacionalidadeDAO;
 
 /**
  * Controlador responsável pela lógica de negócio relacionada com reparações.
  * Gere todo o ciclo de vida de uma reparação, desde a criação do pedido
- * até à conclusão e arquivamento, incluindo gestão de peças, testes
- * de operacionalidade e verificação de prazos.
+ * até à conclusão e arquivamento, incluindo a verificação de prazos.
  *
  * @author Santiago e Hugo
  * @version 1.0
@@ -27,8 +22,6 @@ import repositorio.TesteOperacionalidadeDAO;
 public class ControladorReparacao {
 
     private ReparacaoDAO rDao = new ReparacaoDAO();
-    private PecaDAO pDao = new PecaDAO();
-    private TesteOperacionalidadeDAO tDao = new TesteOperacionalidadeDAO();
     private ControladorNotificacao cNotificacao = new ControladorNotificacao();
     private ControladorLog cLog = new ControladorLog();
     private static String ultimaVerificacaoAtrasos = "";
@@ -122,78 +115,6 @@ public class ControladorReparacao {
     }
 
     /**
-     * Lista todas as peças disponíveis em stock no armazém.
-     *
-     * @return lista de peças com quantidade superior a zero
-     */
-    public ArrayList<Peca> listarPecasComStock() {
-        return pDao.listarPecasComStock();
-    }
-
-    /**
-     * Lista todas as peças registadas no sistema, independentemente do stock.
-     *
-     * @return lista de todas as peças
-     */
-    public ArrayList<Peca> listarTodasPecas() {
-        return pDao.listarTodasPecas();
-    }
-
-    /**
-     * Regista a utilização de uma peça numa reparação.
-     * Verifica disponibilidade de stock e gera alertas quando o stock desce abaixo
-     * de 10 unidades.
-     *
-     * @param idReparacao    identificador da reparação
-     * @param codPeca        código interno da peça
-     * @param qtd            quantidade a utilizar
-     * @param usernameLogado username do utilizador autenticado (para log)
-     * @return {@code true} se a peça foi registada com sucesso, {@code false} se
-     *         não há stock suficiente
-     */
-    public boolean registarPecaUsada(int idReparacao, String codPeca, int qtd, String usernameLogado) {
-        Peca p = pDao.obterPecaPorCodigo(codPeca);
-        if (p != null && p.getQuantidade() >= qtd) {
-            pDao.registarPecaUsada(idReparacao, codPeca, qtd);
-
-            Peca pecaAtualizada = pDao.obterPecaPorCodigo(codPeca);
-            if (pecaAtualizada != null && pecaAtualizada.getQuantidade() < 10) {
-                cNotificacao.gerarNotificacaoParaGestores(
-                        "ALERTA DE STOCK: A peça '" + pecaAtualizada.getDesignacao() + "' (Cód: " + codPeca
-                                + ") desceu para " + pecaAtualizada.getQuantidade() + " unidades!",
-                        CategoriaNotificacao.STOCK);
-            }
-            cLog.registarAcao(usernameLogado,
-                    "Usou " + qtd + " unidade(s) da peça " + codPeca + " na reparação ID: " + idReparacao);
-            return true;
-        } else {
-            if (p != null) {
-                cNotificacao.gerarNotificacaoParaGestores(
-                        "ALERTA DE STOCK: A peça '" + p.getDesignacao() + "' (Cód: " + codPeca
-                                + ") não tem stock suficiente para ser usada na reparação ID: " + idReparacao,
-                        CategoriaNotificacao.STOCK);
-            }
-            return false;
-        }
-    }
-
-    /**
-     * Regista um teste de operacionalidade numa reparação em curso.
-     *
-     * @param idReparacao    identificador da reparação
-     * @param designacao     designação do teste (ex: Teste de Bateria)
-     * @param descricao      descrição ou resultado do teste
-     * @param usernameLogado username do utilizador autenticado (para log)
-     */
-    public void registarTeste(int idReparacao, String designacao, String descricao, String usernameLogado) {
-        String dataAtual = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
-        TesteOperacionalidade teste = new TesteOperacionalidade(0, idReparacao, designacao, descricao, dataAtual);
-        tDao.inserirTeste(teste);
-        cLog.registarAcao(usernameLogado,
-                "Realizou teste '" + designacao + "' na reparação ID: " + idReparacao);
-    }
-
-    /**
      * Conclui o processo de reparação, registando a data de fim, tempo decorrido,
      * custo e observações.
      * Calcula automaticamente o tempo decorrido e notifica o cliente da conclusão.
@@ -236,40 +157,6 @@ public class ControladorReparacao {
         } catch (Exception e) {
             System.out.println("Erro técnico ao calcular o tempo da reparação.");
         }
-    }
-
-    /**
-     * Gere a entrada de peças no armazém. Se a peça já existir, atualiza a
-     * quantidade;
-     * caso contrário, regista uma nova peça.
-     *
-     * @param codPeca    código interno da peça
-     * @param designacao designação da peça (ignorado se peça já existir)
-     * @param fabricante nome do fabricante (ignorado se peça já existir)
-     * @param qtd        quantidade a adicionar ao stock
-     * @return mensagem de resultado da operação
-     */
-    public String gerirEntradaPeca(String codPeca, String designacao, String fabricante, int qtd) {
-        Peca pecaExistente = pDao.obterPecaPorCodigo(codPeca);
-
-        if (pecaExistente != null) {
-            pDao.atualizarQuantidadePeca(codPeca, qtd);
-            return "Stock da peça atualizado com sucesso no armazém!";
-        } else {
-            Peca novaPeca = new Peca(codPeca, designacao, fabricante, qtd);
-            pDao.inserirPeca(novaPeca);
-            return "Nova peça registada com sucesso no armazém!";
-        }
-    }
-
-    /**
-     * Obtém uma peça existente a partir do seu código interno.
-     *
-     * @param codPeca código interno da peça
-     * @return objeto {@link Peca} se encontrada, ou {@code null} caso contrário
-     */
-    public Peca obterPecaExistente(String codPeca) {
-        return pDao.obterPecaPorCodigo(codPeca);
     }
 
     /**
@@ -405,9 +292,9 @@ public class ControladorReparacao {
                     + " reparação(ões) com mais de 10 dias sem finalizar!";
 
             cNotificacao.gerarNotificacaoParaGestores(mensagem, CategoriaNotificacao.PRAZO);
-
-            ultimaVerificacaoAtrasos = dataHoje;
         }
+
+        ultimaVerificacaoAtrasos = dataHoje;
     }
 
     /**

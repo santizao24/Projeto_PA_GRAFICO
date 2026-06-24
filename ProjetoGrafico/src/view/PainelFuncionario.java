@@ -22,7 +22,6 @@ import Enums.CategoriaNotificacao;
  * Painel com as funcionalidades disponíveis para o utilizador do tipo
  * Funcionário.
  * Inclui gestão de reparações atribuídas, perfil, notificações e consultas.
- * A manipulação de peças e testes é gerida internamente.
  *
  * @author Santiago e Hugo
  * @version 1.0
@@ -187,7 +186,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         painelBtns.add(btnAceitar);
         painelBtns.add(btnRejeitar);
         p.add(painelBtns, BorderLayout.SOUTH);
-        trocarConteudo(p, "pedidosNovos");
+        trocarConteudo(p);
     }
 
     /**
@@ -251,7 +250,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             }
         });
         p.add(painelConclusao, BorderLayout.SOUTH);
-        trocarConteudo(p, "emCurso");
+        trocarConteudo(p);
     }
 
     /**
@@ -322,7 +321,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             }
         });
         p.add(btnGuardar, BorderLayout.SOUTH);
-        trocarConteudo(p, "perfil");
+        trocarConteudo(p);
     }
 
     /**
@@ -351,7 +350,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                         converterReparacoes(lista));
             }
         });
-        trocarConteudo(p, "listarRep");
+        trocarConteudo(p);
     }
 
     /**
@@ -392,7 +391,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
                         converterReparacoes(res));
             }
         });
-        trocarConteudo(p, "pesqRep");
+        trocarConteudo(p);
     }
 
     /**
@@ -424,7 +423,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             }
         });
         p.add(btnMarcar, BorderLayout.SOUTH);
-        trocarConteudo(p, "notifs");
+        trocarConteudo(p);
     }
 
     /**
@@ -468,9 +467,8 @@ public class PainelFuncionario extends JPanel implements ActionListener {
      * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
      *
      * @param novoPainel painel a apresentar
-     * @param nome       nome identificador do painel
      */
-    private void trocarConteudo(JPanel novoPainel, String nome) {
+    private void trocarConteudo(JPanel novoPainel) {
         painelConteudo.remove(painelAtualConteudo);
         painelAtualConteudo = novoPainel;
         painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);

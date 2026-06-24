@@ -207,7 +207,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         });
         p.add(btnSubmeter);
 
-        trocarConteudo(p, "inserirEquip");
+        trocarConteudo(p);
     }
 
     /**
@@ -252,7 +252,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         painelAcao.add(btnPedir);
         p.add(painelAcao, BorderLayout.SOUTH);
 
-        trocarConteudo(p, "pedirRep");
+        trocarConteudo(p);
     }
 
     /**
@@ -324,7 +324,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         });
         p.add(btnGuardar, BorderLayout.SOUTH);
 
-        trocarConteudo(p, "perfil");
+        trocarConteudo(p);
     }
 
     /**
@@ -407,7 +407,7 @@ public class PainelCliente extends JPanel implements ActionListener {
             }
         });
 
-        trocarConteudo(p, "listarRep");
+        trocarConteudo(p);
     }
 
     /**
@@ -449,7 +449,7 @@ public class PainelCliente extends JPanel implements ActionListener {
             }
         });
 
-        trocarConteudo(p, "pesqRep");
+        trocarConteudo(p);
     }
 
     /**
@@ -485,7 +485,7 @@ public class PainelCliente extends JPanel implements ActionListener {
             }
         });
 
-        trocarConteudo(p, "listarEquip");
+        trocarConteudo(p);
     }
 
     /**
@@ -534,7 +534,7 @@ public class PainelCliente extends JPanel implements ActionListener {
             }
         });
 
-        trocarConteudo(p, "pesqEquip");
+        trocarConteudo(p);
     }
 
     /**
@@ -568,7 +568,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         });
         p.add(btnMarcar, BorderLayout.SOUTH);
 
-        trocarConteudo(p, "notifs");
+        trocarConteudo(p);
     }
 
     /**
@@ -611,7 +611,7 @@ public class PainelCliente extends JPanel implements ActionListener {
         JList<String> listaSwing = Utilitarios.criarLista(dados);
         p.add(new JScrollPane(listaSwing), BorderLayout.CENTER);
 
-        trocarConteudo(p, "consultarEstado");
+        trocarConteudo(p);
     }
 
     /**
@@ -637,9 +637,8 @@ public class PainelCliente extends JPanel implements ActionListener {
      * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
      *
      * @param novoPainel painel a apresentar
-     * @param nome       nome identificador do painel
      */
-    private void trocarConteudo(JPanel novoPainel, String nome) {
+    private void trocarConteudo(JPanel novoPainel) {
         painelConteudo.remove(painelAtualConteudo);
         painelAtualConteudo = novoPainel;
         painelConteudo.add(painelAtualConteudo, BorderLayout.CENTER);

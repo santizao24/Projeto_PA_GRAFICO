@@ -97,6 +97,7 @@ public class EquipamentoDAO {
                 lista.add(eq);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -144,6 +145,7 @@ public class EquipamentoDAO {
                 existe = true;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -191,6 +193,7 @@ public class EquipamentoDAO {
                 existe = true;
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -248,6 +251,7 @@ public class EquipamentoDAO {
                 lista.add(eq);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -308,6 +312,7 @@ public class EquipamentoDAO {
                 lista.add(eq);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -336,13 +341,13 @@ public class EquipamentoDAO {
      * pesquisa.
      *
      * @param idCliente     identificador do cliente
-     * @param escolha       critério de pesquisa (1 = marca, 2 = código SKU)
+     * @param escolha       critério de pesquisa (1 = marca, 2 = código de modelo)
      * @param termoPesquisa termo de pesquisa parcial
      * @return lista de equipamentos que correspondem aos critérios
      */
     public ArrayList<Equipamento> pesquisarEquipamentosCliente(int idCliente, int escolha, String termoPesquisa) {
         ArrayList<Equipamento> lista = new ArrayList<>();
-        String coluna = (escolha == 1) ? "E_MARCA" : "E_CODIGO_SKU";
+        String coluna = (escolha == 1) ? "E_MARCA" : "E_CODIGO_MODELO";
         String sql = "SELECT * FROM EQUIPAMENTO WHERE U_ID_UTILIZADOR = ? AND " + coluna + " LIKE ?";
         Connection conn = null;
         PreparedStatement ps = null;
@@ -368,6 +373,7 @@ public class EquipamentoDAO {
                 lista.add(eq);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {

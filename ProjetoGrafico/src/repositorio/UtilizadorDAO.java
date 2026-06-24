@@ -193,6 +193,7 @@ public class UtilizadorDAO {
                 utilizadorEncontrado.setObservacoes(rs.getString("U_OBSERVACOES"));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -214,83 +215,6 @@ public class UtilizadorDAO {
             }
         }
         return utilizadorEncontrado;
-    }
-
-    /**
-     * Lista todos os utilizadores com estado PENDENTE ou REJEITADO (excluindo
-     * gestores).
-     *
-     * @return lista de utilizadores pendentes ou rejeitados
-     */
-    public ArrayList<Utilizador> listarUtilizadoresPendentes() {
-        ArrayList<Utilizador> lista = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        String sql = "SELECT U_ID_UTILIZADOR, U_NOME, U_USERNAME, U_EMAIL, U_TIPO, U_ESTADO, U_FOTO, U_OBSERVACOES FROM UTILIZADOR WHERE (U_ESTADO = 'PENDENTE' OR U_ESTADO = 'REJEITADO') AND U_TIPO != 'GESTOR'";
-
-        try {
-            conn = ConexaoBD.obterConexao();
-            ps = conn.prepareStatement(sql);
-            ps.clearParameters();
-
-            rs = ps.executeQuery();
-
-            while (rs.next()) {
-                String tipoStr = rs.getString("U_TIPO");
-                String tipo = (tipoStr != null) ? tipoStr.toUpperCase() : "";
-                String estadoStr = rs.getString("U_ESTADO");
-                String estado = (estadoStr != null) ? estadoStr.toUpperCase() : "";
-                TipoUtilizador tipoEnum;
-                EstadoUtilizador estadoUtilizador;
-
-                try {
-                    tipoEnum = TipoUtilizador.valueOf(tipo);
-                } catch (Exception e) {
-                    tipoEnum = TipoUtilizador.INDEFINIDO;
-                }
-
-                try {
-                    estadoUtilizador = EstadoUtilizador.valueOf(estado);
-                } catch (Exception e) {
-                    estadoUtilizador = EstadoUtilizador.PENDENTE;
-                }
-
-                Utilizador u = new Utilizador(
-                        rs.getInt("U_ID_UTILIZADOR"),
-                        rs.getString("U_USERNAME"),
-                        "",
-                        rs.getString("U_NOME"),
-                        rs.getString("U_EMAIL"),
-                        tipoEnum,
-                        estadoUtilizador);
-                u.setFotoPath(rs.getString("U_FOTO"));
-                u.setObservacoes(rs.getString("U_OBSERVACOES"));
-                lista.add(u);
-            }
-        } catch (Exception e) {
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception e) {
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (Exception e) {
-                }
-            }
-            if (conn != null) {
-                try {
-                    ConexaoBD.fecharBd(conn);
-                } catch (Exception e) {
-                }
-            }
-        }
-        return lista;
     }
 
     /**
@@ -326,6 +250,7 @@ public class UtilizadorDAO {
                 lista.add(u);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -347,106 +272,6 @@ public class UtilizadorDAO {
             }
         }
         return lista;
-    }
-
-    /**
-     * Lista funcionários ativos que não tenham rejeitado uma reparação específica.
-     *
-     * @param idReparacao identificador da reparação
-     * @return lista de funcionários disponíveis
-     */
-    public ArrayList<Utilizador> listarFuncionariosDisponiveis(int idReparacao) {
-        ArrayList<Utilizador> lista = new ArrayList<>();
-        Connection conn = null;
-        PreparedStatement ps = null;
-        ResultSet rs = null;
-
-        String sql = "SELECT U_ID_UTILIZADOR, U_USERNAME, U_NOME, U_EMAIL, U_FOTO, U_OBSERVACOES FROM UTILIZADOR "
-                + "WHERE U_TIPO = 'FUNCIONARIO' AND U_ESTADO = 'ATIVO' "
-                + "AND U_ID_UTILIZADOR NOT IN (SELECT U_ID_UTILIZADOR FROM REPARACAO_REJEITADA WHERE R_ID_REPARACAO = ?)";
-
-        try {
-            conn = ConexaoBD.obterConexao();
-            ps = conn.prepareStatement(sql);
-            ps.clearParameters();
-            ps.setInt(1, idReparacao);
-
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                Utilizador u = new Utilizador(
-                        rs.getInt("U_ID_UTILIZADOR"),
-                        rs.getString("U_USERNAME"),
-                        "",
-                        rs.getString("U_NOME"),
-                        rs.getString("U_EMAIL"),
-                        TipoUtilizador.FUNCIONARIO,
-                        EstadoUtilizador.ATIVO);
-                u.setFotoPath(rs.getString("U_FOTO"));
-                u.setObservacoes(rs.getString("U_OBSERVACOES"));
-                lista.add(u);
-            }
-        } catch (SQLException e) {
-        } finally {
-            if (rs != null) {
-                try {
-                    rs.close();
-                } catch (Exception e) {
-                }
-            }
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (Exception e) {
-                }
-            }
-            if (conn != null) {
-                try {
-                    ConexaoBD.fecharBd(conn);
-                } catch (Exception e) {
-                }
-            }
-        }
-        return lista;
-    }
-
-    /**
-     * Altera o estado de um utilizador para ATIVO ou REJEITADO.
-     *
-     * @param aId    identificador do utilizador
-     * @param ativar {@code true} para estado ATIVO, {@code false} para REJEITADO
-     * @return {@code true} se atualizado com sucesso, {@code false} caso contrário
-     */
-    public boolean alterarEstadoUtilizador(int aId, boolean ativar) {
-        Connection conn = null;
-        PreparedStatement ps = null;
-
-        String estado = ativar ? "ATIVO" : "REJEITADO";
-        String sql = "UPDATE UTILIZADOR SET U_ESTADO = '" + estado + "' WHERE U_ID_UTILIZADOR = ?";
-
-        try {
-            conn = ConexaoBD.obterConexao();
-            ps = conn.prepareStatement(sql);
-            ps.clearParameters();
-
-            ps.setInt(1, aId);
-            ps.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            return false;
-        } finally {
-            if (ps != null) {
-                try {
-                    ps.close();
-                } catch (Exception e) {
-                }
-            }
-            if (conn != null) {
-                try {
-                    ConexaoBD.fecharBd(conn);
-                } catch (Exception e) {
-                }
-            }
-        }
     }
 
     /**
@@ -475,6 +300,7 @@ public class UtilizadorDAO {
                 }
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -547,6 +373,7 @@ public class UtilizadorDAO {
                 lista.add(u);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -816,6 +643,7 @@ public class UtilizadorDAO {
                 lista.add(u);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -890,6 +718,7 @@ public class UtilizadorDAO {
                 u.setObservacoes(rs.getString("U_OBSERVACOES"));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -978,6 +807,7 @@ public class UtilizadorDAO {
                 lista.add(u);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {

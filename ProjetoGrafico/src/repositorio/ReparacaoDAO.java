@@ -93,6 +93,7 @@ public class ReparacaoDAO {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -163,6 +164,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -268,6 +270,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -363,6 +366,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -488,6 +492,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -538,6 +543,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -583,6 +589,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -644,6 +651,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -700,6 +708,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -765,6 +774,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -818,6 +828,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -870,6 +881,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -919,6 +931,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -968,6 +981,7 @@ public class ReparacaoDAO {
                 idCliente = rs.getInt(1);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -1015,6 +1029,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -1060,6 +1075,7 @@ public class ReparacaoDAO {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {

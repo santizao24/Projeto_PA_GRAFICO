@@ -90,6 +90,7 @@ public class LogDAO {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -144,6 +145,7 @@ public class LogDAO {
             }
 
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {

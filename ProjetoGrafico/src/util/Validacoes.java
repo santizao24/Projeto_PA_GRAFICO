@@ -1,60 +1,13 @@
 package util;
 
-import java.util.Scanner;
-import java.util.InputMismatchException;
-
 /**
  * Classe utilitária que contém métodos estáticos para validação de dados de
- * entrada.
- * Inclui validações de leitura segura (inteiros e doubles) e validações de
- * formato
- * para telefone, NIF e email.
+ * entrada (telefone, NIF, email e normalização de datas).
  *
  * @author Santiago
  * @version 1.0
  */
 public class Validacoes {
-
-    /**
-     * Lê um número inteiro a partir da entrada do utilizador, repetindo a leitura
-     * até que um valor válido seja introduzido.
-     *
-     * @param ler objeto {@link Scanner} para leitura da entrada
-     * @return o valor inteiro lido com sucesso
-     */
-    public static int lerInteiro(Scanner ler) {
-        while (true) {
-            try {
-                int valor = ler.nextInt();
-                ler.nextLine();
-                return valor;
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida! Por favor introduza um número.");
-                ler.nextLine();
-            }
-        }
-    }
-
-    /**
-     * Lê um número decimal (double) a partir da entrada do utilizador, repetindo a
-     * leitura
-     * até que um valor válido seja introduzido.
-     *
-     * @param ler objeto {@link Scanner} para leitura da entrada
-     * @return o valor double lido com sucesso
-     */
-    public static double lerDouble(Scanner ler) {
-        while (true) {
-            try {
-                double valor = ler.nextDouble();
-                ler.nextLine();
-                return valor;
-            } catch (InputMismatchException e) {
-                System.out.println("Entrada inválida! Por favor introduza um número válido.");
-                ler.nextLine();
-            }
-        }
-    }
 
     /**
      * Valida um número de telefone português.

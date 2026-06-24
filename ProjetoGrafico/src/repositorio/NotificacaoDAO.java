@@ -112,6 +112,7 @@ public class NotificacaoDAO {
                 lista.add(n);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -159,6 +160,7 @@ public class NotificacaoDAO {
                 total = rs.getInt(1);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -270,6 +272,7 @@ public class NotificacaoDAO {
                 lista.add(n);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
@@ -320,6 +323,7 @@ public class NotificacaoDAO {
                 total = rs.getInt(1);
             }
         } catch (SQLException e) {
+            e.printStackTrace();
         } finally {
             if (rs != null) {
                 try {
