@@ -125,32 +125,31 @@ public class PainelCliente extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (utilizadorLogado == null)
             return;
-        Object src = e.getSource();
 
-        if (src.equals(btnLogout)) {
+        if (e.getSource().equals(btnLogout)) {
             cUtilizador.registarFimSessao(utilizadorLogado.getLogin());
             aplicacao.terminarSessao();
             return;
         }
-        if (src.equals(btnInserirEquip))
+        if (e.getSource().equals(btnInserirEquip))
             mostrarInserirEquipamento();
-        else if (src.equals(btnPedirRep))
+        else if (e.getSource().equals(btnPedirRep))
             mostrarPedirReparacao();
-        else if (src.equals(btnPerfil))
+        else if (e.getSource().equals(btnPerfil))
             mostrarEditarPerfil();
-        else if (src.equals(btnListarRep))
+        else if (e.getSource().equals(btnListarRep))
             mostrarListarReparacoes();
-        else if (src.equals(btnPesquisarRep))
+        else if (e.getSource().equals(btnPesquisarRep))
             mostrarPesquisarReparacoes();
-        else if (src.equals(btnListarEquip))
+        else if (e.getSource().equals(btnListarEquip))
             mostrarListarEquipamentos();
-        else if (src.equals(btnPesquisarEquip))
+        else if (e.getSource().equals(btnPesquisarEquip))
             mostrarPesquisarEquipamentos();
-        else if (src.equals(btnNotificacoes))
+        else if (e.getSource().equals(btnNotificacoes))
             mostrarNotificacoes();
-        else if (src.equals(btnRemocao))
+        else if (e.getSource().equals(btnRemocao))
             solicitarRemocao();
-        else if (src.equals(btnConsultarRep))
+        else if (e.getSource().equals(btnConsultarRep))
             mostrarConsultarEstado();
     }
 

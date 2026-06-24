@@ -125,32 +125,31 @@ public class PainelGestor extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (utilizadorLogado == null)
             return;
-        Object src = e.getSource();
 
-        if (src.equals(btnLogout)) {
+        if (e.getSource().equals(btnLogout)) {
             cUtilizador.registarFimSessao(utilizadorLogado.getLogin());
             aplicacao.terminarSessao();
             return;
         }
-        if (src.equals(btnGerirRep))
+        if (e.getSource().equals(btnGerirRep))
             mostrarGerirReparacoes();
-        else if (src.equals(btnArquivar))
+        else if (e.getSource().equals(btnArquivar))
             mostrarArquivar();
-        else if (src.equals(btnEditarUsers))
+        else if (e.getSource().equals(btnEditarUsers))
             mostrarEditarUsers();
-        else if (src.equals(btnListagens))
+        else if (e.getSource().equals(btnListagens))
             mostrarListagens();
-        else if (src.equals(btnNotifs))
+        else if (e.getSource().equals(btnNotifs))
             mostrarNotificacoes();
-        else if (src.equals(btnLogs))
+        else if (e.getSource().equals(btnLogs))
             mostrarLogs();
-        else if (src.equals(btnToggleContas))
+        else if (e.getSource().equals(btnToggleContas))
             mostrarToggleContas();
-        else if (src.equals(btnPedidosRemocao))
+        else if (e.getSource().equals(btnPedidosRemocao))
             mostrarPedidosRemocao();
-        else if (src.equals(btnPerfil))
+        else if (e.getSource().equals(btnPerfil))
             mostrarPerfil();
-        else if (src.equals(btnMinhaRemocao))
+        else if (e.getSource().equals(btnMinhaRemocao))
             solicitarMinhaRemocao();
     }
 

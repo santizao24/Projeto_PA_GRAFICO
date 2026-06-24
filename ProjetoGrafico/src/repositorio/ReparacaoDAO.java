@@ -1028,7 +1028,7 @@ public class ReparacaoDAO {
             while (rs.next()) {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (rs != null) {
@@ -1074,7 +1074,7 @@ public class ReparacaoDAO {
             while (rs.next()) {
                 lista.add(criarReparacaoDoResultSet(rs));
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             if (rs != null) {

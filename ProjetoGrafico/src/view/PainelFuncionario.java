@@ -116,25 +116,24 @@ public class PainelFuncionario extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (utilizadorLogado == null)
             return;
-        Object src = e.getSource();
-        if (src.equals(btnLogout)) {
+        if (e.getSource().equals(btnLogout)) {
             cUtilizador.registarFimSessao(utilizadorLogado.getLogin());
             aplicacao.terminarSessao();
             return;
         }
-        if (src.equals(btnPedidosNovos))
+        if (e.getSource().equals(btnPedidosNovos))
             mostrarPedidosAtribuidos();
-        else if (src.equals(btnEmCurso))
+        else if (e.getSource().equals(btnEmCurso))
             mostrarEmCurso();
-        else if (src.equals(btnPerfil))
+        else if (e.getSource().equals(btnPerfil))
             mostrarPerfil();
-        else if (src.equals(btnListarRep))
+        else if (e.getSource().equals(btnListarRep))
             mostrarListarRep();
-        else if (src.equals(btnPesquisarRep))
+        else if (e.getSource().equals(btnPesquisarRep))
             mostrarPesquisarRep();
-        else if (src.equals(btnNotificacoes))
+        else if (e.getSource().equals(btnNotificacoes))
             mostrarNotificacoes();
-        else if (src.equals(btnRemocao))
+        else if (e.getSource().equals(btnRemocao))
             solicitarRemocao();
     }
 
