@@ -103,13 +103,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         this.utilizadorLogado = u;
     }
 
-    /**
-     * Cria um botão para o menu lateral com texto, tooltip e listener.
-     *
-     * @param texto   texto do botão
-     * @param tooltip texto de ajuda ao passar o rato
-     * @return botão configurado
-     */
     private JButton criarBotaoMenu(String texto, String tooltip) {
         JButton btn = new JButton(texto);
         btn.setToolTipText(tooltip);
@@ -153,9 +146,6 @@ public class PainelCliente extends JPanel implements ActionListener {
             mostrarConsultarEstado();
     }
 
-    /**
-     * Apresenta o painel de inserção de um novo equipamento no sistema.
-     */
     private void mostrarInserirEquipamento() {
         JPanel p = new JPanel();
         p.setLayout(new GridLayout(6, 1));
@@ -209,10 +199,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel para pedir a reparação de um equipamento associado ao
-     * cliente.
-     */
     private void mostrarPedirReparacao() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pedir Reparação"));
@@ -254,9 +240,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel de edição do perfil (alterar password).
-     */
     private void mostrarEditarPerfil() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
@@ -326,10 +309,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel com a listagem de todos os pedidos de reparação do
-     * cliente.
-     */
     private void mostrarListarReparacoes() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Listar Pedidos de Reparação"));
@@ -409,9 +388,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel para pesquisar reparações do cliente por termo.
-     */
     private void mostrarPesquisarReparacoes() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pesquisar Reparações"));
@@ -451,9 +427,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel com a listagem de todos os equipamentos do cliente.
-     */
     private void mostrarListarEquipamentos() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Listar Equipamentos"));
@@ -487,9 +460,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel para pesquisar equipamentos do cliente por termo.
-     */
     private void mostrarPesquisarEquipamentos() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pesquisar Equipamentos"));
@@ -536,10 +506,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o dashboard de notificações do cliente.
-     * Permite ler e marcar notificações como lidas.
-     */
     private void mostrarNotificacoes() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("As Minhas Notificações"));
@@ -570,10 +536,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Permite ao cliente solicitar a remoção da sua conta.
-     * O estado muda para AGUARDA_REMOCAO e o Gestor recebe uma notificação.
-     */
     private void solicitarRemocao() {
         boolean confirma = Utilitarios.confirmar(this,
                 "Ao solicitar a remoção, a tua conta será removida do sistema.\n"
@@ -590,10 +552,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Apresenta o painel para consultar rapidamente o estado de uma reparação
-     * através do seu número de identificação.
-     */
     private void mostrarConsultarEstado() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Estado das Minhas Reparações"));
@@ -613,13 +571,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Converte uma lista de reparações para uma matriz de objetos
-     * para apresentação numa JTable.
-     *
-     * @param lista lista de reparações a converter
-     * @return matriz de dados com ID, número, data e estado
-     */
     private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
         Object[][] dados = new Object[lista.size()][4];
         Iterator<Reparacao> it = lista.iterator();
@@ -632,11 +583,6 @@ public class PainelCliente extends JPanel implements ActionListener {
         return dados;
     }
 
-    /**
-     * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
-     *
-     * @param novoPainel painel a apresentar
-     */
     private void trocarConteudo(JPanel novoPainel) {
         painelConteudo.remove(painelAtualConteudo);
         painelAtualConteudo = novoPainel;

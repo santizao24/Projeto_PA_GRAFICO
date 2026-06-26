@@ -103,13 +103,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         this.utilizadorLogado = u;
     }
 
-    /**
-     * Cria um botão para o menu lateral com texto, tooltip e listener.
-     *
-     * @param texto   texto do botão
-     * @param tooltip texto de ajuda ao passar o rato
-     * @return botão configurado
-     */
     private JButton criarBotaoMenu(String texto, String tooltip) {
         JButton btn = new JButton(texto);
         btn.setToolTipText(tooltip);
@@ -153,11 +146,6 @@ public class PainelGestor extends JPanel implements ActionListener {
             solicitarMinhaRemocao();
     }
 
-    /**
-     * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
-     * 
-     * @param novoPainel painel a apresentar
-     */
     private void trocarConteudo(JPanel novoPainel) {
         painelConteudo.remove(painelAtualConteudo);
         painelAtualConteudo = novoPainel;
@@ -166,13 +154,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         painelConteudo.repaint();
     }
 
-    /**
-     * Converte uma lista de reparações para uma matriz de objetos
-     * para apresentação numa JTable.
-     *
-     * @param lista lista de reparações a converter
-     * @return matriz de dados com ID, número, data e estado
-     */
     private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
         Object[][] dados = new Object[lista.size()][4];
         Iterator<Reparacao> it = lista.iterator();
@@ -185,9 +166,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         return dados;
     }
 
-    /**
-     * Apresenta o painel de gestão de pedidos de reparação pendentes.
-     */
     private void mostrarGerirReparacoes() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Gerir Pedidos de Reparação"));
@@ -246,9 +224,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel de arquivamento de processos finalizados.
-     */
     private void mostrarArquivar() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Arquivar Processos Finalizados"));
@@ -274,9 +249,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel de edição de dados de utilizadores.
-     */
     private void mostrarEditarUsers() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Editar Utilizadores"));
@@ -350,10 +322,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel de listagens e pesquisas com campos dinâmicos.
-     * Os campos de pesquisa mostram-se ou escondem-se conforme a opção selecionada.
-     */
     private void mostrarListagens() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Listagens e Pesquisas"));
@@ -537,10 +505,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o dashboard de notificações.
-     * Permite visualizar e marcar notificações como lidas, filtradas por categoria.
-     */
     private void mostrarNotificacoes() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Dashboard de Notificações"));
@@ -594,10 +558,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta os registos de auditoria (logs) do sistema.
-     * Permite visualizar todos os logs ou pesquisar por username específico.
-     */
     private void mostrarLogs() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Registos de Auditoria (Logs)"));
@@ -639,10 +599,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel para alternar o estado de contas (Ativo/Inativo).
-     * O Gestor pode suspender (inativar) contas por mau comportamento ou reativar.
-     */
     private void mostrarToggleContas() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Ativar / Inativar Contas"));
@@ -702,10 +658,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta os pedidos de remoção de conta solicitados pelos utilizadores.
-     * Permite aceitar (e anonimizar/apagar) ou recusar o pedido.
-     */
     private void mostrarPedidosRemocao() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pedidos de Remoção de Conta"));
@@ -764,10 +716,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.add(btns, BorderLayout.SOUTH);
         trocarConteudo(p);
     }
-    /**
-     * Apresenta o painel de edição do perfil do gestor.
-     * Inclui foto de perfil, email e password — consistente com os outros painéis.
-     */
     private void mostrarPerfil() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
@@ -827,11 +775,6 @@ public class PainelGestor extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Solicita a remoção da própria conta (Gestor logado).
-     * Verifica se existe pelo menos outro Gestor ativo no sistema antes de permitir
-     * a solicitação.
-     */
     private void solicitarMinhaRemocao() {
         ArrayList<Utilizador> todos = cUtilizador.obterTodosUtilizadores();
         Iterator<Utilizador> it = todos.iterator();

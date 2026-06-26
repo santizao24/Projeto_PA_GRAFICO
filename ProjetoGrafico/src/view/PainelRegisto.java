@@ -131,9 +131,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
         add(painelBotoes, BorderLayout.SOUTH);
     }
 
-    /**
-     * Constrói e configura os campos específicos para o registo de um Funcionário.
-     */
     private void construirPainelFuncionario() {
         painelFuncionario = new JPanel();
         painelFuncionario.setLayout(new GridLayout(5, 1));
@@ -156,9 +153,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 "Data de início de atividade (dd/MM/yyyy ou yyyy-MM-dd)"));
     }
 
-    /**
-     * Constrói e configura os campos específicos para o registo de um Cliente.
-     */
     private void construirPainelCliente() {
         painelCliente = new JPanel();
         painelCliente.setLayout(new GridLayout(5, 1));
@@ -205,11 +199,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Valida os campos preenchidos, cria as instâncias adequadas (Cliente ou
-     * Funcionário)
-     * e submete os dados ao controlador para registo no sistema.
-     */
     private void efetuarRegisto() {
         String nome = campoNome.getText();
         String email = campoEmail.getText();
@@ -317,10 +306,6 @@ public class PainelRegisto extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Limpa todos os campos do formulário após um registo bem sucedido
-     * ou cancelamento.
-     */
     private void limparCampos() {
         campoNome.setText("");
         campoEmail.setText("");
