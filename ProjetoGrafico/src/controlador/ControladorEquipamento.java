@@ -11,7 +11,8 @@ import repositorio.EquipamentoDAO;
 
 /**
  * Controlador responsável pela lógica de negócio relacionada com equipamentos.
- * Faz a ponte entre a camada de apresentação (View) e a camada de acesso a dados (DAO)
+ * Faz a ponte entre a camada de apresentação (View) e a camada de acesso a
+ * dados (DAO)
  * para operações de registo, listagem, pesquisa e validação de equipamentos.
  *
  * @author Santiago
@@ -31,7 +32,8 @@ public class ControladorEquipamento {
      * @param codSKU         código SKU único gerado para o equipamento
      * @param dataFabrico    data de fabrico do equipamento
      * @param lote           identificação do lote de fabrico
-     * @param usernameLogado username do utilizador autenticado (para registo de log)
+     * @param usernameLogado username do utilizador autenticado (para registo de
+     *                       log)
      */
     public void registarEquipamento(Utilizador clienteLogado, String marca, String codModelo, int codSKU,
             String dataFabrico, String lote, String usernameLogado, String obs) {
@@ -82,7 +84,8 @@ public class ControladorEquipamento {
     }
 
     /**
-     * Pesquisa equipamentos de todos os clientes com base num critério e termo de pesquisa.
+     * Pesquisa equipamentos de todos os clientes com base num critério e termo de
+     * pesquisa.
      *
      * @param escolha critério de pesquisa (1 = marca, 2 = código de modelo)
      * @param termo   termo de pesquisa parcial
@@ -97,7 +100,8 @@ public class ControladorEquipamento {
      *
      * @param IdCliente  identificador do cliente
      * @param escolha    critério de ordenação (1 = marca, 2 = código SKU)
-     * @param ascendente {@code true} para ordem crescente, {@code false} para decrescente
+     * @param ascendente {@code true} para ordem crescente, {@code false} para
+     *                   decrescente
      * @return lista de equipamentos ordenados
      */
     public ArrayList<Equipamento> listarEquipamentosClienteOrdenados(int IdCliente, int escolha, boolean ascendente) {

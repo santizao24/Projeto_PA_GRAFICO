@@ -14,9 +14,10 @@ import java.io.FileOutputStream;
 public class GestorFicheiros {
 
     /**
-     * Copia a foto de perfil escolhida pelo utilizador para a diretoria interna da aplicação.
+     * Copia a foto de perfil escolhida pelo utilizador para a diretoria interna da
+     * aplicação.
      *
-     * @param fotoOrigem o ficheiro original escolhido
+     * @param fotoOrigem     o ficheiro original escolhido
      * @param caminhoDestino o caminho (incluindo o nome do ficheiro) onde guardar
      * @return true se a cópia for bem-sucedida, false caso contrário
      */
@@ -26,7 +27,6 @@ public class GestorFicheiros {
         }
 
         File destino = new File(caminhoDestino);
-
 
         File parent = destino.getParentFile();
         if (parent != null && !parent.exists()) {
@@ -49,8 +49,10 @@ public class GestorFicheiros {
             return false;
         } finally {
             try {
-                if (fis != null) fis.close();
-                if (fos != null) fos.close();
+                if (fis != null)
+                    fis.close();
+                if (fos != null)
+                    fos.close();
             } catch (Exception ex) {
 
             }

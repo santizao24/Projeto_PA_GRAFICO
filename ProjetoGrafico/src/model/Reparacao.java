@@ -27,10 +27,11 @@ public class Reparacao {
     /**
      * Constrói uma nova Reparação com todos os atributos.
      *
-     * @param aIdReparacao  identificador único da reparação
-     * @param aNumReparacao número de referência da reparação
+     * @param aIdReparacao   identificador único da reparação
+     * @param aNumReparacao  número de referência da reparação
      * @param aIdEquipamento identificador do equipamento a reparar
-     * @param aIdUtilizador  identificador do funcionário atribuído (0 se não atribuído)
+     * @param aIdUtilizador  identificador do funcionário atribuído (0 se não
+     *                       atribuído)
      * @param aDataCriacao   data de criação do pedido
      * @param aDataInicio    data de início da reparação (pode ser null)
      * @param aDataFim       data de conclusão da reparação (pode ser null)

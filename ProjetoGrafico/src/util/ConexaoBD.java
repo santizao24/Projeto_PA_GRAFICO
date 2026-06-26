@@ -42,8 +42,8 @@ public class ConexaoBD {
     /**
      * Guarda as configurações de acesso no ficheiro {@code configbd.txt}.
      *
-     * @param url URL da base de dados
-     * @param user username
+     * @param url      URL da base de dados
+     * @param user     username
      * @param password password
      * @throws Exception em caso de erro na gravação do ficheiro
      */

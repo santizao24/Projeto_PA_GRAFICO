@@ -20,7 +20,7 @@ public class Utilitarios {
      * Cria uma JTable configurada com modelo não editável e ordenação automática.
      * 
      * @param colunas array com os nomes das colunas
-     * @param dados matriz bidimensional com os dados da tabela
+     * @param dados   matriz bidimensional com os dados da tabela
      * @return a JTable configurada e pronta a usar
      */
     public static javax.swing.JTable criarTabela(String[] colunas, Object[][] dados) {
@@ -54,14 +54,12 @@ public class Utilitarios {
         return lista;
     }
 
-
-
     /**
      * Atualiza os dados de uma JTable existente dentro de um JScrollPane.
      *
-     * @param tabela a JTable a analisar
-     * @param colunas    nomes das colunas
-     * @param dados      novos dados para a tabela
+     * @param tabela  a JTable a analisar
+     * @param colunas nomes das colunas
+     * @param dados   novos dados para a tabela
      */
     public static void atualizarTabela(JTable tabela, String[] colunas, Object[][] dados) {
         if (tabela != null) {
@@ -170,7 +168,7 @@ public class Utilitarios {
      * Obtém o valor de uma coluna específica da linha selecionada numa JTable.
      *
      * @param tabela a JTable a analisar
-     * @param coluna     índice da coluna (0-based)
+     * @param coluna índice da coluna (0-based)
      * @return o valor da coluna como String, ou null se nada estiver selecionado
      */
     public static String obterValorSelecionado(JTable tabela, int coluna) {
