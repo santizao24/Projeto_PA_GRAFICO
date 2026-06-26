@@ -270,10 +270,19 @@ public class Aplicacao extends JFrame implements ActionListener {
             }
 
             boolean ok = app.getControladorUtilizador().registarGestor(nome, email, user, pass);
-            if (ok)
+            if (ok) {
+                Utilizador gestor = app.getControladorUtilizador().efetuarLogin(user, pass);
+                if (gestor != null) {
+                    String novaFoto = Utilitarios.escolherFicheiroImagem(app, gestor.getIdUtilizador());
+                    if (novaFoto == null) {
+                        novaFoto = "fotos/geral.png";
+                    }
+                    app.getControladorUtilizador().atualizarFoto(gestor.getIdUtilizador(), novaFoto, "Sistema");
+                }
                 Utilitarios.mostrarSucesso(app, "Gestor criado com sucesso!");
-            else
+            } else {
                 Utilitarios.mostrarErro(app, "Erro ao criar gestor!");
+            }
         }
     }
 }
