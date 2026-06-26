@@ -250,11 +250,6 @@ public class Aplicacao extends JFrame implements ActionListener {
         }
     }
 
-    /**
-     * Inicia o diálogo para forçar a criação do primeiro gestor do sistema.
-     *
-     * @param app a instância principal da aplicação para servir de pai ao diálogo
-     */
     private static void criarPrimeiroGestor(Aplicacao app) {
         JTextField cNome = new JTextField();
         JTextField cEmail = new JTextField();

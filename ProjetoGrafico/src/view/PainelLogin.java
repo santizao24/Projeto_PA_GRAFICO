@@ -131,9 +131,6 @@ public class PainelLogin extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Limpa os campos de texto do formulário de login.
-     */
     private void limparCampos() {
         campoUsername.setText("");
         campoPassword.setText("");

@@ -94,13 +94,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         this.utilizadorLogado = u;
     }
 
-    /**
-     * Cria um botão para o menu lateral com texto, tooltip e listener.
-     *
-     * @param texto   texto do botão
-     * @param tooltip texto de ajuda ao passar o rato
-     * @return botão configurado
-     */
     private JButton criarBotaoMenu(String texto, String tooltip) {
         JButton btn = new JButton(texto);
         btn.setToolTipText(tooltip);
@@ -137,9 +130,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
             solicitarRemocao();
     }
 
-    /**
-     * Apresenta os pedidos de reparação ACEITES (novos pedidos atribuídos).
-     */
     private void mostrarPedidosAtribuidos() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pedidos de Reparação Atribuídos"));
@@ -188,9 +178,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta os pedidos de reparação atualmente EM_CURSO ou a AGUARDAR_PECA.
-     */
     private void mostrarEmCurso() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Reparações em Curso"));
@@ -252,9 +239,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel de edição do perfil do funcionário.
-     */
     private void mostrarPerfil() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
@@ -323,10 +307,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel com a listagem de todas as reparações associadas ao
-     * funcionário.
-     */
     private void mostrarListarRep() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Listar Reparações"));
@@ -352,9 +332,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o painel para pesquisar reparações associadas ao funcionário.
-     */
     private void mostrarPesquisarRep() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("Pesquisar Reparações"));
@@ -393,9 +370,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Apresenta o dashboard de notificações do funcionário.
-     */
     private void mostrarNotificacoes() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("As Minhas Notificações"));
@@ -425,9 +399,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         trocarConteudo(p);
     }
 
-    /**
-     * Solicita a remoção da conta do funcionário, notificando os gestores.
-     */
     private void solicitarRemocao() {
         if (Utilitarios.confirmar(this,
                 "Ao solicitar a remoção, a tua conta será removida do sistema.\n"
@@ -443,13 +414,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         }
     }
 
-    /**
-     * Converte uma lista de reparações para uma matriz de objetos
-     * para apresentação numa JTable.
-     *
-     * @param lista lista de reparações a converter
-     * @return matriz de dados com ID, número, data e estado
-     */
     private Object[][] converterReparacoes(ArrayList<Reparacao> lista) {
         Object[][] dados = new Object[lista.size()][4];
         Iterator<Reparacao> it = lista.iterator();
@@ -462,11 +426,6 @@ public class PainelFuncionario extends JPanel implements ActionListener {
         return dados;
     }
 
-    /**
-     * Troca o painel de conteúdo visível usando remove/add/revalidate/repaint.
-     *
-     * @param novoPainel painel a apresentar
-     */
     private void trocarConteudo(JPanel novoPainel) {
         painelConteudo.remove(painelAtualConteudo);
         painelAtualConteudo = novoPainel;
