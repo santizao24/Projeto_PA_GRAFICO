@@ -1,6 +1,6 @@
 /*==============================================================*/
 /* DBMS name:      MySQL 5.0                                    */
-/* Created on:     02/06/2026 15:55:54                          */
+/* Created on:     26/06/2026 13:30:17                          */
 /*==============================================================*/
 
 
@@ -14,15 +14,9 @@ drop table if exists LOGS;
 
 drop table if exists NOTIFICACAO;
 
-drop table if exists PECA;
-
 drop table if exists REPARACAO;
 
-drop table if exists REPARACAO_PECA;
-
 drop table if exists REPARACAO_REJEITADA;
-
-drop table if exists TESTE_OPERACIONALIDADE;
 
 drop table if exists UTILIZADOR;
 
@@ -98,18 +92,6 @@ create table NOTIFICACAO
 );
 
 /*==============================================================*/
-/* Table: PECA                                                  */
-/*==============================================================*/
-create table PECA
-(
-   P_CODIGO_INTERNO     varchar(50) not null,
-   T_P_DESIGNACAO       varchar(100),
-   P_FABRICANTE         varchar(100),
-   P_QUANTIDADE         int,
-   primary key (P_CODIGO_INTERNO)
-);
-
-/*==============================================================*/
 /* Table: REPARACAO                                             */
 /*==============================================================*/
 create table REPARACAO
@@ -129,17 +111,6 @@ create table REPARACAO
 );
 
 /*==============================================================*/
-/* Table: REPARACAO_PECA                                        */
-/*==============================================================*/
-create table REPARACAO_PECA
-(
-   R_ID_REPARACAO       int not null,
-   P_CODIGO_INTERNO     varchar(50) not null,
-   RP_QUANTIDADE_USADA  int,
-   primary key (R_ID_REPARACAO, P_CODIGO_INTERNO)
-);
-
-/*==============================================================*/
 /* Table: REPARACAO_REJEITADA                                   */
 /*==============================================================*/
 create table REPARACAO_REJEITADA
@@ -147,19 +118,6 @@ create table REPARACAO_REJEITADA
    R_ID_REPARACAO       int not null,
    U_ID_UTILIZADOR      int not null,
    primary key (R_ID_REPARACAO, U_ID_UTILIZADOR)
-);
-
-/*==============================================================*/
-/* Table: TESTE_OPERACIONALIDADE                                */
-/*==============================================================*/
-create table TESTE_OPERACIONALIDADE
-(
-   T_ID_TESTE           int not null AUTO_INCREMENT,
-   R_ID_REPARACAO       int not null,
-   T_P_DESIGNACAO       varchar(100) not null,
-   T_DESCRICAO          text not null,
-   T_DATA_REALIZACAO    datetime not null,
-   primary key (T_ID_TESTE)
 );
 
 /*==============================================================*/
@@ -197,18 +155,9 @@ alter table REPARACAO add constraint FK_EQUIPAMENTO_REPARACAO foreign key (E_ID_
 alter table REPARACAO add constraint FK_FUNCIONARIO_REPARACAO foreign key (U_ID_UTILIZADOR)
       references FUNCIONARIO (U_ID_UTILIZADOR) on delete restrict on update restrict;
 
-alter table REPARACAO_PECA add constraint FK_PECA_REPARACAO_PECA foreign key (P_CODIGO_INTERNO)
-      references PECA (P_CODIGO_INTERNO) on delete restrict on update restrict;
-
-alter table REPARACAO_PECA add constraint FK_REPARACAO_REPARACAO_PECA foreign key (R_ID_REPARACAO)
-      references REPARACAO (R_ID_REPARACAO) on delete restrict on update restrict;
-
 alter table REPARACAO_REJEITADA add constraint FK_REPARACAO_REPARACAO_REJEITADA foreign key (R_ID_REPARACAO)
       references REPARACAO (R_ID_REPARACAO) on delete restrict on update restrict;
 
 alter table REPARACAO_REJEITADA add constraint FK_UTILIZADOR_REPARACAO_REJEITADA foreign key (U_ID_UTILIZADOR)
       references UTILIZADOR (U_ID_UTILIZADOR) on delete restrict on update restrict;
-
-alter table TESTE_OPERACIONALIDADE add constraint FK_REPARACAO_TESTE_OPERACIONALIDADE foreign key (R_ID_REPARACAO)
-      references REPARACAO (R_ID_REPARACAO) on delete restrict on update restrict;
 
