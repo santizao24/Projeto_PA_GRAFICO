@@ -189,7 +189,7 @@ public class PainelFuncionario extends JPanel implements ActionListener {
     }
 
     /**
-     * Apresenta os pedidos de reparação atualmente EM_CURSO ou a AGUARDAR_PECA.
+     * Apresenta as reparações atualmente em curso (estado DECORRER).
      */
     private void mostrarEmCurso() {
         JPanel p = new JPanel(new BorderLayout());
