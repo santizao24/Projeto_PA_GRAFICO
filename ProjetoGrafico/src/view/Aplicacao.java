@@ -258,9 +258,17 @@ public class Aplicacao extends JFrame implements ActionListener {
         Object[] campos = { "Nome:", cNome, "Email:", cEmail, "Username:", cUser, "Password:", cPass };
         int r = JOptionPane.showConfirmDialog(app, campos, "Criar Primeiro Gestor", JOptionPane.OK_CANCEL_OPTION);
         if (r == JOptionPane.OK_OPTION) {
-            boolean ok = app.getControladorUtilizador().registarGestor(
-                    cNome.getText(), cEmail.getText(),
-                    cUser.getText(), new String(cPass.getPassword()));
+            String nome = cNome.getText();
+            String email = cEmail.getText();
+            String user = cUser.getText();
+            String pass = new String(cPass.getPassword());
+
+            if (nome.isEmpty() || email.isEmpty() || user.isEmpty() || pass.isEmpty()) {
+                Utilitarios.mostrarErro(app, "Todos os campos são obrigatórios!");
+                return;
+            }
+
+            boolean ok = app.getControladorUtilizador().registarGestor(nome, email, user, pass);
             if (ok)
                 Utilitarios.mostrarSucesso(app, "Gestor criado com sucesso!");
             else
