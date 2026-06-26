@@ -1,5 +1,5 @@
 #Configuracoes da Base de Dados
-#Fri Jun 26 13:22:04 WEST 2026
+#Fri Jun 26 14:10:16 WEST 2026
 password=root
+url=jdbc\:mysql\://127.0.0.1\:3306/oficina
 user=root
-url=jdbc\:mysql\://127.0.0.1\:3306/teste
