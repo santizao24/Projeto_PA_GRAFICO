@@ -36,12 +36,6 @@ public class ConexaoBD {
             throw new SQLException("Configuração da Base de Dados inexistente.");
         }
 
-        try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException e) {
-            throw new SQLException("Driver MySQL não encontrado.");
-        }
-
         return DriverManager.getConnection(url, user, password);
     }
 

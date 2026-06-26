@@ -92,36 +92,41 @@ public class PainelLogin extends JPanel implements ActionListener {
                 return;
             }
 
-            Utilizador utilizador = aplicacao.getControladorUtilizador().efetuarLogin(user, pass);
+            try {
+                Utilizador utilizador = aplicacao.getControladorUtilizador().efetuarLogin(user, pass);
 
-            if (utilizador != null) {
-                if (utilizador.getEstado() == EstadoUtilizador.ATIVO) {
-                    aplicacao.getControladorUtilizador().registarInicioSessao(user);
+                if (utilizador != null) {
+                    if (utilizador.getEstado() == EstadoUtilizador.ATIVO) {
+                        aplicacao.getControladorUtilizador().registarInicioSessao(user);
 
-                    int naoLidas = aplicacao.getControladorNotificacao()
-                            .contarNaoLidas(utilizador.getIdUtilizador());
-                    if (naoLidas > 0) {
-                        JOptionPane.showMessageDialog(this,
-                                "Tens " + naoLidas + " notificação(ões) não lida(s)!",
-                                "Notificações Pendentes",
-                                JOptionPane.WARNING_MESSAGE);
+                        int naoLidas = aplicacao.getControladorNotificacao()
+                                .contarNaoLidas(utilizador.getIdUtilizador());
+                        if (naoLidas > 0) {
+                            JOptionPane.showMessageDialog(this,
+                                    "Tens " + naoLidas + " notificação(ões) não lida(s)!",
+                                    "Notificações Pendentes",
+                                    JOptionPane.WARNING_MESSAGE);
+                        }
+
+                        aplicacao.autenticar(utilizador);
+                        limparCampos();
+                    } else if (utilizador.getEstado() == EstadoUtilizador.INATIVO) {
+                        Utilitarios.mostrarInfo(this, "A tua conta encontra-se INATIVA. Contacta um gestor.");
+                    } else if (utilizador.getEstado() == EstadoUtilizador.AGUARDA_REMOCAO) {
+                        Utilitarios.mostrarInfo(this,
+                                "A tua conta está a aguardar remoção. Contacta um gestor se queres reverter.");
+                    } else if (utilizador.getEstado() == EstadoUtilizador.REMOVIDA) {
+                        Utilitarios.mostrarInfo(this, "Esta conta foi removida do sistema.");
+                    } else {
+                        Utilitarios.mostrarInfo(this,
+                                "Conta com estado desconhecido: " + utilizador.getEstado());
                     }
-
-                    aplicacao.autenticar(utilizador);
-                    limparCampos();
-                } else if (utilizador.getEstado() == EstadoUtilizador.INATIVO) {
-                    Utilitarios.mostrarInfo(this, "A tua conta encontra-se INATIVA. Contacta um gestor.");
-                } else if (utilizador.getEstado() == EstadoUtilizador.AGUARDA_REMOCAO) {
-                    Utilitarios.mostrarInfo(this,
-                            "A tua conta está a aguardar remoção. Contacta um gestor se queres reverter.");
-                } else if (utilizador.getEstado() == EstadoUtilizador.REMOVIDA) {
-                    Utilitarios.mostrarInfo(this, "Esta conta foi removida do sistema.");
                 } else {
-                    Utilitarios.mostrarInfo(this,
-                            "Conta com estado desconhecido: " + utilizador.getEstado());
+                    Utilitarios.mostrarErro(this, "Credenciais inválidas.");
                 }
-            } else {
-                Utilitarios.mostrarErro(this, "Credenciais inválidas.");
+            } catch (Exception ex) {
+                Utilitarios.mostrarErro(this,
+                        "Erro ao conectar à Base de Dados!\n" + ex.getMessage());
             }
         } else if (e.getSource().equals(btnRegistar)) {
             aplicacao.mostrarPainel("registo");
