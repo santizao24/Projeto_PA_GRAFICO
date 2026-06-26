@@ -273,7 +273,12 @@ public class Aplicacao extends JFrame implements ActionListener {
             if (ok) {
                 Utilizador gestor = app.getControladorUtilizador().efetuarLogin(user, pass);
                 if (gestor != null) {
-                    String novaFoto = Utilitarios.escolherFicheiroImagem(app, gestor.getIdUtilizador());
+                    String novaFoto = null;
+                    if (Utilitarios.confirmar(app,
+                            "Gestor criado com sucesso!\n\nDeseja escolher agora uma foto de perfil?\n"
+                                    + "(Se selecionar \"Não\", será usada uma imagem por defeito.)")) {
+                        novaFoto = Utilitarios.escolherFicheiroImagem(app, gestor.getIdUtilizador());
+                    }
                     if (novaFoto == null) {
                         novaFoto = "fotos/geral.png";
                     }
