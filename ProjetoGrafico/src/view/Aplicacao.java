@@ -247,6 +247,7 @@ public class Aplicacao extends JFrame implements ActionListener {
                 criarPrimeiroGestor(this);
             }
         } catch (Exception ex) {
+            Utilitarios.mostrarErro(this, "Erro ao conectar à Base de Dados: " + ex.getMessage());
         }
     }
 
