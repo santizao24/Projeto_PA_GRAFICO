@@ -103,7 +103,7 @@ public class Utilizador {
     /**
      * Define o estado da conta do utilizador.
      *
-     * @param aEstado novo estado
+     * @param estado novo estado
      */
     public void setEstado(EstadoUtilizador estado) {
         this.estado = estado;
