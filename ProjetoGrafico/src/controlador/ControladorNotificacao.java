@@ -60,7 +60,8 @@ public class ControladorNotificacao {
     }
 
     /**
-     * Obtém todas as notificações de um utilizador, ordenadas da mais recente para a mais antiga.
+     * Obtém todas as notificações de um utilizador, ordenadas da mais recente para
+     * a mais antiga.
      *
      * @param idUtilizador identificador do utilizador
      * @return lista de notificações do utilizador
@@ -89,7 +90,8 @@ public class ControladorNotificacao {
     }
 
     /**
-     * Obtém as notificações de um utilizador filtradas por uma categoria específica.
+     * Obtém as notificações de um utilizador filtradas por uma categoria
+     * específica.
      *
      * @param idUtilizador identificador do utilizador
      * @param categoria    categoria das notificações a obter
@@ -100,7 +102,8 @@ public class ControladorNotificacao {
     }
 
     /**
-     * Conta o número de notificações não lidas de um utilizador numa categoria específica.
+     * Conta o número de notificações não lidas de um utilizador numa categoria
+     * específica.
      *
      * @param idUtilizador identificador do utilizador
      * @param categoria    categoria das notificações a contar
@@ -111,7 +114,8 @@ public class ControladorNotificacao {
     }
 
     /**
-     * Marca como lidas todas as notificações não lidas de um utilizador numa categoria específica.
+     * Marca como lidas todas as notificações não lidas de um utilizador numa
+     * categoria específica.
      *
      * @param idUtilizador identificador do utilizador
      * @param categoria    categoria das notificações a marcar como lidas

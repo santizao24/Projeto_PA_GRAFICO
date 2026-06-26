@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-
 /**
  * Diálogo para configuração dos parâmetros de acesso à base de dados.
  * Permite ao utilizador definir o IP, porto, nome da base de dados,

@@ -5,7 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-
 import com.formdev.flatlaf.FlatDarculaLaf;
 
 import controlador.ControladorUtilizador;
@@ -225,7 +224,8 @@ public class Aplicacao extends JFrame implements ActionListener {
 
     /**
      * Inicia a aplicação gráfica, tornando a janela principal visível.
-     * Verifica a existência da base de dados e a necessidade de criar um Gestor inicial.
+     * Verifica a existência da base de dados e a necessidade de criar um Gestor
+     * inicial.
      */
     public void iniciar() {
         setVisible(true);

@@ -1,8 +1,10 @@
 package model;
 
 /**
- * Classe que representa um equipamento registado no sistema de gestão de oficina.
- * Cada equipamento pertence a um cliente e pode ser alvo de pedidos de reparação.
+ * Classe que representa um equipamento registado no sistema de gestão de
+ * oficina.
+ * Cada equipamento pertence a um cliente e pode ser alvo de pedidos de
+ * reparação.
  *
  * @author Santiago
  * @version 1.0

@@ -308,7 +308,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                     Utilitarios.mostrarSucesso(PainelGestor.this, "Dados atualizados com sucesso!");
                     mostrarEditarUsers();
                 } else
-                    Utilitarios.mostrarErro(PainelGestor.this, "Erro ao atualizar. Email ou Username pode já estar em uso.");
+                    Utilitarios.mostrarErro(PainelGestor.this,
+                            "Erro ao atualizar. Email ou Username pode já estar em uso.");
             }
         });
         form.add(Utilitarios.criarCampoFormulario("Nome:", cNome, "Novo nome"));
@@ -402,7 +403,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                                 u.getEstado() };
                         j++;
                     }
-                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" },
+                            dd);
                 } else if (sel.equals("Reparações")) {
                     ArrayList<Reparacao> l = cReparacao.listarReparacoesOrdenadas(1, true);
                     Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Número", "Data", "Estado" },
@@ -466,7 +468,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                                 u.getEstado() };
                         j++;
                     }
-                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" }, dd);
+                    Utilitarios.atualizarTabela(tabela, new String[] { "ID", "Nome", "Username", "Tipo", "Estado" },
+                            dd);
                 } else if (sel.equals("Pesquisar Equipamentos")) {
                     ArrayList<Equipamento> l;
                     if (termo.isEmpty()) {
@@ -488,7 +491,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                     String dataFim = Validacoes.normalizarData(campoDataFim.getText());
                     ArrayList<Reparacao> l;
                     if (dataInicio == null || dataFim == null) {
-                        Utilitarios.mostrarErro(PainelGestor.this, "Data inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
+                        Utilitarios.mostrarErro(PainelGestor.this,
+                                "Data inválida! Use formatos como dd/MM/yyyy ou yyyy-MM-dd.");
                         return;
                     } else {
                         l = cReparacao.pesquisarReparacoesPorData(dataInicio, dataFim);
@@ -716,6 +720,7 @@ public class PainelGestor extends JPanel implements ActionListener {
         p.add(btns, BorderLayout.SOUTH);
         trocarConteudo(p);
     }
+
     private void mostrarPerfil() {
         JPanel p = new JPanel(new BorderLayout());
         p.setBorder(BorderFactory.createTitledBorder("O Meu Perfil"));
@@ -764,7 +769,8 @@ public class PainelGestor extends JPanel implements ActionListener {
                     return;
                 }
                 boolean ok = cUtilizador.atualizarPerfilPeloGestor(utilizadorLogado.getIdUtilizador(),
-                        utilizadorLogado.getNome(), email, pass, utilizadorLogado.getLogin(), utilizadorLogado.getLogin());
+                        utilizadorLogado.getNome(), email, pass, utilizadorLogado.getLogin(),
+                        utilizadorLogado.getLogin());
                 if (ok)
                     Utilitarios.mostrarSucesso(PainelGestor.this, "Perfil atualizado com sucesso!");
                 else
