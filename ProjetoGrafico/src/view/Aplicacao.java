@@ -258,7 +258,8 @@ public class Aplicacao extends JFrame implements ActionListener {
         JTextField cUser = new JTextField();
         JPasswordField cPass = new JPasswordField();
         Object[] campos = { "Nome:", cNome, "Email:", cEmail, "Username:", cUser, "Password:", cPass };
-        while (true) {
+        boolean gestorCriado = false;
+        while (!gestorCriado) {
             int r = JOptionPane.showConfirmDialog(app, campos, "Criar Primeiro Gestor", JOptionPane.OK_CANCEL_OPTION);
             if (r != JOptionPane.OK_OPTION) {
                 return;
@@ -271,36 +272,31 @@ public class Aplicacao extends JFrame implements ActionListener {
 
             if (nome.isEmpty() || email.isEmpty() || user.isEmpty() || pass.isEmpty()) {
                 Utilitarios.mostrarErro(app, "Todos os campos são obrigatórios!");
-                continue;
-            }
-
-            if (!Validacoes.emailValido(email)) {
+            } else if (!Validacoes.emailValido(email)) {
                 Utilitarios.mostrarErro(app,
                         "Formato de email inválido! Use o formato: designacao@entidade.dominio");
-                continue;
-            }
-
-            boolean ok = app.getControladorUtilizador().registarGestor(nome, email, user, pass);
-            if (ok) {
-                Utilizador gestor = app.getControladorUtilizador().efetuarLogin(user, pass);
-                if (gestor != null) {
-                    String novaFoto = null;
-                    if (Utilitarios.confirmar(app,
-                            "Gestor criado com sucesso!\n\nDeseja escolher agora uma foto de perfil?\n"
-                                    + "(Se selecionar \"Não\", será usada uma imagem por defeito.)")) {
-                        novaFoto = Utilitarios.escolherFicheiroImagem(app, gestor.getIdUtilizador());
-                    }
-                    if (novaFoto == null) {
-                        novaFoto = "fotos/geral.png";
-                    }
-                    app.getControladorUtilizador().atualizarFoto(gestor.getIdUtilizador(), novaFoto, "Sistema");
-                }
-                Utilitarios.mostrarSucesso(app, "Gestor criado com sucesso!");
-                return;
             } else {
-                Utilitarios.mostrarErro(app,
-                        "Erro ao criar gestor! O username ou email especificado já se encontra em uso.");
-                continue;
+                boolean ok = app.getControladorUtilizador().registarGestor(nome, email, user, pass);
+                if (ok) {
+                    Utilizador gestor = app.getControladorUtilizador().efetuarLogin(user, pass);
+                    if (gestor != null) {
+                        String novaFoto = null;
+                        if (Utilitarios.confirmar(app,
+                                "Gestor criado com sucesso!\n\nDeseja escolher agora uma foto de perfil?\n"
+                                        + "(Se selecionar \"Não\", será usada uma imagem por defeito.)")) {
+                            novaFoto = Utilitarios.escolherFicheiroImagem(app, gestor.getIdUtilizador());
+                        }
+                        if (novaFoto == null) {
+                            novaFoto = "fotos/geral.png";
+                        }
+                        app.getControladorUtilizador().atualizarFoto(gestor.getIdUtilizador(), novaFoto, "Sistema");
+                    }
+                    Utilitarios.mostrarSucesso(app, "Gestor criado com sucesso!");
+                    gestorCriado = true;
+                } else {
+                    Utilitarios.mostrarErro(app,
+                            "Erro ao criar gestor! O username ou email especificado já se encontra em uso.");
+                }
             }
         }
     }
