@@ -156,6 +156,17 @@ public class ControladorUtilizador {
     }
 
     /**
+     * Verifica se um NIF já se encontra registado em qualquer tabela da base de
+     * dados (clientes ou funcionários).
+     *
+     * @param nif NIF a verificar
+     * @return {@code true} se o NIF já existir, {@code false} caso contrário
+     */
+    public boolean nifExiste(String nif) {
+        return uDao.nifExiste(nif);
+    }
+
+    /**
      * Obtém todos os utilizadores registados no sistema.
      *
      * @return lista de todos os utilizadores

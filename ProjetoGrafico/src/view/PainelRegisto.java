@@ -236,6 +236,10 @@ public class PainelRegisto extends JPanel implements ActionListener {
                 Utilitarios.mostrarErro(this, "O NIF tem de ter exatamente 9 dígitos numéricos!");
                 return;
             }
+            if (aplicacao.getControladorUtilizador().nifExiste(nif)) {
+                Utilitarios.mostrarErro(this, "Já existe um utilizador registado com o NIF '" + nif + "'.");
+                return;
+            }
             if (!Validacoes.telefoneValido(tel)) {
                 Utilitarios.mostrarErro(this,
                         "Formato de telefone inválido! (9 dígitos, começa por 2, 3 ou 9)");
@@ -262,6 +266,10 @@ public class PainelRegisto extends JPanel implements ActionListener {
 
             if (!Validacoes.nifValido(nif)) {
                 Utilitarios.mostrarErro(this, "O NIF tem de ter exatamente 9 dígitos numéricos!");
+                return;
+            }
+            if (aplicacao.getControladorUtilizador().nifExiste(nif)) {
+                Utilitarios.mostrarErro(this, "Já existe um utilizador registado com o NIF '" + nif + "'.");
                 return;
             }
             if (!Validacoes.telefoneValido(tel)) {

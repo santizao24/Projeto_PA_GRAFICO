@@ -325,6 +325,57 @@ public class UtilizadorDAO {
     }
 
     /**
+     * Verifica se um NIF já existe na base de dados, em qualquer das tabelas que
+     * armazenam contribuintes (CLIENTE e FUNCIONARIO).
+     *
+     * @param nif NIF a verificar
+     * @return {@code true} se o NIF existir, {@code false} caso contrário
+     */
+    public boolean nifExiste(String nif) {
+        boolean existe = false;
+        String sql = "SELECT (SELECT COUNT(*) FROM CLIENTE WHERE C_NUM_CONTRIBUINTE = ?)"
+                + " + (SELECT COUNT(*) FROM FUNCIONARIO WHERE C_NUM_CONTRIBUINTE = ?)";
+        Connection conn = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+
+        try {
+            conn = ConexaoBD.obterConexao();
+            ps = conn.prepareStatement(sql);
+            ps.clearParameters();
+            ps.setString(1, nif);
+            ps.setString(2, nif);
+
+            rs = ps.executeQuery();
+            if (rs.next() && rs.getInt(1) > 0) {
+                existe = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                } catch (Exception e) {
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (Exception e) {
+                }
+            }
+            if (conn != null) {
+                try {
+                    ConexaoBD.fecharBd(conn);
+                } catch (Exception e) {
+                }
+            }
+        }
+        return existe;
+    }
+
+    /**
      * Lista todos os utilizadores registados na base de dados.
      *
      * @return lista de todos os utilizadores
