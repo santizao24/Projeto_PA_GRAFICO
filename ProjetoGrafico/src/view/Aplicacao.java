@@ -258,8 +258,12 @@ public class Aplicacao extends JFrame implements ActionListener {
         JTextField cUser = new JTextField();
         JPasswordField cPass = new JPasswordField();
         Object[] campos = { "Nome:", cNome, "Email:", cEmail, "Username:", cUser, "Password:", cPass };
-        int r = JOptionPane.showConfirmDialog(app, campos, "Criar Primeiro Gestor", JOptionPane.OK_CANCEL_OPTION);
-        if (r == JOptionPane.OK_OPTION) {
+        while (true) {
+            int r = JOptionPane.showConfirmDialog(app, campos, "Criar Primeiro Gestor", JOptionPane.OK_CANCEL_OPTION);
+            if (r != JOptionPane.OK_OPTION) {
+                return;
+            }
+
             String nome = cNome.getText();
             String email = cEmail.getText();
             String user = cUser.getText();
@@ -267,13 +271,13 @@ public class Aplicacao extends JFrame implements ActionListener {
 
             if (nome.isEmpty() || email.isEmpty() || user.isEmpty() || pass.isEmpty()) {
                 Utilitarios.mostrarErro(app, "Todos os campos são obrigatórios!");
-                return;
+                continue;
             }
 
             if (!Validacoes.emailValido(email)) {
                 Utilitarios.mostrarErro(app,
                         "Formato de email inválido! Use o formato: designacao@entidade.dominio");
-                return;
+                continue;
             }
 
             boolean ok = app.getControladorUtilizador().registarGestor(nome, email, user, pass);
@@ -292,8 +296,11 @@ public class Aplicacao extends JFrame implements ActionListener {
                     app.getControladorUtilizador().atualizarFoto(gestor.getIdUtilizador(), novaFoto, "Sistema");
                 }
                 Utilitarios.mostrarSucesso(app, "Gestor criado com sucesso!");
+                return;
             } else {
-                Utilitarios.mostrarErro(app, "Erro ao criar gestor!");
+                Utilitarios.mostrarErro(app,
+                        "Erro ao criar gestor! O username ou email especificado já se encontra em uso.");
+                continue;
             }
         }
     }
