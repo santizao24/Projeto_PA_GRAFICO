@@ -13,6 +13,7 @@ import controlador.ControladorEquipamento;
 import controlador.ControladorNotificacao;
 import model.Utilizador;
 import Enums.TipoUtilizador;
+import util.Validacoes;
 
 /**
  * Janela principal da aplicação gráfica do Sistema de Gestão de Oficina.
@@ -266,6 +267,12 @@ public class Aplicacao extends JFrame implements ActionListener {
 
             if (nome.isEmpty() || email.isEmpty() || user.isEmpty() || pass.isEmpty()) {
                 Utilitarios.mostrarErro(app, "Todos os campos são obrigatórios!");
+                return;
+            }
+
+            if (!Validacoes.emailValido(email)) {
+                Utilitarios.mostrarErro(app,
+                        "Formato de email inválido! Use o formato: designacao@entidade.dominio");
                 return;
             }
 
