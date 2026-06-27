@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"controlador"},{"l":"Enums"},{"l":"model"},{"l":"repositorio"},{"l":"util"},{"l":"view"}];updateSearchResults();
